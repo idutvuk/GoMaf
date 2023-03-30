@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf
 
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,20 +13,8 @@ import kotlin.math.sin
 
 
 class GameFragment : Fragment() {
-
-
-    private val selectionTimeMillis = 3000
-
-    // Define the number of player circles and the radius of the table
     private val numPlayers = 10
-//    private val underTableRadiusDp = dp2px(180)
-//    private val tableRadiusPx = dp2px(130)
-
-    //declared here bcs I have to use them outside the OnCreate method.
-    private var pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
-    private var players: Array<L_Player> = Array(numPlayers) { L_Player() }
-    private var playerButtons: ArrayList<View> = ArrayList() //TODO: replace
-    private var curBtn = "none"
+//    private var curBtn = "none"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,16 +27,54 @@ class GameFragment : Fragment() {
 
         Game.playerNumber = 10
         Game.startGame()
-        //test moving
-        b.btn1.x = 100F
-        b.btn1.y = 50F
+        val points = generatePivotPoints(numPlayers)
 
+        val buttons = listOf(
+            b.btn1, b.btn2, b.btn3,
+            b.btn4, b.btn5, b.btn6,
+            b.btn7, b.btn8, b.btn9,
+            b.btn10, b.btn11,b.btn12
+        )
+
+        for(index in 0 until numPlayers) {
+            buttons[index].x += points[index][0].toFloat()
+            buttons[index].y += points[index][1].toFloat()
+        }
+
+        for (i in numPlayers until 12) {
+            buttons[i].visibility = View.GONE
+            Log.d("GraphLog", "Button $i deleted.")
+        }
+
+
+        Log.d("GraphLog","width ${b.root.width}")
         return b.root
     }
+
 
     override fun onDestroyView() {
         Game.endGame()
         super.onDestroyView()
     }
+    private fun generatePivotPoints(
+        numPlayers: Int,
+        radius: Int = 340
+    ): Array<IntArray> {
+        val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
+
+        val angleOffset = Math.toRadians(60.0)
+        for (i in 0 until numPlayers) {
+            val angle =
+                ((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat()
+
+            val x = -(radius * sin(angle.toDouble())).toInt()
+            val y = (radius * cos(angle.toDouble())).toInt()
+            pivotPoints[i] = intArrayOf(x, y)
+            Log.d("GraphLog", "index: $i x: $x y: $y")
+        }
+        return pivotPoints
+    }
+
+
 
 }
