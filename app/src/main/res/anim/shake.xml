@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- класс Animator, есть способ анимировать не указывая xml -->
+<!-- Есть библиотека Lottie (AE) -->
+<!-- если найти, написать ХА -->
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:anim/linear_interpolator">
+    <translate
+        android:fromXDelta="-5"
+        android:toXDelta="5"
+        android:fromYDelta="-5"
+        android:toYDelta="5"
+        android:duration="100"
+        android:repeatCount="infinite"
+        android:repeatMode="reverse"/>
+</rotate>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constr_l"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_tableContainer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardCornerRadius="2005dp"
+            android:layout_margin="20dp"
+            app:cardElevation="20dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_margin="70dp"
+                    android:id="@+id/cv_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:cardCornerRadius="2005dp"
+                    app:cardElevation="10dp"/>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+
+
+    <Button
+        android:id="@+id/btn_kill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KILL"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <Button
+        android:id="@+id/btn_Foul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Foul"
+        app:layout_constraintBottom_toTopOf="@id/btn_kill"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <Button
+        android:id="@+id/btn_vote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nominate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_Foul"
+        />
+
+    <!-- debug -->
+    <Button
+        android:id="@+id/btn_d_state"
+        android:backgroundTint="@color/debugColor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(debug) STATE"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_d_universal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sdoba"
+        android:backgroundTint="@color/debugColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+
+
+        <!-- Add your card content here -->
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

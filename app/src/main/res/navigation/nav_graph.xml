@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/gameFragment">
+
+    <fragment
+        android:id="@+id/mainMenuFragment"
+        android:name="com.idutvuk.go_maf.MainMenuFragment"
+        android:label="fragment_main_menu"
+        tools:layout="@layout/fragment_main_menu" >
+        <action
+            android:id="@+id/action_mainMenuFragment_to_gameFragment"
+            app:destination="@id/gameFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_placeholder"
+            app:destination="@id/tournamentPlaceholder" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_tutorialPlaceholder"
+            app:destination="@id/tutorialPlaceholder" />
+    </fragment>
+    <fragment
+        android:id="@+id/gameFragment"
+        android:name="com.idutvuk.go_maf.GameFragment"
+        android:label="fragment_game"
+        tools:layout="@layout/fragment_game" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.idutvuk.go_maf.SettingsFragment"
+        android:label="SettingsFragment" />
+    <fragment android:id="@+id/tournamentPlaceholder" />
+    <fragment android:id="@+id/tutorialPlaceholder" />
+</navigation>
