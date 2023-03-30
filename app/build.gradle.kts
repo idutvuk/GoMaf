@@ -40,6 +40,8 @@ android {
 
 dependencies {
 
+    implementation(libs.material)
+
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

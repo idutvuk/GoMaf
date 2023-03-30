@@ -31,15 +31,17 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        var b = FragmentGameBinding.inflate(layoutInflater)
+        val b = FragmentGameBinding.inflate(layoutInflater)
         Log.i("GameLog","view created")
         b.btnDState.setOnClickListener { Game.getState() }
 
 
         Game.playerNumber = 10
         Game.startGame()
-        Game.kill(3)
-        Game.kill(5)
+        //test moving
+        b.btn1.x = 100F
+        b.btn1.y = 50F
+
         return b.root
     }
 

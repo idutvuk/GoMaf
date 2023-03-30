@@ -9,13 +9,14 @@
     android:orientation="vertical">
 
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_tableContainer"
+            style="@style/Widget.Material3.CardView.Outlined"
+            app:strokeWidth="3dp"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:cardCornerRadius="2005dp"
             android:layout_margin="20dp"
-            app:cardElevation="20dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,10 +31,108 @@
                     app:layout_constraintDimensionRatio="1:1"
                     app:cardCornerRadius="2005dp"
                     app:cardElevation="10dp"/>
+        </com.google.android.material.card.MaterialCardView>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_d_universal">
+        <TableRow
+            android:gravity="center">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn1"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
 
+                android:text="1" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn2"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
 
-        </androidx.cardview.widget.CardView>
+                android:text="2" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn3"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
 
+                android:text="3" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn4"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="4" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn5"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="5" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn6"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="6" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn7"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="7" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn8"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="8" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn9"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="9" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn10"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="53dp"
+                android:layout_height="60dp"
+                android:layout_margin="5dp"
+                android:padding="3dp"
+
+                android:text="10" />
+        </TableRow>
+
+    </TableLayout>
 
 
 

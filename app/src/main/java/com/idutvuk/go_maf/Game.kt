@@ -88,6 +88,7 @@ object Game {
 
     fun startGame() {
         generateRoles()
+        nicknames.shuffle()
         players = Array(playerNumber) { i ->
             Player(
                 number = i,
