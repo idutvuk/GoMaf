@@ -5,7 +5,7 @@ import android.util.Log
 object Game {
     const val minPlayers = 6
     const val maxPlayers = 12
-    var playerNumber = 10
+    var numPlayers = 10
         set(value) {
             field = value
             Log.i("GameLog", "Players number is set as $value")
@@ -64,13 +64,13 @@ object Game {
 
 
     private fun generateRoles() {
-        roles = Array(playerNumber) { "CIV" }
-        if (playerNumber == 6) {
+        roles = Array(numPlayers) { "CIV" }
+        if (numPlayers == 6) {
             roles[0] = "MAF"
         } else {
             roles[0] = "SHR"
             roles[1] = "DON"
-            val numMaf = when (playerNumber) {
+            val numMaf = when (numPlayers) {
                 in 7..8 -> 2
                 in 9..10 -> 3
                 in 11..12 -> 4
@@ -88,7 +88,8 @@ object Game {
 
     fun startGame() {
         generateRoles()
-        players = Array(playerNumber) { i ->
+        nicknames.shuffle()
+        players = Array(numPlayers) { i ->
             Player(
                 number = i,
                 role = roles[i],
@@ -140,9 +141,10 @@ object Game {
     }
 
     fun getState() {
-        Log.i("GameLog", "Game status: " + if (gameActive) "active" else "not active")
-        for (i in 0 until playerNumber) {
-            Log.i("GameLog", players[i].toString())
+        var logMessage = "Game status: " + if (gameActive) "active\n" else "not active\n"
+        for (i in 0 until numPlayers) {
+           logMessage += players[i].toString() + '\n'
         }
+        Log.i("GameLog", logMessage)
     }
 }
