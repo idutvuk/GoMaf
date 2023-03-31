@@ -1,11 +1,12 @@
 package com.idutvuk.go_maf
 
 import android.util.Log
+import android.widget.Toast
 
 object Game {
     const val minPlayers = 6
     const val maxPlayers = 12
-    var playerNumber = 10
+    var numPlayers = 10
         set(value) {
             field = value
             Log.i("GameLog", "Players number is set as $value")
@@ -38,39 +39,14 @@ object Game {
     var gameActive = false
 
 
-    class Player(
-        val number: Int,
-        val role: String = "CIV",
-        val nickname: String = "Debugger",
-        val isGhost: Boolean = false
-    ) {
-        var alive = true
-        var fouls = 0
-        var isAddedForVoting = false
-
-
-        override fun toString(): String {
-            return String.format("%02d", number + 1) +
-                    when(role) {
-                        "CIV" -> " 🙂CIV "
-                        "SHR" -> " 🥸SHR "
-                        "MAF" -> " 🔫MAF "
-                        "DON" -> " 💍DON "
-                        else -> {" 🤷‍♂️IDK "}
-                    } + (if (alive) "✅alive" else "💀 dead") +
-                    ", fouls: $fouls. Aka $nickname"
-        }
-    }
-
-
     private fun generateRoles() {
-        roles = Array(playerNumber) { "CIV" }
-        if (playerNumber == 6) {
+        roles = Array(numPlayers) { "CIV" }
+        if (numPlayers == 6) {
             roles[0] = "MAF"
         } else {
             roles[0] = "SHR"
             roles[1] = "DON"
-            val numMaf = when (playerNumber) {
+            val numMaf = when (numPlayers) {
                 in 7..8 -> 2
                 in 9..10 -> 3
                 in 11..12 -> 4
@@ -89,7 +65,7 @@ object Game {
     fun startGame() {
         generateRoles()
         nicknames.shuffle()
-        players = Array(playerNumber) { i ->
+        players = Array(numPlayers) { i ->
             Player(
                 number = i,
                 role = roles[i],
@@ -106,14 +82,34 @@ object Game {
         gameActive = false
     }
 
-    fun kill(id: Int) {
+    fun kill(id: Int): Boolean {
         if (!players[id].alive) {
             Log.w("GameLog", "Attempt to kill dead person. Aboring")
-            return
+            return false
         }
         players[id].alive = false
-        Log.i("GameLog", "Player #${players[id].number} hb killed")
+        Log.i("GameLog", "Player #${players[id].strNum} killed")
+        var redTeamCount = 0
+        var blackTeamCount=0
+        for ( i in 0 until numPlayers)
+            if (players[i].alive)
+                when (players[i].role) {
+                    "CIV", "SHR" -> redTeamCount++
+                    else -> blackTeamCount++
+                }
+        if (blackTeamCount == 0) {
+            Log.w("GameLog", "All black team members are dead.")
+            endGame()
+            return true
+        }
+        if (redTeamCount<=blackTeamCount) {
+            Log.w("GameLog", "Red team is no longer in the majority")
+            endGame()
+            return true
+        }
+        return true
         //TODO kill logic
+        //TODO create an opportunity to kill multiple people
     }
 
     fun checkSheriff(id: Int): Boolean {
@@ -142,8 +138,12 @@ object Game {
 
     fun getState() {
         Log.i("GameLog", "Game status: " + if (gameActive) "active" else "not active")
-        for (i in 0 until playerNumber) {
+        for (i in 0 until numPlayers) {
             Log.i("GameLog", players[i].toString())
         }
+    }
+
+    fun mute(id: Int) {
+        Log.i("GameLog", "Player #${players[id].strNum} muted.")
     }
 }

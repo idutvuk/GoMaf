@@ -11,5 +11,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         setContentView(R.layout.activity_main)
+
+        Game.numPlayers = 10
+        Game.startGame()
+    }
+
+    override fun onDestroy() {
+        Game.endGame()
+        super.onDestroy()
     }
 }
