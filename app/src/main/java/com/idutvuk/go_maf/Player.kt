@@ -22,17 +22,6 @@ class Player(
         }
     }
 
-
-    fun foul() {
-        fouls++
-        Log.i("GameLog", "Player #$strNum fouled. Total fouls: $fouls")
-        when (fouls) {
-            3 -> Game.mute(number)
-            4 -> Game.kill(number)
-            else -> {}
-
-        }
-    }
     override fun toString(): String {
         return strNum + emoji + role +(if (alive) "✅alive" else "💀 dead") +
                 ", fouls: $fouls. Aka $nickname"

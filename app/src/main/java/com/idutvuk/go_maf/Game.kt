@@ -1,7 +1,8 @@
 package com.idutvuk.go_maf
 
+import CmdManager
 import android.util.Log
-import android.widget.Toast
+import com.google.android.material.button.MaterialButton
 
 object Game {
     const val minPlayers = 6
@@ -17,6 +18,7 @@ object Game {
     lateinit var positions: Array<Int>
     lateinit var roles: Array<String>
     lateinit var players: Array<Player>
+    lateinit var buttons: List<MaterialButton>
     var voteList = ArrayList<Int>()
 
     // !DEBUG!
@@ -79,38 +81,13 @@ object Game {
     fun endGame() {
         voteList.clear()
         Log.i("GameLog", "Game ended")
+        SmartTV.gameEndTV()
         gameActive = false
     }
 
-    fun kill(id: Int): Boolean {
-        if (!players[id].alive) {
-            Log.w("GameLog", "Attempt to kill dead person. Aboring")
-            return false
-        }
-        players[id].alive = false
-        Log.i("GameLog", "Player #${players[id].strNum} killed")
-        var redTeamCount = 0
-        var blackTeamCount=0
-        for ( i in 0 until numPlayers)
-            if (players[i].alive)
-                when (players[i].role) {
-                    "CIV", "SHR" -> redTeamCount++
-                    else -> blackTeamCount++
-                }
-        if (blackTeamCount == 0) {
-            Log.w("GameLog", "All black team members are dead.")
-            endGame()
-            return true
-        }
-        if (redTeamCount<=blackTeamCount) {
-            Log.w("GameLog", "Red team is no longer in the majority")
-            endGame()
-            return true
-        }
-        return true
-        //TODO kill logic
-        //TODO create an opportunity to kill multiple people
-    }
+
+
+
 
     fun checkSheriff(id: Int): Boolean {
         val b = players[id].role == "MAF" || players[id].role == "DON"
@@ -137,13 +114,24 @@ object Game {
     }
 
     fun getState() {
-        Log.i("GameLog", "Game status: " + if (gameActive) "active" else "not active")
-        for (i in 0 until numPlayers) {
-            Log.i("GameLog", players[i].toString())
+        var msg = "Game status: " + if (gameActive) "active\n" else "not active\n"
+       msg+="Current action: ${CmdManager.currentIndex}. Actions:\n"
+        for(i in 0 until CmdManager.history.size) {
+            msg += (if (CmdManager.currentIndex == i+1) '>' else ' ') +
+                    (if (i<10) "0$i " else "$i ") +
+                    CmdManager.history[i]+'\n'
         }
+        msg+="Players:\n"
+        for (i in 0 until numPlayers) {
+            msg+=players[i].toString()+'\n'
+        }
+        Log.i("GameLog",msg)
     }
 
     fun mute(id: Int) {
         Log.i("GameLog", "Player #${players[id].strNum} muted.")
+        //TODO mute logic
     }
+
+
 }
