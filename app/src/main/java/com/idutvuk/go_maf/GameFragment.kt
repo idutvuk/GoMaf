@@ -1,5 +1,7 @@
 package com.idutvuk.go_maf
 
+import CheckDonAction
+import CheckShrAction
 import CmdManager
 import FoulAction
 import KillAction
@@ -9,9 +11,12 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+
 import androidx.fragment.app.Fragment
+import com.example.kmafia.databinding.CvDebugBinding
 import com.example.kmafia.databinding.FragmentGameBinding
+
+import com.example.kmafia.databinding.RightSideBarBinding
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,12 +31,13 @@ class GameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        b = FragmentGameBinding.inflate(layoutInflater)
+        this.b = FragmentGameBinding.inflate(layoutInflater)
+        val bRightSide = RightSideBarBinding.inflate(layoutInflater, b.root as ViewGroup?, true)
         Log.i("GameLog","view created")
         CmdManager.gameFragment = this
         Game.buttons = listOf(
-            b.btn1, b.btn2, b.btn3,b.btn4, b.btn5, b.btn6,
-            b.btn7, b.btn8, b.btn9,b.btn10, b.btn11,b.btn12
+            b.btn1, b.btn2, b.btn3, b.btn4,  b.btn5,  b.btn6,
+            b.btn7, b.btn8, b.btn9, b.btn10, b.btn11, b.btn12
         )
 
         SmartTV.tvPrimary = b.tvBig
@@ -62,6 +68,12 @@ class GameFragment : Fragment() {
                     "foul"-> {
                         CmdManager.commit(FoulAction(i))
                     }
+                    "cdon"->{
+                        CmdManager.commit(CheckDonAction(i))
+                    }
+                    "cshr"->{
+                        CmdManager.commit(CheckShrAction(i))
+                    }
                     else -> Log.e("GameLog", "Incorrect curBtn type")
                 }
                 curBtn="none"
@@ -71,17 +83,25 @@ class GameFragment : Fragment() {
         Log.d("GraphLog", logMsg); logMsg=""
 
         //TODO make auto mode droppers
-        b.btnKill.setOnClickListener{
+        bRightSide.btnKill.setOnClickListener{
             curBtn="kill"
         }
 
-        b.btnVote.setOnClickListener{
+        bRightSide.btnVote.setOnClickListener{
             curBtn="vote"
         }
 
-        b.btnFoul.setOnClickListener{
+        bRightSide.btnFoul.setOnClickListener{
             curBtn="foul"
         }
+
+        bRightSide.btnDonCheck.setOnClickListener{
+            curBtn="cdon"
+        }
+        bRightSide.btnShrCheck.setOnClickListener{
+            curBtn="cshr"
+        }
+
         b.btnPeep.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 // Change the text of all Game.buttons when the FAB is pressed
@@ -96,6 +116,7 @@ class GameFragment : Fragment() {
             }
             false
         }
+
 
         b.btnUndo.setOnClickListener{
             CmdManager.undo()
@@ -115,13 +136,9 @@ class GameFragment : Fragment() {
     }
 
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
-
     private fun generatePivotPoints(
         numPlayers: Int,
-        radius: Int = 340
+        radius: Int = 365
     ): Array<IntArray> {
         val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
 
@@ -136,7 +153,6 @@ class GameFragment : Fragment() {
         }
         return pivotPoints
     }
-
     fun undoButtonState(state: Boolean) {
         b.btnUndo.isEnabled = state
     }

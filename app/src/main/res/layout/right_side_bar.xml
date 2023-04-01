@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnAdd5s"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="3dp"
+                android:enabled="false"
+                android:src="@drawable/baseline_alarm_add_24"
+                app:elevation="1dp" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnPlay"
+                android:layout_width="80dp"
+                android:src="@drawable/baseline_pause_24"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/btnAdd5s"
+                app:layout_constraintEnd_toStartOf="@id/btnReset"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/btnAdd5s"
+                app:elevation="1dp" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnReset"
+                style="@style/Widget.Material3.Button.IconButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="3dp"
+                android:enabled="false"
+                android:src="@drawable/baseline_alarm_off_24" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvActionButtons"
+                style="@style/Widget.Material3.CardView.Filled"
+                app:cardBackgroundColor="@color/cardview_light_background"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/btnAdd5s"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="5dp"
+                app:cardCornerRadius="20dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:id="@+id/btn_kill"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="KILL"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_Foul"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Foul"
+                        app:layout_constraintBottom_toTopOf="@id/btn_kill"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_vote"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:text="Nominate"
+                        app:layout_constraintBottom_toTopOf="@id/btn_Foul"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_shrCheck"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sheriff"
+                        app:layout_constraintBottom_toTopOf="@id/btn_vote"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <Button
+                        android:id="@+id/btn_donCheck"
+                        style="@style/Widget.Material3.Button.IconButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Don"
+                        app:layout_constraintBottom_toTopOf="@id/btn_shrCheck"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

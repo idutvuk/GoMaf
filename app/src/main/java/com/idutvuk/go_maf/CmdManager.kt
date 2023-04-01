@@ -158,11 +158,6 @@ object CmdManager {
     var currentIndex = 0
 
 
-    private var canUndo = false
-        get() = field
-    private var canRedo = false
-        get() = field
-
     fun commit(command: GameAction): Int {
         val commandCode = command.execute()
         if (history.size != currentIndex) {
