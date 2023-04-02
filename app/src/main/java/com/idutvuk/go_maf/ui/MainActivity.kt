@@ -3,7 +3,7 @@ package com.idutvuk.go_maf.ui
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.kmafia.R
+import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.Game
 
 class MainActivity : AppCompatActivity() {

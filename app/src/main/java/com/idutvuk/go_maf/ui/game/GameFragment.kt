@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.kmafia.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.databinding.FragmentGameBinding
 
 import com.idutvuk.go_maf.model.Game
 

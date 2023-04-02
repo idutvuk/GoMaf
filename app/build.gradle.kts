@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.kmafia"
+    namespace = "com.idutvuk.go_maf"
     compileSdk = 33
 
     defaultConfig {

@@ -1,8 +1,8 @@
 package com.idutvuk.go_maf.ui.settings
 
 import androidx.lifecycle.ViewModel
-import com.example.kmafia.databinding.FragmentGameBinding
-import com.example.kmafia.databinding.FragmentSettingsBinding
+import com.idutvuk.go_maf.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.databinding.FragmentSettingsBinding
 
 class SettingsFragmentViewModel : ViewModel() {
     fun initViews(

@@ -8,7 +8,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kmafia.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.Game
 import com.idutvuk.go_maf.model.gameactions.FoulAction

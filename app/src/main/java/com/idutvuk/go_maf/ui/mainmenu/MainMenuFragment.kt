@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import com.example.kmafia.R
+import com.idutvuk.go_maf.R
 
-import com.example.kmafia.databinding.FragmentMainMenuBinding
+import com.idutvuk.go_maf.databinding.FragmentMainMenuBinding
 import com.idutvuk.go_maf.ui.game.GameFragmentViewModel
 
 
