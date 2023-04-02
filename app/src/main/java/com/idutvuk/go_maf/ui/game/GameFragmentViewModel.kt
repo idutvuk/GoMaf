@@ -1,16 +1,17 @@
 package com.idutvuk.go_maf.ui.game
 
+
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.util.Log
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.gameactions.AddToVoteAction
 import com.idutvuk.go_maf.model.gameactions.FoulAction
 import com.idutvuk.go_maf.model.gameactions.KillAction
 import kotlin.math.cos
@@ -18,16 +19,12 @@ import kotlin.math.sin
 
 
 class GameFragmentViewModel : ViewModel() {
-
-
-    private var _gameState: MutableLiveData<String> = MutableLiveData()
-
     private var logMsg = ""
     private var actionID = "none"
 
     fun initViews(
         b: FragmentGameBinding,
-        numPlayers: Int
+        numPlayers: Int,
     ) {
         Game.buttons = listOf(
             b.btn1, b.btn2, b.btn3, b.btn4, b.btn5, b.btn6,
@@ -35,43 +32,41 @@ class GameFragmentViewModel : ViewModel() {
         )
 
         val points = generatePivotPoints(numPlayers)
-        for (i in 12 - 1 downTo numPlayers) {
+
+        for (i in 12 - 1 downTo Game.numPlayers) {
             Game.buttons[i].visibility = View.GONE
             logMsg += "Btn '${i+1}' hidden\n"
         }
         for (i in 0 until numPlayers) {
-            val x = points[i][0].toFloat()
-            val y = points[i][1].toFloat()
-            Game.buttons[i].x += x
-            Game.buttons[i].y += y
+            val КОСТЫЛЬ999 = 50
+            Game.buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
+            Game.buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
 
-            logMsg += "Btn '${i + 1}' added with relative x: $x, y:$y\n"
             Game.buttons[i].setOnClickListener { v ->
+                lateinit var output: IntArray
                 when (actionID) {
-                    "none" -> {}
                     "kill" -> {
-                        val output = CmdManager.commit(KillAction(i))
+                        output = CmdManager.commit(KillAction(i))
                         v.isEnabled = false
-                        controlUndoRedo(output,b)
                     }
 
                     "vote" -> {
-                        TODO("Not yet implemented")
-
+                        output = CmdManager.commit(AddToVoteAction(i,5))
                     }
 
                     "foul" -> {
-                        val output = CmdManager.commit(FoulAction(i))
-                        controlUndoRedo(output,b)
+                        output = CmdManager.commit(FoulAction(i))
                         foulTV(output[2],b)
                     }
 
-                    else -> Log.e("GameLog", "Incorrect curBtn type")
+                    else -> {output = IntArray(3)}
                 }
+                controlUndoRedo(output,b)
                 actionID = "none"
                 if (!Game.gameActive) gameEndTV(b)
             }
         }
+
         Log.d("GraphLog", logMsg); logMsg = ""
 
         b.rightSideBar.btnKill.setOnClickListener { actionID = "kill" }
@@ -102,8 +97,8 @@ class GameFragmentViewModel : ViewModel() {
         b.btnRedo.setOnClickListener { controlUndoRedo(CmdManager.redo(),b) }
 
         //debug buttons
-        b.btnDState.setOnClickListener { Game.printState() }
-        b.btnDUniversal.setOnClickListener { actionID="kill" }
+//        b.btnDState.setOnClickListener { Game.printState() }
+//        b.btnDUniversal.setOnClickListener { actionID="kill" }
 
 
     }
@@ -176,7 +171,7 @@ private fun controlUndoRedo(arr: IntArray, b: FragmentGameBinding) {
 }
 private fun generatePivotPoints(
     numPlayers: Int,
-    radius: Int = 365,
+    radius: Int = 330,
 ): Array<IntArray> {
     val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
 

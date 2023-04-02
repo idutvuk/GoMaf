@@ -1,12 +1,10 @@
 package com.idutvuk.go_maf.ui.mainmenu
 
 import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.findNavController
 import com.idutvuk.go_maf.R
 
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
-import androidx.navigation.fragment.findNavController
+
 
 import com.idutvuk.go_maf.databinding.FragmentMainMenuBinding
 
