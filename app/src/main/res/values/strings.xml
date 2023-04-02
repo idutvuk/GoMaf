@@ -8,6 +8,7 @@
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
 
+
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
@@ -28,4 +29,11 @@
     <string name="number10">10</string>
     <string name="number11">11</string>
     <string name="number12">12</string>
+    <string name="undo">undo</string>
+    <string name="redo">Redo</string>
+    <string name="peep">Peep</string>
+    <string name="log">log</string>
+    <string name="debug_test">test</string>
+    <string name="coming_soon">You shouldn\'t be able to see it.</string>
+
 </resources>

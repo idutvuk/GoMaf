@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.idutvuk.go_maf.MainMenuFragment">
+    tools:context="com.idutvuk.go_maf.ui.mainmenu.MainMenuFragment">
 
     <TextView
         android:layout_width="wrap_content"

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainMenuFragment"
-        android:name="com.idutvuk.go_maf.MainMenuFragment"
+        android:name="com.idutvuk.go_maf.ui.mainmenu.MainMenuFragment"
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" >
         <action
@@ -28,12 +28,12 @@
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.idutvuk.go_maf.GameFragment"
+        android:name="com.idutvuk.go_maf.ui.game.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.idutvuk.go_maf.SettingsFragment"
+        android:name="com.idutvuk.go_maf.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment android:id="@+id/tournamentPlaceholder" />
     <fragment android:id="@+id/tutorialPlaceholder" />

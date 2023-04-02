@@ -1,6 +1,4 @@
-package com.idutvuk.go_maf
-
-import android.util.Log
+package com.idutvuk.go_maf.model
 
 class Player(
     val number: Int,

@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf
+package com.idutvuk.go_maf.ui.mainmenu
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
