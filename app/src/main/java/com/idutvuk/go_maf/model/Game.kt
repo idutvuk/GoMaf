@@ -2,7 +2,6 @@ package com.idutvuk.go_maf.model
 
 import android.util.Log
 import com.google.android.material.button.MaterialButton
-import com.idutvuk.go_maf.ui.game.SmartTV
 
 object Game {
     const val minPlayers = 6

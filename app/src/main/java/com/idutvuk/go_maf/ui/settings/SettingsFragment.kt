@@ -5,17 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.kmafia.databinding.FragmentSettingsBinding
+import com.idutvuk.go_maf.ui.mainmenu.MainMenuFragmentViewModel
 
 internal class SettingsFragment : Fragment() {
-    private lateinit var settingsFragmentViewModel: SettingsFragmentViewModel
+    private lateinit var viewModel: SettingsFragmentViewModel
     private lateinit var b: FragmentSettingsBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        viewModel = ViewModelProvider(this)[SettingsFragmentViewModel::class.java]
         b = FragmentSettingsBinding.inflate(inflater,container,false)
-        settingsFragmentViewModel.initViews(b)
+       viewModel.initViews(b)
 
 
         return b.root

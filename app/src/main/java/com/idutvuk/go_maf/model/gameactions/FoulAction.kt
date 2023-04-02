@@ -2,7 +2,6 @@ package com.idutvuk.go_maf.model.gameactions
 
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
-import com.idutvuk.go_maf.ui.game.SmartTV
 
 class FoulAction(private val id: Int) : GameAction {
     private var wasMuted = false

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/gameFragment">
+    app:startDestination="@id/mainMenuFragment">
 
     <fragment
         android:id="@+id/mainMenuFragment"
@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_tutorialPlaceholder"
             app:destination="@id/tutorialPlaceholder" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_settingsFragment3"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
