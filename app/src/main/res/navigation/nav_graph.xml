@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/gameFragment">
+    app:startDestination="@id/mainMenuFragment">
 
     <fragment
         android:id="@+id/mainMenuFragment"
@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_settingsFragment3"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_debugFragment"
+            app:destination="@id/debugFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -40,4 +43,9 @@
         android:label="SettingsFragment" />
     <fragment android:id="@+id/tournamentPlaceholder" />
     <fragment android:id="@+id/tutorialPlaceholder" />
+    <fragment
+        android:id="@+id/debugFragment"
+        android:name="com.idutvuk.go_maf.ui.debug.DebugFragment"
+        android:label="fragment_debug"
+        tools:layout="@layout/fragment_debug" />
 </navigation>

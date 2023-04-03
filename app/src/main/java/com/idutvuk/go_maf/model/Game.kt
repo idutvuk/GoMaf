@@ -116,18 +116,18 @@ object Game {
     }
 
     fun printState() {
-        var msg = "Game status: " + if (gameActive) "active\n" else "not active\n"
-       msg+="Current action: ${CmdManager.currentIndex}. Actions:\n"
-        for(i in 0 until CmdManager.history.size) {
-            msg += (if (CmdManager.currentIndex == i+1) '>' else ' ') +
-                    (if (i<10) "0$i " else "$i ") +
-                    CmdManager.history[i]+'\n'
-        }
-        msg+="Players:\n"
-        for (i in 0 until numPlayers) {
-            msg+= players[i].toString()+'\n'
-        }
-        Log.i("GameLog",msg)
+            var msg = "Game status: " + if (gameActive) "active\n" else "not active\n"
+            msg += "Current action: ${CmdManager.currentIndex}. Actions:\n"
+            for (i in 0 until CmdManager.history.size) {
+                msg += (if (CmdManager.currentIndex == i + 1) '>' else ' ') +
+                        (if (i < 10) "0$i " else "$i ") +
+                        CmdManager.history[i] + '\n'
+            }
+            msg += "Players:\n"
+            for (i in 0 until numPlayers) {
+                msg += players[i].toString() + '\n'
+            }
+            Log.i("GameLog", msg)
     }
 
     fun mute(id: Int) {

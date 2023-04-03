@@ -3,27 +3,35 @@ package com.idutvuk.go_maf.ui.game
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
 import android.util.Log
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.GameMessage
+import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
 import com.idutvuk.go_maf.model.gameactions.AddToVoteAction
 import com.idutvuk.go_maf.model.gameactions.FoulAction
 import com.idutvuk.go_maf.model.gameactions.KillAction
+import kotlinx.coroutines.DisposableHandle
 import kotlin.math.cos
 import kotlin.math.sin
 
 
-class GameFragmentViewModel : ViewModel() {
+class GameViewModel: ViewModel() {
+
     private var logMsg = ""
     private var actionID = "none"
+    private lateinit var messages: ArrayList<GameMessage>
+    private lateinit var rvDisposable: DisposableHandle
 
     fun initViews(
         b: FragmentGameBinding,
+        context: Context, //TODO: Context inside a ViewModel is bad
         numPlayers: Int,
     ) {
         Game.buttons = listOf(
@@ -38,7 +46,7 @@ class GameFragmentViewModel : ViewModel() {
             logMsg += "Btn '${i+1}' hidden\n"
         }
         for (i in 0 until numPlayers) {
-            val КОСТЫЛЬ999 = 50
+            val КОСТЫЛЬ999 = 60 //TODO: Убрать костыль
             Game.buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
             Game.buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
 
@@ -66,6 +74,14 @@ class GameFragmentViewModel : ViewModel() {
                 if (!Game.gameActive) gameEndTV(b)
             }
         }
+        // Initialize contacts
+        messages = GameMessage.getGameActionsList()
+        // Create adapter passing in the sample user data
+        val adapter = RecyclerViewLogAdapter(messages)
+        // Attach the adapter to the recyclerview to populate items
+        b.rvLog.adapter = adapter
+        // Set layout manager to position the items
+        b.rvLog.layoutManager = LinearLayoutManager(context)
 
         Log.d("GraphLog", logMsg); logMsg = ""
 
@@ -97,12 +113,12 @@ class GameFragmentViewModel : ViewModel() {
         b.btnRedo.setOnClickListener { controlUndoRedo(CmdManager.redo(),b) }
 
         //debug buttons
-//        b.btnDState.setOnClickListener { Game.printState() }
-//        b.btnDUniversal.setOnClickListener { actionID="kill" }
+        b.btnDState.setOnClickListener { Game.printState() }
+        b.btnDTest.text = "update logs"
+        b.btnDTest.setOnClickListener {adapter.updateMessagesList()}
 
 
     }
-
 
 val blinkDur = 2_000
 fun foulTV(id:Int, b:FragmentGameBinding) {

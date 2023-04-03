@@ -25,6 +25,10 @@ class MainMenuFragmentViewModel: ViewModel() {
             TODO("Not yet implemented")
         }
 
+        b.btnDPlayground.setOnClickListener {
+            n.navigate(R.id.action_mainMenuFragment_to_debugFragment)
+        }
+
 
     }
 }
