@@ -1,15 +1,15 @@
 package com.idutvuk.go_maf.model
 
+import android.database.Observable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.idutvuk.go_maf.model.gameactions.GameAction
 import com.idutvuk.go_maf.ui.game.GameFragment
 
+
 object CmdManager {
-    lateinit var gameFragment: GameFragment
     val history = mutableListOf<GameAction>()
-    val liveHistory = MutableLiveData<List<GameAction>>(history)
     var currentIndex = 0
 
 
@@ -20,12 +20,10 @@ object CmdManager {
         if (history.size != currentIndex) {
             repeat(history.size - currentIndex) {
                 history.removeLastOrNull()
-                liveHistory.value = history
             }
             result[1] = -1
         }
         history.add(command)
-        liveHistory.value = history
         currentIndex++
         result[0] = 1
         return result
@@ -39,7 +37,6 @@ object CmdManager {
             return result
         }
         history[currentIndex -1].undo()
-        liveHistory.value = history
         currentIndex--
         result[1] = 1
         Log.d("GameLog","Undo completed. size: ${history.size}, index:$currentIndex")
