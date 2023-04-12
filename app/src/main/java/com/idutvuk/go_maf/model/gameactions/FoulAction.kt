@@ -2,6 +2,9 @@ package com.idutvuk.go_maf.model.gameactions
 
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.gameactions.kill.BanAction
+import com.idutvuk.go_maf.model.gameactions.kill.KillAction
+import com.idutvuk.go_maf.model.gameactions.kill.KillByMafiaAction
 
 class FoulAction(private val id: Int) : GameAction {
     private var wasMuted = false
@@ -23,7 +26,7 @@ class FoulAction(private val id: Int) : GameAction {
             }
 
             4 -> {
-                KillAction(id).execute()
+                BanAction(id).execute()
                 wasKilled = true
             }
 
@@ -41,13 +44,15 @@ class FoulAction(private val id: Int) : GameAction {
         )
 
         if (wasKilled) {
-            KillAction(id).undo()
+            BanAction(id).undo()
         } else if (wasMuted) {
             Log.i("GameLog", "Player #${Game.players[id].strNum} unmuted.")
             //TODO unmute logic
         }
     }
     override fun toString(): String {
-        return "fouled ${Game.players[id].strNum}"
+        return (if (Game.players[id].fouls==4) "❗fouled" else "‼️banned") + Game.players[id].strNum
     }
+
+    override val importance = 5
 }

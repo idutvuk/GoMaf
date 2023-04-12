@@ -24,7 +24,7 @@ object Game {
     lateinit var buttons: List<MaterialButton>
     var voteList = ArrayList<Int>()
 
-    // !DEBUG!
+    //TODO: Delete or extract
     private val nicknames = arrayOf(
         "Jake Green",
         "Zach",
@@ -63,8 +63,6 @@ object Game {
         }
         roles.shuffle()
         Log.i("GameLog", "Roles created: ${roles.joinToString(",")}")
-
-
     }
 
     fun startGame() {
@@ -91,23 +89,9 @@ object Game {
 
 
 
-    fun checkSheriff(id: Int): Boolean {
-        val b = players[id].role == "MAF" || players[id].role == "DON"
-        Log.i(
-            "GameLog", "Player #${players[id].number} (${players[id].role}) " +
-                    "hb checked by SHR. Res: ${if (b) "mafia" else "civilian"}"
-        )
-        return b
-    }
 
-    fun checkDon(id: Int): Boolean {
-        val b = players[id].role == "SHR"
-        Log.i(
-            "GameLog", "Player #${players[id].number} (${players[id].role}) " +
-                    "hb checked by DON. Res: ${if (b) "SHR" else "not SHR"}"
-        )
-        return b
-    }
+
+
 
     fun addToVoteList(id: Int) {
         if (!voteList.contains(id)) {

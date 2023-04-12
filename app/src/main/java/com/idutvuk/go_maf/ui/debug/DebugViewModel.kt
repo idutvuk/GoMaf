@@ -3,9 +3,11 @@ package com.idutvuk.go_maf.ui.debug
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentDebugBinding
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
+import com.idutvuk.go_maf.ui.TimerHandler
 
 class DebugViewModel : ViewModel() {
     private lateinit var messages: ArrayList<GameMessage>
@@ -22,6 +24,11 @@ class DebugViewModel : ViewModel() {
         b.rvLog.adapter = adapter
         // Set layout manager to position the items
         b.rvLog.layoutManager = LinearLayoutManager(context)
+
+
+
+
+
     }
 
 

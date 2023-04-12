@@ -4,29 +4,32 @@ import android.util.Log
 import com.idutvuk.go_maf.model.Game
 
 class CheckDonAction(private val playerId: Int) : GameAction {
-    private var wasShr = false
+    private var isShr: Boolean = false //will be overridden later
 
     override fun execute(): Int {
         // Determine whether the player is a SHR and log the action.
-        val isShr = Game.players[playerId].role == "SHR"
+        isShr = Game.players[playerId].role == "SHR"
         Log.i(
             "GameLog",
-            "Player #${Game.players[playerId].number} (${Game.players[playerId].role}) was checked by DON."
+            "Player #${Game.players[playerId].number} checked by DON. Result:" +
+                    if (isShr) "SHR" else "not SHR"
         )
 
         // Save the result of the check.
-        wasShr = isShr
+
 
         return if (isShr) 1 else 0
     }
     override fun undo() {
         Log.i(
             "GameLog",
-            "Undo DON check on player #${Game.players[playerId].number}. Result: ${if (wasShr) "SHR" else "not SHR"}"
+            "Undo DON check on player #${Game.players[playerId].number}"
         )
     }
 
     override fun toString(): String {
-        return "checkDON"
+        return "💍checked by DON ${Game.players[playerId].strNum} Result:" +
+                if (isShr) "👌SHR" else "👍not SHR"
     }
+    override val importance = 5
 }

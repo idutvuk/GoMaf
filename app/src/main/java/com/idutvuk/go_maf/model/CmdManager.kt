@@ -17,15 +17,17 @@ object CmdManager {
     fun commit(command: GameAction): IntArray {
         val result = IntArray(3) //[0] for undo state, [1] for redo state, [2] for command code
         result[2] = command.execute()
-        if (history.size != currentIndex) {
-            repeat(history.size - currentIndex) {
-                history.removeLastOrNull()
+        if (result[2] != -1) {
+            if (history.size != currentIndex) {
+                repeat(history.size - currentIndex) {
+                    history.removeLastOrNull()
+                }
+                result[1] = -1
             }
-            result[1] = -1
+            history.add(command)
+            currentIndex++
+            result[0] = 1
         }
-        history.add(command)
-        currentIndex++
-        result[0] = 1
         return result
     }
 

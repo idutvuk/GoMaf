@@ -16,8 +16,11 @@ import com.idutvuk.go_maf.model.Game
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
 import com.idutvuk.go_maf.model.gameactions.AddToVoteAction
+import com.idutvuk.go_maf.model.gameactions.CheckDonAction
+import com.idutvuk.go_maf.model.gameactions.CheckShrAction
 import com.idutvuk.go_maf.model.gameactions.FoulAction
-import com.idutvuk.go_maf.model.gameactions.KillAction
+import com.idutvuk.go_maf.model.gameactions.kill.KillAction
+import com.idutvuk.go_maf.model.gameactions.kill.KillByMafiaAction
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -54,17 +57,16 @@ class GameViewModel : ViewModel() {
             val КОСТЫЛЬ999 = 60 //TODO: Убрать костыль
             Game.buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
             Game.buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
-
             Game.buttons[i].setOnClickListener { v ->
                 lateinit var output: IntArray
                 when (actionID) {
                     "kill" -> {
-                        output = CmdManager.commit(KillAction(i))
+                        output = CmdManager.commit(KillByMafiaAction(i))
                         v.isEnabled = false
                     }
 
                     "vote" -> {
-                        output = CmdManager.commit(AddToVoteAction(i, 5))
+                        output = CmdManager.commit(AddToVoteAction(i))
                     }
 
                     "foul" -> {
@@ -72,11 +74,20 @@ class GameViewModel : ViewModel() {
                         foulTV(output[2], b)
                     }
 
+                    "cshr" -> {
+                        output = CmdManager.commit(CheckShrAction(i))
+                    }
+
+                    "cdon" -> {
+                        output = CmdManager.commit(CheckDonAction(i))
+                    }
+
                     else -> {
                         output = IntArray(3)
                     }
                 }
                 controlUndoRedo(output, b, adapter)
+                b.tvTopBar.text = "votelist: " + Game.voteList.toString()
                 actionID = "none"
                 if (!Game.gameActive) gameEndTV(b)
             }
@@ -86,15 +97,25 @@ class GameViewModel : ViewModel() {
 
         Log.d("GraphLog", logMsg); logMsg = ""
 
-        b.rightSideBar.btnKill.setOnClickListener { actionID = "kill" }
+        b.rightSideBar.btnKill.setOnClickListener {
+            actionID = "kill"
+        }
 
-        b.rightSideBar.btnVote.setOnClickListener { actionID = "vote" }
+        b.rightSideBar.btnVote.setOnClickListener {
+            actionID = "vote"
+        }
 
-        b.rightSideBar.btnFoul.setOnClickListener { actionID = "foul" }
+        b.rightSideBar.btnFoul.setOnClickListener {
+            actionID = "foul"
+        }
 
-        b.rightSideBar.btnDonCheck.setOnClickListener { actionID = "cdon" }
+        b.rightSideBar.btnDonCheck.setOnClickListener {
+            actionID = "cdon"
+        }
 
-        b.rightSideBar.btnShrCheck.setOnClickListener { actionID = "cshr" }
+        b.rightSideBar.btnShrCheck.setOnClickListener {
+            actionID = "cshr"
+        }
 
         b.btnPeep.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
@@ -115,7 +136,6 @@ class GameViewModel : ViewModel() {
 
         //debug buttons
         b.btnDState.setOnClickListener { Game.printState() }
-        b.btnDTest.text = "update logs"
         b.btnDTest.setOnClickListener { adapter.updateMessagesList() }
 
 

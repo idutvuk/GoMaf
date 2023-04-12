@@ -1,12 +1,15 @@
-package com.idutvuk.go_maf.model.gameactions
+package com.idutvuk.go_maf.model.gameactions.kill
 
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.gameactions.GameAction
+import com.idutvuk.go_maf.model.gameactions.gamestate.GameEndAction
 
-class KillAction(private val id: Int) : GameAction {
+abstract class KillAction(private val id: Int) : GameAction {
+    override val importance = 2
     override fun execute(): Int {
         if (!Game.players[id].alive) {
-            Log.w("GameLog", "Attempt to kill dead person. Aboring")
+            Log.w("GameLog", "Attempt to kill dead person. Aborting")
             return 0
         }
         Game.players[id].alive = false
@@ -22,16 +25,13 @@ class KillAction(private val id: Int) : GameAction {
                 }
         if (blackTeamCount == 0) {
             Log.w("GameLog", "All black team members are dead.")
-            Game.endGame()
-            return 1
-        }
-        if (redTeamCount <= blackTeamCount) {
+            GameEndAction()
+        } else if (redTeamCount <= blackTeamCount) {
             Log.w("GameLog", "Red team is no longer in the majority")
-            Game.endGame()
-            return 1
+            GameEndAction()
         }
+        Game.voteList.clear()
         return 1
-        //TODO kill logic
         //TODO create an opportunity to kill multiple people
     }
 
@@ -45,7 +45,7 @@ class KillAction(private val id: Int) : GameAction {
         }
     }
     override fun toString(): String {
-        return "killed ${Game.players[id].strNum}"
+        return "💀 killed ${Game.players[id].strNum}"
     }
 
 }

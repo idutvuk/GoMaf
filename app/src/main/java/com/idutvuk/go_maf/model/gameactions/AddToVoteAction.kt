@@ -3,7 +3,7 @@ package com.idutvuk.go_maf.model.gameactions
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
 
-class AddToVoteAction(private val nominatedId: Int, private val nominaterId: Int) : GameAction {
+class AddToVoteAction(private val nominatedId: Int/*, private val nominaterId: Int*/) : GameAction {
     override fun execute(): Int {
         if (Game.voteList.contains(nominatedId)) {
             Log.e("GameLog",
@@ -11,8 +11,8 @@ class AddToVoteAction(private val nominatedId: Int, private val nominaterId: Int
             return -1
         }
         Game.voteList.add(nominatedId)
-        Log.i("GameLog","Player #${Game.players[nominatedId].strNum} was nominated by " +
-                "player #${Game.players[nominaterId].strNum}")
+        Log.i("GameLog","Player #${Game.players[nominatedId].strNum} nominated")
+        /* by player #${Game.players[nominaterId].strNum}")*/
         return 0
     }
 
@@ -24,6 +24,8 @@ class AddToVoteAction(private val nominatedId: Int, private val nominaterId: Int
     }
 
     override fun toString(): String {
-        return "nominated ${Game.players[nominatedId].strNum} by ${Game.players[nominaterId].strNum}"
+        return "👆 nominated ${Game.players[nominatedId].strNum}"/* by ${Game.players[nominaterId].strNum}"*/
     }
+
+    override val importance = 5
 }
