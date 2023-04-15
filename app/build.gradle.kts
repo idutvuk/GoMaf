@@ -1,10 +1,12 @@
 plugins {
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.com.android.application)
+    @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
 android {
-    namespace = "com.example.kmafia"
+    namespace = "com.idutvuk.go_maf"
     compileSdk = 33
 
     defaultConfig {
@@ -39,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.material)
+    implementation(libs.androidx.navigation.fragment.ktx)
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -47,6 +51,9 @@ dependencies {
     implementation(libs.preference)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.legacy.support.v4)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

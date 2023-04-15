@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/gameFragment">
+    app:startDestination="@id/mainMenuFragment">
 
     <fragment
         android:id="@+id/mainMenuFragment"
-        android:name="com.idutvuk.go_maf.MainMenuFragment"
+        android:name="com.idutvuk.go_maf.ui.mainmenu.MainMenuFragment"
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" >
         <action
@@ -25,16 +25,27 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_tutorialPlaceholder"
             app:destination="@id/tutorialPlaceholder" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_settingsFragment3"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_debugFragment"
+            app:destination="@id/debugFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.idutvuk.go_maf.GameFragment"
+        android:name="com.idutvuk.go_maf.ui.game.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.idutvuk.go_maf.SettingsFragment"
+        android:name="com.idutvuk.go_maf.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment android:id="@+id/tournamentPlaceholder" />
     <fragment android:id="@+id/tutorialPlaceholder" />
+    <fragment
+        android:id="@+id/debugFragment"
+        android:name="com.idutvuk.go_maf.ui.debug.DebugFragment"
+        android:label="fragment_debug"
+        tools:layout="@layout/fragment_debug" />
 </navigation>
