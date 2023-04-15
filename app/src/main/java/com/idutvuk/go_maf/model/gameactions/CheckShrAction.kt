@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.model.gameactions
 
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.Role
 
 class CheckShrAction(private val playerId: Int) : GameAction {
     private var isBlack: Boolean = false //will be overridden later
@@ -9,7 +10,7 @@ class CheckShrAction(private val playerId: Int) : GameAction {
     override fun execute(): Int {
         // Determine whether the player is a SHR and log the action.
         val role = Game.players[playerId].role
-        isBlack = (role == "DON" || role == "MAF")
+        isBlack = (role == Role.DON || role == Role.MAF)
         Log.i(
             "GameLog",
             "Player #${Game.players[playerId].number} (${Game.players[playerId].role}) was checked by SHR."

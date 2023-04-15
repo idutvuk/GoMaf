@@ -10,10 +10,12 @@ import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.Game
 import com.idutvuk.go_maf.model.GameMessage
+import com.idutvuk.go_maf.model.Player
 import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
 import com.idutvuk.go_maf.model.gameactions.AddToVoteAction
 import com.idutvuk.go_maf.model.gameactions.CheckDonAction
@@ -31,39 +33,36 @@ class GameViewModel : ViewModel() {
     private var actionID = "none"
     private lateinit var messages: ArrayList<GameMessage>
     val gameMessages = MutableLiveData<List<GameMessage>>()
+//    val playersData = MutableLiveData<List<Player>>()
 
+    //Объявляю LiveData, содержащую в себе Int внутри ViewModel
+    val ldNumber = MutableLiveData<Int>(0)
 
     fun initViews(
         b: FragmentGameBinding,
-        context: Context, //TODO: Context inside a ViewModel is bad
         numPlayers: Int,
+        buttons: List<MaterialButton>,
+        adapter: RecyclerViewLogAdapter
     ) {
-        messages = GameMessage.getGameActionsList()
-        val adapter = RecyclerViewLogAdapter(messages)
-        //TODO: Move RV declaration to the GameFragment.kt
-        b.rvLog.adapter = adapter
-        b.rvLog.layoutManager = LinearLayoutManager(context)
 
-        Game.buttons = listOf(
-            b.btn1, b.btn2, b.btn3, b.btn4, b.btn5, b.btn6,
-            b.btn7, b.btn8, b.btn9, b.btn10, b.btn11, b.btn12
-        )
+        //TODO: Move RV declaration to the GameFragment.kt
+
         val points = generatePivotPoints(numPlayers)
 
         for (i in 12 - 1 downTo Game.numPlayers) {
-            Game.buttons[i].visibility = View.GONE
+            buttons[i].visibility = View.GONE
             logMsg += "Btn '${i + 1}' hidden\n"
         }
         for (i in 0 until numPlayers) {
             val КОСТЫЛЬ999 = 60 //TODO: Убрать костыль
-            Game.buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
-            Game.buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
-            Game.buttons[i].setOnClickListener { v ->
+            buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
+            buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
+            buttons[i].setOnClickListener { v ->
                 lateinit var output: IntArray
                 when (actionID) {
                     "kill" -> {
                         output = CmdManager.commit(KillByMafiaAction(i))
-                        v.isEnabled = false
+//                        v.isEnabled = false
                     }
 
                     "vote" -> {
@@ -120,11 +119,11 @@ class GameViewModel : ViewModel() {
         b.btnPeep.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 for (i in 0 until numPlayers)
-                    Game.buttons[i].text = Game.players[i].emoji
+                    buttons[i].text = Game.players[i].emoji
                 view.performClick()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 for (i in 0 until numPlayers)
-                    Game.buttons[i].text = (i + 1).toString()
+                    buttons[i].text = (i + 1).toString()
                 view.performClick()
             }
             false
@@ -136,7 +135,12 @@ class GameViewModel : ViewModel() {
 
         //debug buttons
         b.btnDState.setOnClickListener { Game.printState() }
-        b.btnDTest.setOnClickListener { adapter.updateMessagesList() }
+
+        //Меняем состояние значения livedata ldNumber по нажатию на кнопку
+        b.btnDTest.setOnClickListener {
+            ldNumber.value = ldNumber.value?.plus(1)
+            Log.d("GameLog", "test button activated")
+        }
 
 
     }

@@ -9,7 +9,7 @@ class RegularPlayerSpeechAction (mId: Int) : PlayerSpeechAction(mId) {
         return 0
     }
     override fun undo() {
-        Game.currentSpeaker--
+        TODO("Not yet implemented")
     }
 
     override fun toString(): String {

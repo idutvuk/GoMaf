@@ -2,7 +2,7 @@ package com.idutvuk.go_maf.model
 
 class Player(
     val number: Int,
-    val role: String = "CIV", //TODO: extract to ENUM
+    val role: Role = Role.CIV,
     val nickname: String = "Debugger",
 //    val isGhost: Boolean = false //TODO: add ghost logic
 ) {
@@ -10,13 +10,10 @@ class Player(
     var fouls = 0
     internal val strNum = String.format("%02d", number + 1)
     internal val emoji = when (role) {
-        "CIV" -> "🙂"
-        "SHR" -> "🥸"
-        "MAF" -> "🔫"
-        "DON" -> "💍"
-        else -> {
-            "🤷‍♂️IDK "
-        }
+        Role.CIV -> "🙂"
+        Role.SHR -> "🥸"
+        Role.MAF -> "🔫"
+        Role.DON -> "💍"
     }
 
     override fun toString(): String {

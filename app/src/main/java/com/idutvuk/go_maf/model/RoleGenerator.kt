@@ -21,13 +21,13 @@ val nicknames = arrayOf(
     "Fred"
 )
 
-fun generateRoles() {
-    Game.roles = Array(Game.numPlayers) { "CIV" }
+fun generateRoles() : Array<Role> {
+    val roles = Array(Game.numPlayers) { Role.CIV }
     if (Game.numPlayers == 6) {
-        Game.roles[0] = "MAF"
+        roles[0] = Role.MAF
     } else {
-        Game.roles[0] = "SHR"
-        Game.roles[1] = "DON"
+        roles[0] = Role.SHR
+        roles[1] = Role.DON
         val numMaf = when (Game.numPlayers) {
             in 7..8 -> 2
             in 9..10 -> 3
@@ -35,9 +35,10 @@ fun generateRoles() {
             else -> 0
         }
         for (i in 2..numMaf) {
-            Game.roles[i] = "MAF"
+            roles[i] = Role.MAF
         }
     }
-    Game.roles.shuffle()
-    Log.i("GameLog", "Roles created: ${Game.roles.joinToString(",")}")
+    roles.shuffle()
+    Log.i("GameLog", "Roles created: ${roles.joinToString(",")}")
+    return roles
 }

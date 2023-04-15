@@ -10,12 +10,12 @@ import com.idutvuk.go_maf.model.nicknames
 
 class GameStartAction : GameAction {
     override fun execute(): Int {
-        generateRoles()
+        val roles = generateRoles()
         nicknames.shuffle()
         Game.players = Array(Game.numPlayers) { i ->
             Player(
                 number = i,
-                role = Game.roles[i],
+                role = roles[i],
                 nickname = nicknames[i]
             )
         }

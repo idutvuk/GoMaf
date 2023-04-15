@@ -25,10 +25,9 @@ object Game {
     //TODO: Make ghost games possible
     var ghost = false
 
-    lateinit var positions: Array<Int>
-    lateinit var roles: Array<String>
+//    lateinit var positions: Array<Int> //TODO: move to upper level
     lateinit var players: Array<Player>
-    lateinit var buttons: List<MaterialButton>
+//    lateinit var buttons: List<MaterialButton>
     var voteList = ArrayList<Int>()
 
     /**

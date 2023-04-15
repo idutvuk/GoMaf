@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.model.gameactions.kill
 
 import android.util.Log
 import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.Role
 import com.idutvuk.go_maf.model.gameactions.GameAction
 import com.idutvuk.go_maf.model.gameactions.gamestate.GameEndAction
 
@@ -13,14 +14,14 @@ abstract class KillAction(private val id: Int) : GameAction {
             return 0
         }
         Game.players[id].alive = false
-        Game.buttons[id].isEnabled = false
+        Game.buttons[id].isEnabled = false //TODO: Fix
         Log.i("GameLog", "Player #${Game.players[id].strNum} killed")
         var redTeamCount = 0
         var blackTeamCount = 0
         for (i in 0 until Game.numPlayers)
             if (Game.players[i].alive)
                 when (Game.players[i].role) {
-                    "CIV", "SHR" -> redTeamCount++
+                    Role.CIV, Role.SHR -> redTeamCount++
                     else -> blackTeamCount++
                 }
         if (blackTeamCount == 0) {
