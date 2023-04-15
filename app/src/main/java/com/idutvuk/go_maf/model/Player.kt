@@ -2,13 +2,12 @@ package com.idutvuk.go_maf.model
 
 class Player(
     val number: Int,
-    val role: String = "CIV",
+    val role: String = "CIV", //TODO: extract to ENUM
     val nickname: String = "Debugger",
-    val isGhost: Boolean = false
+//    val isGhost: Boolean = false //TODO: add ghost logic
 ) {
     var alive = true
     var fouls = 0
-    var isAddedForVoting = false
     internal val strNum = String.format("%02d", number + 1)
     internal val emoji = when (role) {
         "CIV" -> "🙂"

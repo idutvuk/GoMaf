@@ -12,8 +12,6 @@ object CmdManager {
     val history = mutableListOf<GameAction>()
     var currentIndex = 0
 
-
-
     fun commit(command: GameAction): IntArray {
         val result = IntArray(3) //[0] for undo state, [1] for redo state, [2] for command code
         result[2] = command.execute()

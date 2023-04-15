@@ -40,6 +40,7 @@ class GameViewModel : ViewModel() {
     ) {
         messages = GameMessage.getGameActionsList()
         val adapter = RecyclerViewLogAdapter(messages)
+        //TODO: Move RV declaration to the GameFragment.kt
         b.rvLog.adapter = adapter
         b.rvLog.layoutManager = LinearLayoutManager(context)
 
@@ -87,7 +88,6 @@ class GameViewModel : ViewModel() {
                     }
                 }
                 controlUndoRedo(output, b, adapter)
-                b.tvTopBar.text = "votelist: " + Game.voteList.toString()
                 actionID = "none"
                 if (!Game.gameActive) gameEndTV(b)
             }
@@ -98,23 +98,23 @@ class GameViewModel : ViewModel() {
         Log.d("GraphLog", logMsg); logMsg = ""
 
         b.rightSideBar.btnKill.setOnClickListener {
-            actionID = "kill"
+            actionID = if (actionID == "kill") "none" else "kill"
         }
 
         b.rightSideBar.btnVote.setOnClickListener {
-            actionID = "vote"
+            actionID = if (actionID == "vote") "none" else "vote"
         }
 
         b.rightSideBar.btnFoul.setOnClickListener {
-            actionID = "foul"
+            actionID = if (actionID == "foul") "none" else "foul"
         }
 
         b.rightSideBar.btnDonCheck.setOnClickListener {
-            actionID = "cdon"
+            actionID = if (actionID == "cdon") "none" else "cdon"
         }
 
         b.rightSideBar.btnShrCheck.setOnClickListener {
-            actionID = "cshr"
+            actionID = if (actionID == "cshr") "none" else "cshr"
         }
 
         b.btnPeep.setOnTouchListener { view, motionEvent ->

@@ -31,14 +31,11 @@ object TimerHandler {
                 tvTimer.text = timeText
 
                 // Calculate progress as a percentage of total time
-                val progress = (remainingTime * 100 / maxTime).toInt()
-
 //                pbTimer.visibility = ProgressBar.VISIBLE
-                pbTimer.progress = progress
+                pbTimer.progress = (remainingTime/1000).toInt()
 
                 // Your code for updating the UI with the remaining time
                 if (remainingTime == 30000L || remainingTime == 10000L || remainingTime == 0L) {
-
                     Log.v("GameLog","${remainingTime/1000} secs remaining")
                 }
             }

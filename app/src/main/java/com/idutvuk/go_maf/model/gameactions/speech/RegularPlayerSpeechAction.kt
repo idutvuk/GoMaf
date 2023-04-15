@@ -5,10 +5,11 @@ import com.idutvuk.go_maf.model.gameactions.GameAction
 
 class RegularPlayerSpeechAction (mId: Int) : PlayerSpeechAction(mId) {
     override fun execute(): Int {
-        TODO("Not yet implemented")
+        //TODO something here...
+        return 0
     }
     override fun undo() {
-        TODO("Not yet implemented")
+        Game.currentSpeaker--
     }
 
     override fun toString(): String {

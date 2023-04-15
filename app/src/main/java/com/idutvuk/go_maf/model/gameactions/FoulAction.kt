@@ -40,7 +40,7 @@ class FoulAction(private val id: Int) : GameAction {
         Game.players[id].fouls--
         Log.i(
             "GameLog",
-            "Undo foul on player #${Game.players[id].number}. Total fouls: ${Game.players[id].fouls}"
+            "Undone foul on player #${Game.players[id].number}. Total fouls: ${Game.players[id].fouls}"
         )
 
         if (wasKilled) {
@@ -51,7 +51,7 @@ class FoulAction(private val id: Int) : GameAction {
         }
     }
     override fun toString(): String {
-        return (if (Game.players[id].fouls==4) "❗fouled" else "‼️banned") + Game.players[id].strNum
+        return (if (Game.players[id].fouls<4) "❗fouled" else "‼️banned") + Game.players[id].strNum
     }
 
     override val importance = 5

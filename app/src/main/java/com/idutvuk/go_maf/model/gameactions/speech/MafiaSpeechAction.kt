@@ -2,7 +2,7 @@ package com.idutvuk.go_maf.model.gameactions.speech
 
 import com.idutvuk.go_maf.model.Game
 
-class MafiaSpeechAction (playerId: Int) : SpeechAction(playerId) {
+class MafiaSpeechAction () : SpeechAction() {
     override fun execute(): Int {
         TODO("Not yet implemented")
     }
@@ -11,6 +11,6 @@ class MafiaSpeechAction (playerId: Int) : SpeechAction(playerId) {
     }
 
     override fun toString(): String {
-        return "mafia speech ${Game.players[id].strNum}"
+        return "mafia speech"
     }
 }
