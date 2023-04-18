@@ -354,7 +354,6 @@
         android:src="@drawable/ic_debug"
         android:contentDescription="@string/debug_test"/>
 
-
 <include
     layout="@layout/bottom_sheet"
     android:id="@+id/bottomSheetLayout"
@@ -363,6 +362,5 @@
     android:layout_height="600dp"
     android:layout_gravity="center|top"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
