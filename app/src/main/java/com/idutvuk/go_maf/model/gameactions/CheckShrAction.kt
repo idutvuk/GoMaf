@@ -1,10 +1,11 @@
 package com.idutvuk.go_maf.model.gameactions
 
 import android.util.Log
-import com.idutvuk.go_maf.model.Game
-import com.idutvuk.go_maf.model.Role
+import com.idutvuk.go_maf.model.gamedata.Game
+import com.idutvuk.go_maf.model.gamedata.GameState
+import com.idutvuk.go_maf.model.gamedata.Role
 
-class CheckShrAction(private val playerId: Int) : GameAction {
+class CheckShrAction(gameState: GameState, private val playerId: Int) : GameAction(gameState) {
     private var isBlack: Boolean = false //will be overridden later
 
     override fun execute(): Int {

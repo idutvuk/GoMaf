@@ -1,62 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.cardview.widget.CardView
-    android:id="@+id/cv_upperInfoBar"
-    style="@style/Widget.Material3.CardView.Filled"
-    android:layout_width="0dp"
-    android:layout_height="30dp"
-    app:cardCornerRadius="20dp"
-    android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="10dp"
-    app:layout_constraintStart_toEndOf="@id/cvUndoRedoPeep"
-    app:layout_constraintEnd_toStartOf="@id/right_side_bar"
-    app:layout_constraintTop_toTopOf="parent">
-        <Button
-            android:id="@+id/btn_d_state"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:text="log"
-            android:textSize="13sp"
-            android:padding="0dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="5dp"/>
-        <Button
-            android:id="@+id/btn_d_test"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:text="test"
-            android:textSize="13sp"
-            android:padding="0dp"
-            android:layout_gravity="center"
-            android:layout_marginRight="5dp"/>
-        <TextView
-            android:id="@+id/tv_top_bar"
-            android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="140dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/top_app_bar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:text="Status will be here"
-            android:layout_marginLeft="10dp"/>
-    </androidx.cardview.widget.CardView>
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_tableContainer"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginVertical="5dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/cv_upperInfoBar"
-        app:layout_constraintEnd_toEndOf="@id/cv_upperInfoBar"
-        app:layout_constraintTop_toBottomOf="@id/cv_upperInfoBar">
+            app:navigationIcon="@drawable/ic_back">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="24dp">
+
+                <TextView
+                    android:id="@+id/tvHeadline"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Медленно и спокойно"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp"/>
+
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description"
+                    android:textSize="18sp"
+                    android:textStyle="normal" />
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -125,79 +122,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <include
-        android:id="@+id/right_side_bar"
-        layout="@layout/right_side_bar"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvUndoRedoPeep"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                style="@style/ThemeOverlay.Material3.FloatingActionButton.Surface"
-                android:id="@+id/btnUndo"
-                android:contentDescription="@string/undo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:enabled="false"
-                android:src="@drawable/baseline_undo_24" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnRedo"
-                android:contentDescription="@string/redo"
-                style="@style/ThemeOverlay.Material3.FloatingActionButton.Surface"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:enabled="false"
-                android:src="@drawable/baseline_redo_24" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btnPeep"
-                style="@style/ThemeOverlay.Material3.FloatingActionButton.Surface"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                android:src="@drawable/baseline_remove_red_eye_24"
-                android:contentDescription="@string/peep" />
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cv_log_container"
-        style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginVertical="5dp"
-        app:cardCornerRadius="20dp"
-        app:layout_constraintBottom_toTopOf="@id/cvUndoRedoPeep"
-        app:layout_constraintEnd_toEndOf="@id/cvUndoRedoPeep"
-        app:layout_constraintStart_toStartOf="@id/cvUndoRedoPeep"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_log"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/game_action_message"/>
-
-    </com.google.android.material.card.MaterialCardView>
     <!-- debug -->
 
     <com.google.android.material.button.MaterialButton
@@ -385,3 +310,37 @@
         android:textSize="30sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPeep"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_anchor="@id/bottomSheetLayout"
+        app:layout_anchorGravity="top|end"
+        android:src="@drawable/baseline_remove_red_eye_24"
+        android:contentDescription="@string/peep" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabFoul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_anchor="@id/bottomSheetLayout"
+        app:layout_anchorGravity="top|start"
+        android:src="@drawable/ic_foul"
+        android:contentDescription="@string/peep" />
+
+<include
+    layout="@layout/bottom_sheet"
+    android:id="@+id/bottomSheetLayout"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="5dp"
+    android:layout_height="600dp"
+    android:layout_gravity="center|top"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

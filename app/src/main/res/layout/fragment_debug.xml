@@ -9,11 +9,14 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cvLogContainer"
         style="@style/Widget.Material3.CardView.Filled"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
         android:layout_marginVertical="5dp"
         app:cardCornerRadius="20dp"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnStart"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_log"
@@ -46,10 +49,10 @@
         android:layout_height="200dp"
         android:layout_marginVertical="5dp"
         app:cardCornerRadius="20dp"
-        app:layout_constraintStart_toEndOf="@id/cvLogContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/cvButtonContainer">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -86,7 +89,7 @@
         app:cardCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="@id/cvTimerContainer"
         app:layout_constraintEnd_toEndOf="@id/cvTimerContainer"
-        app:layout_constraintTop_toBottomOf="@id/cvTimerContainer">
+        app:layout_constraintBottom_toBottomOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

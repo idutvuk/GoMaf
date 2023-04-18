@@ -1,16 +1,16 @@
-package com.idutvuk.go_maf.model
+package com.idutvuk.go_maf.ui.game
 
 import android.app.Dialog
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.idutvuk.go_maf.R
+import com.idutvuk.go_maf.model.CmdManager
+import com.idutvuk.go_maf.model.GameMessage
 
 class RecyclerViewLogAdapter(private var mMessages: List<GameMessage>) : RecyclerView.Adapter<RecyclerViewLogAdapter.ViewHolder>(){
 

@@ -3,11 +3,9 @@ package com.idutvuk.go_maf.ui.debug
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentDebugBinding
 import com.idutvuk.go_maf.model.GameMessage
-import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
-import com.idutvuk.go_maf.ui.TimerHandler
+import com.idutvuk.go_maf.ui.game.RecyclerViewLogAdapter
 
 class DebugViewModel : ViewModel() {
     private lateinit var messages: ArrayList<GameMessage>

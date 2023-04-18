@@ -1,39 +1,25 @@
 <resources>
     <string name="app_name">Go Maf</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+    <string name="number1" translatable="false">1</string>
+    <string name="number2" translatable="false">2</string>
+    <string name="number3" translatable="false">3</string>
+    <string name="number4" translatable="false">4</string>
+    <string name="number5" translatable="false">5</string>
+    <string name="number6" translatable="false">6</string>
+    <string name="number7" translatable="false">7</string>
+    <string name="number8" translatable="false">8</string>
+    <string name="number9" translatable="false">9</string>
+    <string name="number10" translatable="false">10</string>
+    <string name="number11" translatable="false">11</string>
+    <string name="number12" translatable="false">12</string>
 
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="number1">1</string>
-    <string name="number2">2</string>
-    <string name="number3">3</string>
-    <string name="number4">4</string>
-    <string name="number5">5</string>
-    <string name="number6">6</string>
-    <string name="number7">7</string>
-    <string name="number8">8</string>
-    <string name="number9">9</string>
-    <string name="number10">10</string>
-    <string name="number11">11</string>
-    <string name="number12">12</string>
     <string name="undo">undo</string>
     <string name="redo">Redo</string>
     <string name="peep">Peep</string>
     <string name="log">log</string>
     <string name="debug_test">test</string>
     <string name="coming_soon">You shouldn\'t be able to see it.</string>
+    <string name="description">Красота — словно ангел, несущий разрушение. Как нечто настолько красивое может нести столько зла? Но не существует на свете такого ангела, который был бы так разрушителен, как их алчность. В конце концов она их всех погубит. Им кажется, что они могут с ней справиться. Но алчность — та единственная змея, которую невозможно околдовать.</string>
 
 </resources>

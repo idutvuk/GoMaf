@@ -3,149 +3,45 @@ package com.idutvuk.go_maf.ui.game
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.content.Context
 import android.util.Log
-import android.view.MotionEvent
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.button.MaterialButton
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
-import com.idutvuk.go_maf.model.CmdManager
-import com.idutvuk.go_maf.model.Game
+import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
-import com.idutvuk.go_maf.model.Player
-import com.idutvuk.go_maf.model.RecyclerViewLogAdapter
-import com.idutvuk.go_maf.model.gameactions.AddToVoteAction
-import com.idutvuk.go_maf.model.gameactions.CheckDonAction
-import com.idutvuk.go_maf.model.gameactions.CheckShrAction
-import com.idutvuk.go_maf.model.gameactions.FoulAction
-import com.idutvuk.go_maf.model.gameactions.kill.KillAction
-import com.idutvuk.go_maf.model.gameactions.kill.KillByMafiaAction
-import kotlin.math.cos
-import kotlin.math.sin
+import com.idutvuk.go_maf.model.gamedata.GameState
 
 
 class GameViewModel : ViewModel() {
 
     private var logMsg = ""
-    private var actionID = "none"
+
     private lateinit var messages: ArrayList<GameMessage>
     val gameMessages = MutableLiveData<List<GameMessage>>()
-//    val playersData = MutableLiveData<List<Player>>()
 
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
-    val ldNumber = MutableLiveData<Int>(0)
+    /**
+     * for education purposes only!
+     */
+    val ldNumber = MutableLiveData<Int>(0) //TODO remove
+    val gameState: GameState = GameState()
 
-    fun initViews(
+    fun initViews( //TODO: Destroy the initviews
         b: FragmentGameBinding,
-        numPlayers: Int,
-        buttons: List<MaterialButton>,
-        adapter: RecyclerViewLogAdapter
     ) {
 
-        //TODO: Move RV declaration to the GameFragment.kt
-
-        val points = generatePivotPoints(numPlayers)
-
-        for (i in 12 - 1 downTo Game.numPlayers) {
-            buttons[i].visibility = View.GONE
-            logMsg += "Btn '${i + 1}' hidden\n"
-        }
-        for (i in 0 until numPlayers) {
-            val КОСТЫЛЬ999 = 60 //TODO: Убрать костыль
-            buttons[i].x = points[i][0].toFloat() + b.cvTableContainer.x
-            buttons[i].y = points[i][1].toFloat() + b.cvTableContainer.y + КОСТЫЛЬ999
-            buttons[i].setOnClickListener { v ->
-                lateinit var output: IntArray
-                when (actionID) {
-                    "kill" -> {
-                        output = CmdManager.commit(KillByMafiaAction(i))
-//                        v.isEnabled = false
-                    }
-
-                    "vote" -> {
-                        output = CmdManager.commit(AddToVoteAction(i))
-                    }
-
-                    "foul" -> {
-                        output = CmdManager.commit(FoulAction(i))
-                        foulTV(output[2], b)
-                    }
-
-                    "cshr" -> {
-                        output = CmdManager.commit(CheckShrAction(i))
-                    }
-
-                    "cdon" -> {
-                        output = CmdManager.commit(CheckDonAction(i))
-                    }
-
-                    else -> {
-                        output = IntArray(3)
-                    }
-                }
-                controlUndoRedo(output, b, adapter)
-                actionID = "none"
-                if (!Game.gameActive) gameEndTV(b)
-            }
-        }
 
 
 
-        Log.d("GraphLog", logMsg); logMsg = ""
-
-        b.rightSideBar.btnKill.setOnClickListener {
-            actionID = if (actionID == "kill") "none" else "kill"
-        }
-
-        b.rightSideBar.btnVote.setOnClickListener {
-            actionID = if (actionID == "vote") "none" else "vote"
-        }
-
-        b.rightSideBar.btnFoul.setOnClickListener {
-            actionID = if (actionID == "foul") "none" else "foul"
-        }
-
-        b.rightSideBar.btnDonCheck.setOnClickListener {
-            actionID = if (actionID == "cdon") "none" else "cdon"
-        }
-
-        b.rightSideBar.btnShrCheck.setOnClickListener {
-            actionID = if (actionID == "cshr") "none" else "cshr"
-        }
-
-        b.btnPeep.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                for (i in 0 until numPlayers)
-                    buttons[i].text = Game.players[i].emoji
-                view.performClick()
-            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
-                for (i in 0 until numPlayers)
-                    buttons[i].text = (i + 1).toString()
-                view.performClick()
-            }
-            false
-        }
-
-        b.btnUndo.setOnClickListener { controlUndoRedo(CmdManager.undo(), b,adapter) }
-
-        b.btnRedo.setOnClickListener { controlUndoRedo(CmdManager.redo(), b,adapter) }
-
-        //debug buttons
-        b.btnDState.setOnClickListener { Game.printState() }
 
         //Меняем состояние значения livedata ldNumber по нажатию на кнопку
-        b.btnDTest.setOnClickListener {
-            ldNumber.value = ldNumber.value?.plus(1)
-            Log.d("GameLog", "test button activated")
-        }
-
-
+//        b.btnDTest.setOnClickListener {
+//            ldNumber.value = ldNumber.value?.plus(1)
+//            Log.d("GameLog", "test button activated")
+//        }
     }
 
-    val blinkDur = 2_000
+    private val blinkDur = 2_000
     fun foulTV(id: Int, b: FragmentGameBinding) {
         b.tvBig.text = Game.players[id].fouls.toString()
         b.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
@@ -197,36 +93,20 @@ class GameViewModel : ViewModel() {
 
 
     }
+    fun controlUndoRedo(arr: IntArray, b: FragmentGameBinding, adapter: RecyclerViewLogAdapter) {
+        when (arr[0]) {
+            -1 -> b.bottomSheetLayout.btnUndo.isEnabled = false
+            1 -> b.bottomSheetLayout.btnUndo.isEnabled = true
+            else -> {}
+        }
+        when (arr[1]) {
+            -1 -> b.bottomSheetLayout.btnRedo.isEnabled = false
+            1 -> b.bottomSheetLayout.btnRedo.isEnabled = true
+            else -> {}
+        }
+        adapter.updateMessagesList() //TODO: УБРАТЬ GOVNOCODE
+    }
 }
 
-private fun controlUndoRedo(arr: IntArray, b: FragmentGameBinding, adapter:RecyclerViewLogAdapter) {
-    when (arr[0]) {
-        -1 -> b.btnUndo.isEnabled = false
-        1 -> b.btnUndo.isEnabled = true
-        else -> {}
-    }
-    when (arr[1]) {
-        -1 -> b.btnRedo.isEnabled = false
-        1 -> b.btnRedo.isEnabled = true
-        else -> {}
-    }
-    adapter.updateMessagesList() //TODO: УБРАТЬ GOVNOCODE
-}
 
-private fun generatePivotPoints(
-    numPlayers: Int,
-    radius: Int = 330,
-): Array<IntArray> {
-    val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
 
-    val angleOffset = Math.toRadians(60.0)
-    for (i in 0 until numPlayers) {
-        val angle =
-            ((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat()
-
-        val x = -(radius * sin(angle.toDouble())).toInt()
-        val y = (radius * cos(angle.toDouble())).toInt()
-        pivotPoints[i] = intArrayOf(x, y)
-    }
-    return pivotPoints
-}

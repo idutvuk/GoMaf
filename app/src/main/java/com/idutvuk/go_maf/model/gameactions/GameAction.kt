@@ -1,10 +1,12 @@
 package com.idutvuk.go_maf.model.gameactions
 
+import com.idutvuk.go_maf.model.gamedata.GameState
+
 // Define a base interface for all game actions.
-interface GameAction {
-    fun execute(): Int
-    fun undo()
-    override fun toString(): String
+abstract class GameAction (protected val gameState: GameState){
+    abstract fun execute(): Int
+    abstract fun undo()
+
 
     /**
      * ## Importance gradation

@@ -1,12 +1,11 @@
-package com.idutvuk.go_maf.model
+package com.idutvuk.go_maf.model.gamedata
 
 import android.util.Log
-import com.google.android.material.button.MaterialButton
-import com.idutvuk.go_maf.model.gameactions.gamestate.GameEndAction
-import com.idutvuk.go_maf.model.gameactions.gamestate.GameStartAction
+import com.idutvuk.go_maf.model.CmdManager
 
 /**
- * [Game] is a singleton object that holds game status inside of it like positions, roles.
+ * @deprecated
+ * Singleton object that holds game status inside of it like positions, roles.
  * May be replaced by the local database
  */
 object Game {
@@ -14,7 +13,7 @@ object Game {
     const val maxPlayers = 12
     var numPlayers = -1
         set(value) {
-            if (numPlayers==-1) {
+            if (numPlayers ==-1) {
                 field = value
                 Log.i("GameLog", "Players number is set as $value")
             } else {
