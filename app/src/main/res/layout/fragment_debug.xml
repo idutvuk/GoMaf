@@ -97,17 +97,17 @@
             android:gravity="center">
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabPause"
-                android:src="@drawable/baseline_play_arrow_24"
+                android:src="@drawable/ic_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabAdd"
-                android:src="@drawable/baseline_alarm_add_24"
+                android:src="@drawable/ic_add_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabSkip"
-                android:src="@drawable/baseline_alarm_off_24"
+                android:src="@drawable/ic_stop_timer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
