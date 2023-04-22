@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -83,7 +84,6 @@ class GameFragment : Fragment() {
 //        }
 
 
-
         val points = generatePivotPoints(Game.numPlayers) //TODO: replace numplayers with the another constant
         for (i in 0 until Game.numPlayers) {
             buttons[i].x += points[i][0].toFloat()
@@ -142,11 +142,28 @@ class GameFragment : Fragment() {
 
         b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 
+
+        var currentState = MainButtonState.START_GAME
+        b.bottomSheetLayout.btnMain.setOnClickListener {
+            currentState = when (currentState) {
+                MainButtonState.START_GAME -> MainButtonState.START_DAY
+                MainButtonState.START_DAY -> MainButtonState.START_VOTE
+                MainButtonState.START_VOTE -> MainButtonState.START_NIGHT
+                else -> MainButtonState.START_GAME
+            }
+            //TODO remove debug test implementation
+            setMainButtonState(b.bottomSheetLayout.btnMain, currentState)
+        }
+
+
         //TODO: implement binding interactions here instead of ViewModel
         return b.root
     }
+}
 
-
+private fun setMainButtonState(button: Button, currentState: MainButtonState) {
+    button.text = currentState.text
+    button.setCompoundDrawablesWithIntrinsicBounds(currentState.icon, 0, 0, 0)
 }
 
 private fun generatePivotPoints(
