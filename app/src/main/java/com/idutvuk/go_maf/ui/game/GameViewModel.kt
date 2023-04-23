@@ -34,7 +34,7 @@ class GameViewModel : ViewModel() {
 
 
 
-        //Меняем состояние значения livedata ldNumber по нажатию на кнопку
+//        Меняем состояние значения livedata ldNumber по нажатию на кнопку
 //        b.btnDTest.setOnClickListener {
 //            ldNumber.value = ldNumber.value?.plus(1)
 //            Log.d("GameLog", "test button activated")

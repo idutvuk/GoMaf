@@ -1,6 +1,7 @@
 package com.idutvuk.go_maf.ui.game
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,8 +14,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
-import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
+import com.idutvuk.go_maf.model.gamedata.Game
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -43,9 +44,8 @@ class GameFragment : Fragment() {
         val messages = GameMessage.createGameMessagesList(10)
         val adapter = RecyclerViewLogAdapter(messages)
 
+        //TODO: remove
         viewModel.initViews(b)
-
-
 
 
         viewModel.ldNumber.observe(viewLifecycleOwner) {
@@ -53,6 +53,9 @@ class GameFragment : Fragment() {
             Log.d("GameLog", "observed")
         }
 
+
+        //TODO: It does not work
+        b.tvDescription.movementMethod = ScrollingMovementMethod()
 
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
             peekHeight = 400
