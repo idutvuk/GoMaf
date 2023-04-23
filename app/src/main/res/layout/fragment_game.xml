@@ -48,24 +48,267 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cvTableContatiner"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        <!-- player buttons -->
+        <!-- TODO: remove -->
 
-    <TextView
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn1"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number1"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="DuplicateClickableBoundsCheck" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn2"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number2"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn3"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number3"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="VisualLintOverlap" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn4"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number4"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="VisualLintOverlap" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn5"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number5"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn6"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number6"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn7"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number7"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn8"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number8"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="VisualLintOverlap" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn9"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number9"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn10"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number10"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn11"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number11"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn12"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_margin="5dp"
+            android:padding="3dp"
+
+            android:text="@string/number12"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/extraLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        app:layout_anchor="@id/bottomSheetLayout"
+        >
+
+    </FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabPeep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/cvTable"
-        app:layout_constraintStart_toStartOf="@id/cvTable"
-        app:layout_constraintEnd_toEndOf="@id/cvTable"
-        android:layout_marginBottom="32dp"
-        android:textSize="16sp"
-        android:text="1,2,3,4,5,6,7"/>
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_anchor="@id/extraLayout"
+        app:layout_anchorGravity="top|end"
+        android:src="@drawable/ic_eye"
+        android:contentDescription="@string/peep"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabFoul"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_anchor="@id/extraLayout"
+        app:layout_anchorGravity="top|start"
+        android:src="@drawable/ic_foul"
+        android:contentDescription="@string/peep" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabDebug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/ic_debug"
+        android:contentDescription="@string/debug_test"/>
+
+    <!--TODO: implement hiding description when scrolling bottom sheet-->
+<include
+    layout="@layout/bottom_sheet"
+    android:id="@+id/bottomSheetLayout"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="5dp"
+    android:layout_height="500dp"
+    android:layout_gravity="center|top"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cvTableContatiner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_anchor="@+id/constraintLayout"
+        app:layout_anchorGravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="1,2,3,4,5,6,7"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/cvTable"
+            app:layout_constraintEnd_toEndOf="@id/cvTable"
+            app:layout_constraintStart_toStartOf="@id/cvTable" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvTable"
@@ -73,13 +316,13 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="70dp"
-            app:layout_constraintDimensionRatio="1:1"
             app:cardBackgroundColor="@color/design_default_color_surface"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:cardCornerRadius="2005dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:cardCornerRadius="2005dp">
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -113,237 +356,6 @@
                     tools:text="34" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- player buttons -->
-    <!-- TODO: remove -->
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn1"
-        style="@style/Widget.Material3.Button.IconButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-
-        android:text="@string/number1"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="DuplicateClickableBoundsCheck" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn2"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number2"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn3"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number3"
-        android:textSize="30sp"
-        tools:ignore="VisualLintOverlap" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn4"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number4"
-        android:textSize="30sp"
-        tools:ignore="VisualLintOverlap" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn5"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number5"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn6"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number6"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn7"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number7"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn8"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number8"
-        android:textSize="30sp"
-        tools:ignore="VisualLintOverlap" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn9"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number9"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn10"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number10"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn11"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number11"
-        android:textSize="30sp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn12"
-        style="@style/Widget.Material3.Button.IconButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_margin="5dp"
-        android:padding="3dp"
-        android:text="@string/number12"
-        android:textSize="30sp" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabPeep"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_anchor="@id/bottomSheetLayout"
-        app:layout_anchorGravity="top|end"
-        android:src="@drawable/ic_eye"
-        android:contentDescription="@string/peep" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabFoul"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_anchor="@id/bottomSheetLayout"
-        app:layout_anchorGravity="top|start"
-        android:src="@drawable/ic_foul"
-        android:contentDescription="@string/peep" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabDebug"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|end"
-        android:src="@drawable/ic_debug"
-        android:contentDescription="@string/debug_test"/>
-
-    <!--TODO: implement hiding description when scrolling bottom sheet-->
-<include
-    layout="@layout/bottom_sheet"
-    android:id="@+id/bottomSheetLayout"
-    android:layout_width="match_parent"
-    android:layout_marginHorizontal="5dp"
-    android:layout_height="500dp"
-    android:layout_gravity="center|top"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
