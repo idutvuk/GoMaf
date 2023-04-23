@@ -30,12 +30,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="3dp"
                 android:enabled="false"
-                android:src="@drawable/baseline_alarm_add_24"
+                android:src="@drawable/ic_add_timer"
                 app:elevation="1dp" />
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btnPlay"
                 android:layout_width="80dp"
-                android:src="@drawable/baseline_pause_24"
+                android:src="@drawable/ic_pause"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/btnAdd5s"
                 app:layout_constraintEnd_toStartOf="@id/btnReset"
@@ -52,7 +52,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="3dp"
                 android:enabled="false"
-                android:src="@drawable/baseline_alarm_off_24" />
+                android:src="@drawable/ic_stop_timer" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView

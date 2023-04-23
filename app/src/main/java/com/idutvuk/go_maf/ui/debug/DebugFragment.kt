@@ -31,10 +31,10 @@ class DebugFragment : Fragment() {
         b.fabPause.setOnClickListener {
             if(TimerHandler.isRunning) {
                 TimerHandler.pauseTimer()
-                b.fabPause.setImageResource(R.drawable.baseline_play_arrow_24)
+                b.fabPause.setImageResource(R.drawable.ic_play)
             } else {
                 TimerHandler.resumeTimer(b.tvTimer, b.pbTimer)
-                b.fabPause.setImageResource(R.drawable.baseline_pause_24)
+                b.fabPause.setImageResource(R.drawable.ic_pause)
             }
         }
         //TODO: remove

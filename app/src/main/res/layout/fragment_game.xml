@@ -42,7 +42,6 @@
                     android:text="@string/description"
                     android:textSize="18sp"
                     android:textStyle="normal" />
-
             </LinearLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -53,12 +52,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
 <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/cvTableContatiner"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/cvTable"
+        app:layout_constraintStart_toStartOf="@id/cvTable"
+        app:layout_constraintEnd_toEndOf="@id/cvTable"
+        android:layout_marginBottom="32dp"
+        android:textSize="16sp"
+        android:text="1,2,3,4,5,6,7"/>
+
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_table"
+            android:id="@+id/cvTable"
             style="@style/Widget.Material3.CardView.Filled"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -74,24 +84,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <Button
-                    android:id="@+id/btnDStart"
-                    android:text="start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/btnDEnd"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-                <Button
-                    android:id="@+id/btnDEnd"
-                    android:text="end"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/btnDStart"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <TextView
                     android:id="@+id/tv_upper"
@@ -123,7 +115,8 @@
         </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- debug -->
+    <!-- player buttons -->
+    <!-- TODO: remove -->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn1"
@@ -319,7 +312,7 @@
         android:layout_marginBottom="16dp"
         app:layout_anchor="@id/bottomSheetLayout"
         app:layout_anchorGravity="top|end"
-        android:src="@drawable/baseline_remove_red_eye_24"
+        android:src="@drawable/ic_eye"
         android:contentDescription="@string/peep" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -333,14 +326,24 @@
         android:src="@drawable/ic_foul"
         android:contentDescription="@string/peep" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabDebug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        app:layout_anchor="@id/app_bar_layout"
+        app:layout_anchorGravity="bottom|end"
+        android:src="@drawable/ic_debug"
+        android:contentDescription="@string/debug_test"/>
+
+    <!--TODO: implement hiding description when scrolling bottom sheet-->
 <include
     layout="@layout/bottom_sheet"
     android:id="@+id/bottomSheetLayout"
     android:layout_width="match_parent"
     android:layout_marginHorizontal="5dp"
-    android:layout_height="600dp"
+    android:layout_height="500dp"
     android:layout_gravity="center|top"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
