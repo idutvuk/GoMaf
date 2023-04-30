@@ -1,9 +1,9 @@
 package com.idutvuk.go_maf.model.gameactions
 
-import com.idutvuk.go_maf.model.gamedata.GameState
+import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 
 // Define a base interface for all game actions.
-abstract class GameAction (protected val gameState: GameState){
+abstract class GameAction (protected val gameState: MafiaGameState){
     abstract fun execute(): Int
     abstract fun undo()
 

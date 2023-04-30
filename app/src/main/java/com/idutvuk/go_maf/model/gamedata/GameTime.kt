@@ -1,7 +1,8 @@
 package com.idutvuk.go_maf.model.gamedata
 
-//TODO: implement or remove
-enum class GameTime {
-    DAY,
-    NIGHT
+import com.idutvuk.go_maf.R
+
+enum class GameTime(toString: String, icon: Int) { //TODO: implement toString and icons (or remove)
+    DAY("Day", R.drawable.ic_sun),
+    NIGHT("Night", R.drawable.ic_moon);
 }

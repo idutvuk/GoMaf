@@ -4,43 +4,38 @@ package com.idutvuk.go_maf.ui.game
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.util.Log
-import android.widget.Button
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
-import com.idutvuk.go_maf.model.gamedata.GameState
+import com.idutvuk.go_maf.model.gamedata.GameTime
+import com.idutvuk.go_maf.model.gamedata.MafiaGameState
+import com.idutvuk.go_maf.model.gamedata.Player
 
 
 class GameViewModel : ViewModel() {
-
-    private var logMsg = ""
 
     private lateinit var messages: ArrayList<GameMessage>
     val gameMessages = MutableLiveData<List<GameMessage>>()
 
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
-    /**
-     * for education purposes only!
-     */
-    val ldNumber = MutableLiveData<Int>(0) //TODO remove
-    val gameState: GameState = GameState()
+    private var gameState: MafiaGameState = MafiaGameState()
 
-    fun initViews( //TODO: Destroy the initviews
-        b: FragmentGameBinding,
-    ) {
+    //Add ui params
+    //TODO: connect them to the ui
+    val ldTime = MutableLiveData(GameTime.NIGHT)
+    val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true }) //TODO: change 10 to player count
+    val ldMainButtonState = MutableLiveData(ActionState.DEBUG)
+    val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
+    val ldBackButton = MutableLiveData(false)
+    val ldSkipButton = MutableLiveData(false)
+    val ldVoteList = MutableLiveData<List<Player>>()
+    val ldHeading = MutableLiveData("Def heading")
+    val ldDescription = MutableLiveData("Def text")
 
 
-
-
-
-//        Меняем состояние значения livedata ldNumber по нажатию на кнопку
-//        b.btnDTest.setOnClickListener {
-//            ldNumber.value = ldNumber.value?.plus(1)
-//            Log.d("GameLog", "test button activated")
-//        }
-    }
 
     private val blinkDur = 2_000
     fun foulTV(id: Int, b: FragmentGameBinding) {
@@ -106,6 +101,44 @@ class GameViewModel : ViewModel() {
             else -> {}
         }
         adapter.updateMessagesList() //TODO: УБРАТЬ GOVNOCODE
+    }
+
+    /**
+     * Main onclick performer from main button
+     * TODO: implement 2-click logic & foul logic
+     */
+    fun onClickBtnMain() {
+        if (gameState.actionState.requireNumber) {
+            //TODO: w/number logic
+        } else {
+            //TODO: single-tap logic (if needed)
+        }
+
+        gameState = CmdManager.commit(gameState.actionState)
+        updateUiParams(gameState)
+    }
+    private fun updateUiParams(gameState: MafiaGameState) {
+        with(gameState) {
+            ldTime.value = time
+            ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
+            ldMainButtonState.value = actionState
+            ldMainButtonOverwriteString.value = mainButtonOverwriteString
+            ldBackButton.value = false //TODO: implement
+            ldSkipButton.value = false //TODO: implement
+            ldVoteList.value = voteList
+            ldHeading.value = headingText
+            ldDescription.value = descriptionText
+        }
+    }
+
+    fun onClickFab1Debug() {
+        Log.d("GameLog","(from debug fab1 in GVM):\nCurrent game state:\n" +
+                gameState.toString())
+    }
+
+    fun onClickFab2Debug() {
+        Log.d("GameLog","(from debug fab2 in GVM):\nCurrent game state history:\n" +
+                CmdManager.stateHistory.toString())
     }
 }
 

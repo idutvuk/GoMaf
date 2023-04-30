@@ -1,23 +1,23 @@
 package com.idutvuk.go_maf.model.gamedata
 
-enum class Role {
+enum class Role(val isRed: Boolean) {
     /**
      * CIV - civilian - Red team
      */
-    CIV,
+    CIV(true),
 
     /**
      * MAF - mafia - Black team
      */
-    MAF,
+    MAF(false),
 
     /**
      * SHR - sheriff - leader of the red team
      */
-    SHR,
+    SHR(true),
 
     /**
      * DON - don - leader of the black team
      */
-    DON
+    DON(false)
 }

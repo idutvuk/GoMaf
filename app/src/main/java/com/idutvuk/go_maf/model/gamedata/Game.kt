@@ -4,10 +4,10 @@ import android.util.Log
 import com.idutvuk.go_maf.model.CmdManager
 
 /**
- * @deprecated
  * Singleton object that holds game status inside of it like positions, roles.
  * May be replaced by the local database
  */
+@Deprecated("Use the GameState")
 object Game {
     const val minPlayers = 6
     const val maxPlayers = 12
@@ -39,9 +39,9 @@ object Game {
      */
     fun printState() {
             var msg = "Game status: " + if (gameActive) "active\n" else "not active\n"
-            msg += "Current action: ${CmdManager.currentIndex}. Actions:\n"
+            msg += "Current action: ${CmdManager.currentHistoryIndex}. Actions:\n"
             for (i in 0 until CmdManager.history.size) {
-                msg += (if (CmdManager.currentIndex == i + 1) '>' else ' ') +
+                msg += (if (CmdManager.currentHistoryIndex == i + 1) '>' else ' ') +
                         (if (i < 10) "0$i " else "$i ") +
                         CmdManager.history[i] + '\n'
             }

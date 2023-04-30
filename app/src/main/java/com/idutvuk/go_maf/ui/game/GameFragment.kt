@@ -1,22 +1,22 @@
 package com.idutvuk.go_maf.ui.game
 
 import android.os.Bundle
-import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
+import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
+import com.idutvuk.go_maf.model.gamedata.GameTime
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -26,7 +26,6 @@ class GameFragment : Fragment() {
     private lateinit var viewModel: GameViewModel
     private lateinit var b: FragmentGameBinding
     private lateinit var buttons: List<MaterialButton>
-    private var actionId = ActionId.NONE
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
@@ -45,86 +44,61 @@ class GameFragment : Fragment() {
         val messages = GameMessage.createGameMessagesList(10)
         val adapter = RecyclerViewLogAdapter(messages)
 
-        //TODO: remove
-        viewModel.initViews(b)
+//        Меняем состояние значения livedata ldNumber по нажатию на кнопку
+//        b.btnDTest.setOnClickListener {
+//            ldNumber.value = ldNumber.value?.plus(1)
+//            Log.d("GameLog", "test button activated")
+//        }
 
+//        viewModel.ldNumber.observe(viewLifecycleOwner) {
+//            b.tvDescription.text = "current: " + viewModel.ldNumber.value.toString()
+//            Log.d("GameLog", "observed")
+//        }
 
-        viewModel.ldNumber.observe(viewLifecycleOwner) {
-            b.tvDescription.text = "current: " + viewModel.ldNumber.value.toString()
-            Log.d("GameLog", "observed")
+        viewModel.ldTime.observe(viewLifecycleOwner) {
+                b.ibDayTime.setImageResource(
+                    if (it == GameTime.DAY) R.drawable.ic_sun
+                    else R.drawable.ic_moon
+                ) //TODO: fix the code (get id from the enum class
         }
 
+        viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
+            Log.d("GameLog","(GameFragment) main button changed in the UI to the $it")
+            with(b.bottomSheetLayout.btnMain) {
+                val tmp = viewModel.ldMainButtonOverwriteString.value
+                text = if (!tmp.isNullOrEmpty()) it.text + tmp else it.text
+                viewModel.ldMainButtonOverwriteString.value = ""
+                setCompoundDrawablesWithIntrinsicBounds(it.icon,0,0,0)
+            }
+        }
 
-        //TODO: It does not work
-        b.tvDescription.movementMethod = ScrollingMovementMethod()
+        viewModel.ldPlayersVis.observe(viewLifecycleOwner) {
+            Log.d("GraphLog","Player visibility changed")
+            for (i in 0 until Game.numPlayers) {
+                buttons[i].isEnabled = it[i]
+            }
+        }
 
+//        viewModel.ld
+
+        //setup bottom sheet behavior
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
             peekHeight = 400
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        //setup RecyclerView adapter
         b.bottomSheetLayout.rvLog.adapter = adapter
         b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
-//        b.bottomSheetLayout.rightSideBar.btnKill.setOnClickListener {
-//            actionId = if (actionId == ActionId.KILL) ActionId.NONE else ActionId.KILL
-//        }
-//
-//        b.bottomSheetLayout.rightSideBar.btnVote.setOnClickListener {
-//            actionId = if (actionId == ActionId.VOTE) ActionId.NONE else ActionId.VOTE
-//        }
-//
-//        b.bottomSheetLayout.rightSideBar.btnFoul.setOnClickListener {
-//            actionId = if (actionId == ActionId.FOUL) ActionId.NONE else ActionId.FOUL
-//        }
-//
-//        b.bottomSheetLayout.rightSideBar.btnShrCheck.setOnClickListener {
-//            actionId = if (actionId == ActionId.CSHR) ActionId.NONE else ActionId.CSHR
-//        }
-
-//        b.rightSideBar.btnDonCheck.setOnClickListener {
-//            actionId = if (actionId == ActionId.CDON) ActionId.NONE else ActionId.CDON
-//        }
-
-
-        val points = generatePivotPoints(Game.numPlayers) //TODO: replace numplayers with the another constant
-        for (i in 0 until Game.numPlayers) {
+        val points = generateCirclePoints(Game.numPlayers) //TODO: replace numplayers with the another constant
+        for (i in 0 until Game.numPlayers) { //TODO: replace numplayers with the another constant
             buttons[i].x += points[i][0].toFloat()
             buttons[i].y += points[i][1].toFloat()
         }
         for (i in 0 until Game.numPlayers) {
-            buttons[i].setOnClickListener{
-                lateinit var output: IntArray
-                when (actionId) {
-                    ActionId.KILL -> {
-//                        output = CmdManager.commit(KillByMafiaAction(i))
-                        it.isEnabled = false
-                    }
-
-                    ActionId.VOTE -> {
-//                        output = CmdManager.commit(AddToVoteAction(i))
-                    }
-
-                    ActionId.FOUL -> {
-//                        output = CmdManager.commit(FoulAction(i))
-//                        viewModel.foulTV(output[2], b)
-                    }
-
-                    ActionId.CSHR -> {
-//                        output = CmdManager.commit(CheckShrAction(i))
-                    }
-
-                    ActionId.CDON -> {
-//                        output = CmdManager.commit(CheckDonAction(i))
-                    }
-                    ActionId.NONE -> {
-//                        output = IntArray(3)
-                    }
-                }
-                output = IntArray(3) //TODO: remove & uncomment
-                viewModel.controlUndoRedo(output, b, adapter)
-                actionId = ActionId.NONE
-                if (!Game.gameActive) viewModel.gameEndTV(b) //TODO REMOVE AAAAAHh
+            buttons[i].setOnClickListener {
+                //TODO: 2-click logic
             }
         }
         b.fabPeep.setOnTouchListener { view, motionEvent ->
@@ -143,36 +117,35 @@ class GameFragment : Fragment() {
 
         b.bottomSheetLayout.btnUndo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.undo(), b,adapter) }
 
-        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
+//        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 
 
-        var currentState = MainButtonState.START_GAME
+
         b.bottomSheetLayout.btnMain.setOnClickListener {
-            currentState = when (currentState) {
-                MainButtonState.START_GAME -> MainButtonState.START_DAY
-                MainButtonState.START_DAY -> MainButtonState.START_VOTE
-                MainButtonState.START_VOTE -> MainButtonState.START_NIGHT
-                else -> MainButtonState.START_GAME
-            }
-            //TODO remove debug test implementation
-            setMainButtonState(b.bottomSheetLayout.btnMain, currentState)
+            viewModel.onClickBtnMain()
+        }
+
+        b.fabDebug1.setOnClickListener{
+            viewModel.onClickFab1Debug()
+        }
+
+        b.fabDebug2.setOnClickListener{
+            viewModel.onClickFab2Debug()
         }
 
 
-        //TODO: implement binding interactions here instead of ViewModel
+
+        //TODO: make GameFragment readable
+
         return b.root
     }
 }
 
-private fun setMainButtonState(button: Button, currentState: MainButtonState) {
-    button.text = currentState.text
-    button.setCompoundDrawablesWithIntrinsicBounds(currentState.icon, 0, 0, 0)
-}
-
-private fun generatePivotPoints(
+private fun generateCirclePoints(
     numPlayers: Int,
     radius: Int = 330,
 ): Array<IntArray> {
+    //TODO: create cursor
     val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
 
     val angleOffset = Math.toRadians(60.0)

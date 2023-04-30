@@ -2,10 +2,10 @@ package com.idutvuk.go_maf.model.gameactions
 
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.Game
-import com.idutvuk.go_maf.model.gamedata.GameState
+import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.Role
 
-class CheckShrAction(gameState: GameState, private val playerId: Int) : GameAction(gameState) {
+class CheckShrAction(gameState: MafiaGameState, private val playerId: Int) : GameAction(gameState) {
     private var isBlack: Boolean = false //will be overridden later
 
     override fun execute(): Int {
@@ -14,7 +14,7 @@ class CheckShrAction(gameState: GameState, private val playerId: Int) : GameActi
         isBlack = (role == Role.DON || role == Role.MAF)
         Log.i(
             "GameLog",
-            "Player #${Game.players[playerId].number} (${Game.players[playerId].role}) was checked by SHR."
+            "Player #${ Game.players[playerId].number} (${Game.players[playerId].role}) was checked by SHR."
         )
 
 

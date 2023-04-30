@@ -39,7 +39,7 @@ class RecyclerViewLogAdapter(private var mMessages: List<GameMessage>) : Recycle
         holder.headingTextView.text = message.heading
         holder.importanceTextView.text = message.importance.toString()
 //        holder.descriptionTextView.text = message.description
-        if(position >= CmdManager.currentIndex) {
+        if(position >= CmdManager.currentHistoryIndex) {
             Log.d("GraphLog","card with action $position disabled")
 //            holder.cardView.background =
         //TODO: disable all the cards after $position
