@@ -157,6 +157,7 @@ object CmdManager {
         return gameState
     }
 
+    //Added this comment to track changes on the git. This is the new logic change
     //TODO: implement double, triple and more kill
     private fun kill(players: Array<Player>, cursor: Int): Boolean { //false if game over
         players[cursor].alive = false
