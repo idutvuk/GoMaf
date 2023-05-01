@@ -56,10 +56,11 @@ class GameFragment : Fragment() {
 //        }
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
-                b.ibDayTime.setImageResource(
-                    if (it == GameTime.DAY) R.drawable.ic_sun
-                    else R.drawable.ic_moon
-                ) //TODO: fix the code (get id from the enum class
+            //TODO: uncomment
+//                b.ibDayTime.setImageResource(
+//                    if (it == GameTime.DAY) R.drawable.ic_sun
+//                    else R.drawable.ic_moon
+//                ) //TODO: fix the code (get id from the enum class
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
@@ -125,13 +126,13 @@ class GameFragment : Fragment() {
             viewModel.onClickBtnMain()
         }
 
-        b.fabDebug1.setOnClickListener{
-            viewModel.onClickFab1Debug()
-        }
-
-        b.fabDebug2.setOnClickListener{
-            viewModel.onClickFab2Debug()
-        }
+//        b.fabDebug1.setOnClickListener{
+//            viewModel.onClickFab1Debug()
+//        }
+//
+//        b.fabDebug2.setOnClickListener{
+//            viewModel.onClickFab2Debug()
+//        }
 
 
 
