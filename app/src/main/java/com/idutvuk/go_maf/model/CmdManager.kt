@@ -30,15 +30,18 @@ object CmdManager {
                 ActionState.START_NIGHT -> {
                     time = GameTime.NIGHT
                     //todo: night actions
-                    actionState = ActionState.START_MAFIA_SPEECH //TODO: skip if not the first night
+
+                    if (passedPhases == 0) {
+                        actionState = ActionState.START_MAFIA_SPEECH
+                    } else {
+                        actionState = ActionState.CHECK_DON
+                    }
                 }
 
                 ActionState.START_MAFIA_SPEECH -> {
-                    //TODO: Start 60-sec timer
-                    isTimerActive = true
-                    delayedActionState = ActionState.CHECK_DON
-
-                    actionState = ActionState.NEXT
+                        isTimerActive = true
+                        delayedActionState = ActionState.CHECK_DON
+                        actionState = ActionState.NEXT
                 }
 
 
@@ -97,12 +100,14 @@ object CmdManager {
 
                 ActionState.START_DAY -> {
                     time = GameTime.DAY
+                    firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
+                    cursor = firstSpokedPlayer
                     actionState = ActionState.START_SPEECH
                 }
 
 
                 ActionState.START_SPEECH -> {
-                    //TODO: add 60-sec timer
+                    isTimerActive = true
                     Log.d("GameLog", "Speech started. Cursor: $cursor")
                     actionState = ActionState.ADD_TO_VOTE
                 }
@@ -114,10 +119,10 @@ object CmdManager {
                 }
 
                 ActionState.END_SPEECH -> {
-                    //TODO: EndTimer
+                    isTimerActive = false
 
                     cursor = nextAlivePlayer(cursor, players)
-                     if (cursor >= Game.numPlayers)
+                     if (nextAlivePlayer(cursor, players) != firstSpokedPlayer) //TODO: fix this logic
                          actionState = ActionState.START_SPEECH
                     else {
                          actionState = ActionState.START_VOTE
@@ -196,14 +201,14 @@ object CmdManager {
 
     private fun nextAlivePlayer(cursor: Int, players: Array<Player>): Int {
         //check for alive players:
-        var flag = false
+        var livingPlayers = 0
         for (i in 0 until Game.numPlayers) {
             if (players[i].alive) {
-                flag = true
-                break
+                livingPlayers++
             }
         }
-        if (!flag) throw Error("There is no alive players in the game")
+        if (livingPlayers == 0) throw Error("There is no alive players in the game")
+        if (livingPlayers == 1) throw Error("There is only 1 alive person in the game")
 
         //if reached the end
         if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1,players)

@@ -18,7 +18,7 @@ object TimerHandler {
     fun startTimer(tvTimer: TextView, pbTimer: ProgressBar, time: Long) {
         if (isRunning) return
         isRunning = true
-        Log.d("GameLog","Timer started")
+        Log.i("GraphLog","Timer started")
         timer = object : CountDownTimer(time, 1000) { //TODO: increase countDown interval
             override fun onTick(millisUntilFinished: Long) {
                 remainingTime = millisUntilFinished
@@ -46,7 +46,7 @@ object TimerHandler {
             override fun onFinish() {
                 isRunning = false
                 pbTimer.progress = 0
-                Log.i("GameLog", "time out")
+                Log.i("GraphLog", "time out")
             }
         }.start()
     }

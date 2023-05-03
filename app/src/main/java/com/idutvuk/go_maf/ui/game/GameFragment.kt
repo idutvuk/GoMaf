@@ -113,6 +113,7 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldPlayersVis.observe(viewLifecycleOwner) {
+            //TODO: fix it so it wouldn't restart every time
             Log.d("GraphLog","Player visibility changed")
             for (i in 0 until Game.numPlayers) {
                 buttons[i].isEnabled = it[i]

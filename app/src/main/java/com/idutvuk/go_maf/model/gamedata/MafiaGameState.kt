@@ -23,6 +23,12 @@ class MafiaGameState(
     var actionState: ActionState = ActionState.DEBUG,
     var delayedActionState: ActionState = ActionState.DEBUG,
     var mainButtonOverwriteString: String = "",
+
+    /**
+     * used for prevent infinite-speech loop
+     */
+    var firstSpokedPlayer: Int = 0,
+
     /**
      * Selected players is a selector of currently speaking player
      */
