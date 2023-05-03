@@ -57,6 +57,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -84,6 +87,87 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnStart"
+                        android:text="start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/cvTimerContainer"
+                        app:layout_constraintEnd_toEndOf="@id/cvTimerContainer"
+                        app:layout_constraintBottom_toTopOf="@id/cvTimerContainer"/>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvTimerContainer"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginVertical="5dp"
+                        app:cardCornerRadius="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginStart="10dp">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+                            <ProgressBar
+                                android:id="@+id/pbTimer"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:max="60"
+                                style="?android:progressBarStyleHorizontal"
+                                android:progressDrawable="@drawable/circular_progress_bar"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"/>
+                            <TextView
+                                android:id="@+id/tvTimer"
+                                tools:text="00:34"
+                                android:textSize="48sp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvTimerButtonContainer"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_marginVertical="5dp"
+                        app:cardCornerRadius="20dp"
+                        app:layout_constraintStart_toStartOf="@id/cvTimerContainer"
+                        app:layout_constraintEnd_toEndOf="@id/cvTimerContainer"
+                        app:layout_constraintBottom_toBottomOf="parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabPause"
+                                android:src="@drawable/ic_play"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabAdd"
+                                android:src="@drawable/ic_add_timer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabSkip"
+                                android:src="@drawable/ic_stop_timer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
 
                     <TextView
                         android:id="@+id/tv_upper"
