@@ -35,7 +35,7 @@ class GameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
 
-        val circlePoints = generateCirclePoints(Game.numPlayers, radius = 360)
+        val circlePoints = generateCirclePoints(Game.numPlayers, radius = 310)
 
         // create a layout params object for the buttons
         val layoutParams = ConstraintLayout.LayoutParams(
@@ -135,7 +135,7 @@ class GameFragment : Fragment() {
         b.fabPeep.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 for (i in 0 until Game.numPlayers)
-                    buttons[i].text = Game.players[i].emoji
+                    buttons[i].text = viewModel.getEmoji(i)
                 view.performClick()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 for (i in 0 until Game.numPlayers)
@@ -146,7 +146,8 @@ class GameFragment : Fragment() {
         }
 
 
-        b.bottomSheetLayout.btnUndo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.undo(), b,adapter) }
+        //TODO: uncomment
+//        b.bottomSheetLayout.btnUndo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.undo(), b,adapter) }
 
 //        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 

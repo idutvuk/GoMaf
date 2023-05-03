@@ -39,17 +39,18 @@ class GameViewModel : ViewModel() {
 
 
     private val blinkDur = 2_000
-    fun foulTV(id: Int, b: FragmentGameBinding) {
-        b.table.tvBig.text = Game.players[id].fouls.toString()
-        b.table.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
-        blink(blinkDur, b)
-    }
-
-    fun gameEndTV(b: FragmentGameBinding) {
-        b.table.tvBig.text = ""
-        b.table.tvUpper.text = "Game over"
-        blink(blinkDur, b)
-    }
+//    fun foulTV(id: Int, b: FragmentGameBinding) {
+//        b.table.tvBig.text = Game.players[id].fouls.toString()
+//        b.table.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
+//        blink(blinkDur, b)
+//    }
+//
+//    fun gameEndTV(b: FragmentGameBinding) {
+//        b.table.tvBig.text = ""
+//        b.table.tvUpper.text = "Game over"
+//        blink(blinkDur, b)
+//    }
+    //TODO: make use for this 🙄
 
     fun blink(dur: Int, b: FragmentGameBinding) {
         val appearDuration = dur / 4
@@ -133,14 +134,8 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun onClickFab1Debug() {
-        Log.d("GameLog","(from debug fab1 in GVM):\nCurrent game state:\n" +
-                gameState.toString())
-    }
-
-    fun onClickFab2Debug() {
-        Log.d("GameLog","(from debug fab2 in GVM):\nCurrent game state history:\n" +
-                CmdManager.stateHistory.toString())
+    fun getEmoji(i: Int): CharSequence {
+        return gameState.players[i].emoji
     }
 }
 

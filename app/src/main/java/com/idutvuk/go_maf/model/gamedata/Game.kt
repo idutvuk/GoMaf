@@ -9,8 +9,6 @@ import com.idutvuk.go_maf.model.CmdManager
  */
 @Deprecated("Use the GameState")
 object Game {
-    const val minPlayers = 6
-    const val maxPlayers = 12
     var numPlayers = -1
         set(value) {
             if (numPlayers ==-1) {
@@ -20,40 +18,5 @@ object Game {
                 Log.e("GameLog","Attempt to overwrite numPlayers aborted")
             }
         }
-
     //TODO: Make ghost games possible
-    var ghost = false
-
-//    lateinit var positions: Array<Int> //TODO: move to upper level
-    lateinit var players: Array<Player>
-//    lateinit var buttons: List<MaterialButton>
-    var voteList = ArrayList<Int>()
-
-    /**
-     * idk why I need this but let it be as is
-     */
-    var gameActive = false
-
-    /**
-     * Prints game state to the [Log]
-     */
-    fun printState() {
-            var msg = "Game status: " + if (gameActive) "active\n" else "not active\n"
-            msg += "Current action: ${CmdManager.currentHistoryIndex}. Actions:\n"
-            for (i in 0 until CmdManager.history.size) {
-                msg += (if (CmdManager.currentHistoryIndex == i + 1) '>' else ' ') +
-                        (if (i < 10) "0$i " else "$i ") +
-                        CmdManager.history[i] + '\n'
-            }
-            msg += "Players:\n"
-            for (i in 0 until numPlayers) {
-                msg += players[i].toString() + '\n'
-            }
-            Log.i("GameLog", msg)
-    }
-
-    fun mute(id: Int) {
-        Log.i("GameLog", "Player #${players[id].strNum} muted.")
-        //TODO mute logic
-    }
 }
