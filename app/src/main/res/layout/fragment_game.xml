@@ -51,10 +51,40 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/table"
+            app:layout_constraintStart_toStartOf="@id/table"
+            app:layout_constraintEnd_toEndOf="@id/table"
+            android:layout_marginBottom="32dp"
+            android:textSize="16sp"
+            android:text="1,2,3,4,5,6,7"/>
 
         <include
             layout="@layout/table"
             android:id="@+id/table" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginVertical="25dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabPause"
+                android:src="@drawable/ic_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAdd"
+                android:src="@drawable/ic_add_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
         <!-- player buttons -->
         <!-- TODO: remove -->
@@ -289,16 +319,6 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_debug"
         android:contentDescription="@string/debug_test"/>
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnStart"
-        android:text="startTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/fabDebug"
-        app:layout_anchorGravity="bottom|end"
-        app:layout_constraintStart_toStartOf="@id/cvTimerContainer"
-        app:layout_constraintEnd_toEndOf="@id/cvTimerContainer"
-        app:layout_constraintBottom_toTopOf="@id/cvTimerContainer"/>
     <ImageButton
         android:id="@+id/ibDayTime"
         android:layout_gravity="center"

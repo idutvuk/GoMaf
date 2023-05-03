@@ -132,16 +132,10 @@ class GameFragment : Fragment() {
             }
         }
 
-        //TODO: remove unnecessary buttons
-        b.btnStart.setOnClickListener {
-            TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer,60000 )
-        }
         b.table.fabAdd.setOnClickListener{
             TimerHandler.addTime(b.table.tvTimer,b.table.pbTimer, 5000)
         }
-        b.table.fabSkip.setOnClickListener {
-            TimerHandler.skipTimer(b.table.tvTimer, b.table.pbTimer)
-        }
+
 
 
 

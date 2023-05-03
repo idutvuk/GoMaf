@@ -79,7 +79,9 @@ object TimerHandler {
             startTimer(tvTimer, pbTimer, remainingTime)
         } else {
             remainingTime += timeToAdd
-            // Your code for updating the UI with the new remaining time
+            startTimer(tvTimer, pbTimer, remainingTime)
+            isRunning = true
+            pauseTimer()
         }
     }
 
