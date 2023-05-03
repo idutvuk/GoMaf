@@ -21,6 +21,7 @@ class MafiaGameState(
     var passedPhases: Int = 0,
     var time: GameTime = GameTime.NIGHT,
     var actionState: ActionState = ActionState.DEBUG,
+    var delayedActionState: ActionState = ActionState.DEBUG,
     var mainButtonOverwriteString: String = "",
     /**
      * Selected players is a selector of currently speaking player
@@ -34,18 +35,21 @@ class MafiaGameState(
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
     var headingText: String = "Default heading",
     var descriptionText: String = "Default description",
+    var isTimerActive: Boolean = false,
     ) {
     override fun toString(): String {
-        return "MafiaGameState(" + '\n' +
-                "numPlayers=$numPlayers, " + '\n' +
-                "players=${players.contentToString()}, " + '\n' +
-                "voteList=$voteList, " + '\n' +
-                "isOver=$isOver, " + '\n' +
-                "time=$time, " + '\n' +
-                "actionState=$actionState, " + '\n' +
-                "selected=$selectedPlayers, " + '\n' +
-                "headingText='$headingText', " + '\n' +
-                "descriptionText='$descriptionText'" +
+        return "MafiaGameState(\n" +
+                "numPlayers=$numPlayers, \n" +
+                "players=${players.contentToString()}, \n" +
+                "voteList=$voteList, \n" +
+                "isOver=$isOver, \n" +
+                "time=$time, \n" +
+                "is timer active = $isTimerActive, \n" +
+                "actionState=$actionState, \n" +
+                "delayed actionState=$delayedActionState, \n" +
+                "selected=$selectedPlayers, \n" +
+                "headingText='$headingText, \n" +
+                "descriptionText='$descriptionText\n" +
                 ")"
     }
 }

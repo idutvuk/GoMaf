@@ -17,6 +17,7 @@ import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
+import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -44,23 +45,24 @@ class GameFragment : Fragment() {
         val messages = GameMessage.createGameMessagesList(10)
         val adapter = RecyclerViewLogAdapter(messages)
 
-//        Меняем состояние значения livedata ldNumber по нажатию на кнопку
-//        b.btnDTest.setOnClickListener {
-//            ldNumber.value = ldNumber.value?.plus(1)
-//            Log.d("GameLog", "test button activated")
-//        }
 
-//        viewModel.ldNumber.observe(viewLifecycleOwner) {
-//            b.tvDescription.text = "current: " + viewModel.ldNumber.value.toString()
-//            Log.d("GameLog", "observed")
-//        }
+//subscribers
+
+        viewModel.ldTimerActive.observe(viewLifecycleOwner) {
+            if (it) {
+                TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer,60000 )
+                //TODO: make not-only 60s timers
+            } else {
+                TimerHandler.skipTimer(b.table.tvTimer, b.table.pbTimer)
+                //TODO: make invisible TV
+            }
+        }
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
-            //TODO: uncomment
-//                b.ibDayTime.setImageResource(
-//                    if (it == GameTime.DAY) R.drawable.ic_sun
-//                    else R.drawable.ic_moon
-//                ) //TODO: fix the code (get id from the enum class
+                b.ibDayTime.setImageResource(
+                    if (it == GameTime.DAY) R.drawable.ic_sun
+                    else R.drawable.ic_moon
+                ) //TODO: fix the code (get id from the enum class
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
@@ -80,7 +82,6 @@ class GameFragment : Fragment() {
             }
         }
 
-//        viewModel.ld
 
         //setup bottom sheet behavior
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
@@ -121,18 +122,32 @@ class GameFragment : Fragment() {
 //        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 
 
+        b.table.fabPause.setOnClickListener {
+            if(TimerHandler.isRunning) {
+                TimerHandler.pauseTimer()
+                b.table.fabPause.setImageResource(R.drawable.ic_play)
+            } else {
+                TimerHandler.resumeTimer(b.table.tvTimer, b.table.pbTimer)
+                b.table.fabPause.setImageResource(R.drawable.ic_pause)
+            }
+        }
+
+        //TODO: remove unnecessary buttons
+        b.btnStart.setOnClickListener {
+            TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer,60000 )
+        }
+        b.table.fabAdd.setOnClickListener{
+            TimerHandler.addTime(b.table.tvTimer,b.table.pbTimer, 5000)
+        }
+        b.table.fabSkip.setOnClickListener {
+            TimerHandler.skipTimer(b.table.tvTimer, b.table.pbTimer)
+        }
+
+
 
         b.bottomSheetLayout.btnMain.setOnClickListener {
             viewModel.onClickBtnMain()
         }
-
-//        b.fabDebug1.setOnClickListener{
-//            viewModel.onClickFab1Debug()
-//        }
-//
-//        b.fabDebug2.setOnClickListener{
-//            viewModel.onClickFab2Debug()
-//        }
 
 
 

@@ -34,6 +34,7 @@ class GameViewModel : ViewModel() {
     val ldVoteList = MutableLiveData<List<Player>>()
     val ldHeading = MutableLiveData("Def heading")
     val ldDescription = MutableLiveData("Def text")
+    val ldTimerActive = MutableLiveData(false)
 
 
 
@@ -128,6 +129,7 @@ class GameViewModel : ViewModel() {
             ldVoteList.value = voteList
             ldHeading.value = headingText
             ldDescription.value = descriptionText
+            ldTimerActive.value = isTimerActive
         }
     }
 

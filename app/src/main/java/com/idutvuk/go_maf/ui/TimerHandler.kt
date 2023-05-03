@@ -12,6 +12,9 @@ object TimerHandler {
     private var maxTime: Long = 60000L
     var isRunning = false
 
+    /**
+     * Starts the timer if it is **not running** right now
+     */
     fun startTimer(tvTimer: TextView, pbTimer: ProgressBar, time: Long) {
         if (isRunning) return
         isRunning = true
@@ -48,6 +51,9 @@ object TimerHandler {
         }.start()
     }
 
+    /**
+     * Pauses the timer if it is running right now
+     */
     fun pauseTimer() {
         if (isRunning) {
             timer.cancel()
@@ -55,6 +61,9 @@ object TimerHandler {
         }
     }
 
+    /**
+     * Pauses the timer if it is running right now
+     */
     fun resumeTimer(tvTimer: TextView, pbTimer: ProgressBar) {
         if (!isRunning) {
             startTimer(tvTimer, pbTimer, remainingTime)

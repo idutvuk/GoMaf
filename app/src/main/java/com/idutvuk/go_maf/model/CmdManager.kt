@@ -35,7 +35,10 @@ object CmdManager {
 
                 ActionState.START_MAFIA_SPEECH -> {
                     //TODO: Start 60-sec timer
-                    actionState = ActionState.CHECK_DON
+                    isTimerActive = true
+                    delayedActionState = ActionState.CHECK_DON
+
+                    actionState = ActionState.NEXT
                 }
 
 
@@ -80,7 +83,10 @@ object CmdManager {
                 }
 
 
-                ActionState.NEXT -> TODO()
+                ActionState.NEXT -> {
+                    isTimerActive = false
+                    actionState = delayedActionState
+                }
 
                 ActionState.DEBUG -> {
                     Log.e("GameLog","Bug! Activated debug button. Switching to START_GAME...")

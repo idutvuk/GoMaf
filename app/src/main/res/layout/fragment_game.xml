@@ -51,11 +51,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include
             layout="@layout/table"
-            android:id="@+id/table"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:id="@+id/table" />
 
         <!-- player buttons -->
         <!-- TODO: remove -->
@@ -276,14 +275,18 @@
         app:layout_anchorGravity="top|start"
         android:src="@drawable/ic_foul"
         android:contentDescription="@string/peep" />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_anchor="@id/app_bar_layout"
+    app:layout_anchorGravity="bottom|end">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDebug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|end"
+        android:layout_gravity="center"
         android:src="@drawable/ic_debug"
         android:contentDescription="@string/debug_test"/>
     <com.google.android.material.button.MaterialButton
@@ -296,7 +299,14 @@
         app:layout_constraintStart_toStartOf="@id/cvTimerContainer"
         app:layout_constraintEnd_toEndOf="@id/cvTimerContainer"
         app:layout_constraintBottom_toTopOf="@id/cvTimerContainer"/>
+    <ImageButton
+        android:id="@+id/ibDayTime"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_moon"/>
 
+</LinearLayout>
     <!--TODO: implement hiding description when scrolling bottom sheet-->
     <include
         layout="@layout/bottom_sheet"
