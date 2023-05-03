@@ -39,49 +39,49 @@ class GameViewModel : ViewModel() {
 
     private val blinkDur = 2_000
     fun foulTV(id: Int, b: FragmentGameBinding) {
-        b.tvBig.text = Game.players[id].fouls.toString()
-        b.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
+        b.table.tvBig.text = Game.players[id].fouls.toString()
+        b.table.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
         blink(blinkDur, b)
     }
 
     fun gameEndTV(b: FragmentGameBinding) {
-        b.tvBig.text = ""
-        b.tvUpper.text = "Game over"
+        b.table.tvBig.text = ""
+        b.table.tvUpper.text = "Game over"
         blink(blinkDur, b)
     }
 
     fun blink(dur: Int, b: FragmentGameBinding) {
         val appearDuration = dur / 4
         val disappearDuration = dur / 4
-        b.tvBig.alpha = 0f
-        b.tvBig.animate()
+        b.table.tvBig.alpha = 0f
+        b.table.tvBig.animate()
             .alpha(1f)
             .setDuration(appearDuration.toLong())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    b.tvBig.animate()
+                    b.table.tvBig.animate()
                         .alpha(0f)
                         .setDuration(disappearDuration.toLong())
                         .setListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                b.tvBig.alpha = 0f
+                                b.table.tvBig.alpha = 0f
                             }
                         })
                 }
             })
 
-        b.tvUpper.alpha = 0f
-        b.tvUpper.animate()
+        b.table.tvUpper.alpha = 0f
+        b.table.tvUpper.animate()
             .alpha(1f)
             .setDuration(appearDuration.toLong())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    b.tvUpper.animate()
+                    b.table.tvUpper.animate()
                         .alpha(0f)
                         .setDuration(disappearDuration.toLong())
                         .setListener(object : AnimatorListenerAdapter() {
                             override fun onAnimationEnd(animation: Animator) {
-                                b.tvUpper.alpha = 0f
+                                b.table.tvUpper.alpha = 0f
                             }
                         })
                 }

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cvTableContatiner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/cvTable"
+            app:layout_constraintStart_toStartOf="@id/cvTable"
+            app:layout_constraintEnd_toEndOf="@id/cvTable"
+            android:layout_marginBottom="32dp"
+            android:textSize="16sp"
+            android:text="1,2,3,4,5,6,7"/>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvTable"
+            style="@style/Widget.Material3.CardView.Filled"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="70dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="2005dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ProgressBar
+                        android:id="@+id/pbTimer"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:max="60"
+                        style="?android:progressBarStyleHorizontal"
+                        android:progressDrawable="@drawable/circular_progress_bar"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:id="@+id/tvTimer"
+                        tools:text="00:34"
+                        android:textSize="48sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvTimerButtonContainer"
+                        style="@style/Widget.Material3.CardView.Filled"
+                        android:layout_width="wrap_content"
+                        android:layout_height="60dp"
+                        android:layout_marginVertical="25dp"
+                        app:cardCornerRadius="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center">
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabPause"
+                                android:src="@drawable/ic_play"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabAdd"
+                                android:src="@drawable/ic_add_timer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/fabSkip"
+                                android:src="@drawable/ic_stop_timer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+                <TextView
+                    android:id="@+id/tv_upper"
+                    android:layout_width="100dp"
+                    android:layout_height="24dp"
+                    android:alpha="0"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/tv_big"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.82"
+                    tools:text="Smaller text" />
+
+                <TextView
+                    android:id="@+id/tv_big"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0"
+                    android:textAlignment="center"
+                    android:textSize="100sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="34" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
