@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -49,259 +50,44 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/table"
+            app:layout_constraintStart_toStartOf="@id/table"
+            app:layout_constraintEnd_toEndOf="@id/table"
+            android:layout_marginBottom="32dp"
+            android:textSize="16sp"
+            android:text="1,2,3,4,5,6,7"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cvTableContatiner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <include
+            layout="@layout/table"
+            android:id="@+id/table" />
 
-            <TextView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_marginVertical="25dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/table"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabPause"
+                android:src="@drawable/ic_play"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/cvTable"
-                app:layout_constraintStart_toStartOf="@id/cvTable"
-                app:layout_constraintEnd_toEndOf="@id/cvTable"
-                android:layout_marginBottom="32dp"
-                android:textSize="16sp"
-                android:text="1,2,3,4,5,6,7"/>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvTable"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="70dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:cardBackgroundColor="@color/design_default_color_surface"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:cardCornerRadius="2005dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tv_upper"
-                        android:layout_width="100dp"
-                        android:layout_height="24dp"
-                        android:alpha="0"
-                        android:textAlignment="center"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toTopOf="@id/tv_big"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.82"
-                        tools:text="Smaller text" />
-
-                    <TextView
-                        android:id="@+id/tv_big"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:alpha="0"
-                        android:textAlignment="center"
-                        android:textSize="100sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="34" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!-- player buttons -->
-        <!-- TODO: remove -->
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn1"
-            style="@style/Widget.Material3.Button.IconButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-
-            android:text="@string/number1"
-            android:textSize="30sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="DuplicateClickableBoundsCheck" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn2"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number2"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn3"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number3"
-            android:textSize="30sp"
-            tools:ignore="VisualLintOverlap" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn4"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number4"
-            android:textSize="30sp"
-            tools:ignore="VisualLintOverlap" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn5"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number5"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn6"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number6"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn7"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number7"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn8"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number8"
-            android:textSize="30sp"
-            tools:ignore="VisualLintOverlap" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn9"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number9"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn10"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number10"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn11"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number11"
-            android:textSize="30sp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn12"
-            style="@style/Widget.Material3.Button.IconButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_margin="5dp"
-            android:padding="3dp"
-            android:text="@string/number12"
-            android:textSize="30sp" />
-
+                android:layout_height="wrap_content" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAdd"
+                android:src="@drawable/ic_add_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
@@ -334,17 +120,28 @@
         app:layout_anchorGravity="top|start"
         android:src="@drawable/ic_foul"
         android:contentDescription="@string/peep" />
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_anchor="@id/app_bar_layout"
+    app:layout_anchorGravity="bottom|end">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabDebug"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
-        app:layout_anchor="@id/app_bar_layout"
-        app:layout_anchorGravity="bottom|end"
+        android:layout_gravity="center"
         android:src="@drawable/ic_debug"
         android:contentDescription="@string/debug_test"/>
+    <ImageButton
+        android:id="@+id/ibDayTime"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_moon"/>
 
+</LinearLayout>
     <!--TODO: implement hiding description when scrolling bottom sheet-->
     <include
         layout="@layout/bottom_sheet"

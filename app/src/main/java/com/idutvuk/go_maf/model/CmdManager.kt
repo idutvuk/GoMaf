@@ -2,7 +2,6 @@ package com.idutvuk.go_maf.model
 
 
 import android.util.Log
-import com.idutvuk.go_maf.model.gameactions.GameAction
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
@@ -13,7 +12,6 @@ import java.lang.Error
 
 
 object CmdManager {
-    val history = ArrayDeque<GameAction>() //TODO: delete deprecated
     val stateHistory = ArrayDeque<MafiaGameState>()
     var currentHistoryIndex = 0
 
@@ -28,14 +26,20 @@ object CmdManager {
             when (currentState) {
 
                 ActionState.START_NIGHT -> {
+                    passedPhases++
                     time = GameTime.NIGHT
-                    //todo: night actions
-                    actionState = ActionState.START_MAFIA_SPEECH //TODO: skip if not the first night
+
+                    if (passedPhases == 0) {
+                        actionState = ActionState.START_MAFIA_SPEECH
+                    } else {
+                        actionState = ActionState.CHECK_DON
+                    }
                 }
 
                 ActionState.START_MAFIA_SPEECH -> {
-                    //TODO: Start 60-sec timer
-                    actionState = ActionState.CHECK_DON
+                        isTimerActive = true
+                        delayedActionState = ActionState.CHECK_DON
+                        actionState = ActionState.NEXT
                 }
 
 
@@ -61,16 +65,19 @@ object CmdManager {
 
                         //TODO: replace it to the ui change
                         Log.i("GameLog", "Sheriff checked $cursor and the result is $response")
-
                     }
-                    //TODO: if can do best move, do BEST_MOVE
-                    actionState = ActionState.BEST_MOVE
+
+                    actionState = if (
+                        livingPlayersCount(players) + 2 >= Game.numPlayers &&
+                        passedPhases == 2
+                        )
+                        ActionState.BEST_MOVE else ActionState.START_DAY
                 }
 
 
                 ActionState.BEST_MOVE -> {
                     //TODO: Add 20-sec timer
-                    passedPhases++ //todo: extract if skipping best move
+
                     actionState = ActionState.START_DAY
                 }
 
@@ -80,7 +87,10 @@ object CmdManager {
                 }
 
 
-                ActionState.NEXT -> TODO()
+                ActionState.NEXT -> {
+                    isTimerActive = false
+                    actionState = delayedActionState
+                }
 
                 ActionState.DEBUG -> {
                     Log.e("GameLog","Bug! Activated debug button. Switching to START_GAME...")
@@ -90,13 +100,16 @@ object CmdManager {
 
 
                 ActionState.START_DAY -> {
+                    passedPhases++
                     time = GameTime.DAY
+                    firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
+                    cursor = firstSpokedPlayer
                     actionState = ActionState.START_SPEECH
                 }
 
 
                 ActionState.START_SPEECH -> {
-                    //TODO: add 60-sec timer
+                    isTimerActive = true
                     Log.d("GameLog", "Speech started. Cursor: $cursor")
                     actionState = ActionState.ADD_TO_VOTE
                 }
@@ -108,10 +121,10 @@ object CmdManager {
                 }
 
                 ActionState.END_SPEECH -> {
-                    //TODO: EndTimer
+                    isTimerActive = false
 
                     cursor = nextAlivePlayer(cursor, players)
-                     if (cursor >= Game.numPlayers)
+                     if (nextAlivePlayer(cursor, players) != firstSpokedPlayer) //TODO: fix this logic
                          actionState = ActionState.START_SPEECH
                     else {
                          actionState = ActionState.START_VOTE
@@ -171,33 +184,37 @@ object CmdManager {
         return true //game continues
     }
 
-    fun undo(): IntArray { //TODO: rewrite it to the modern logic
-        val result =  IntArray(2)
-        if (currentHistoryIndex ==0) {
-            Log.e("GameLog", "Attempt to redo null aborted")
-            result[0] = -1
-            return result
-        }
-        history[currentHistoryIndex -1].undo()
-        currentHistoryIndex--
-        result[1] = 1
-        Log.d("GameLog","Undo completed. size: ${history.size}, index:$currentHistoryIndex")
-        if (currentHistoryIndex <=0) {
-            result[0] = -1
-        }
-        return result
-    }
+//    fun undo(): IntArray { //TODO: rewrite it to the modern logic
+//        val result =  IntArray(2)
+//        if (currentHistoryIndex ==0) {
+//            Log.e("GameLog", "Attempt to redo null aborted")
+//            result[0] = -1
+//            return result
+//        }
+//        history[currentHistoryIndex -1].undo()
+//        currentHistoryIndex--
+//        result[1] = 1
+//        Log.d("GameLog","Undo completed. size: ${history.size}, index:$currentHistoryIndex")
+//        if (currentHistoryIndex <=0) {
+//            result[0] = -1
+//        }
+//        return result
+//    }
 
-    private fun nextAlivePlayer(cursor: Int, players: Array<Player>): Int {
-        //check for alive players:
-        var flag = false
+    private fun livingPlayersCount(players: Array<Player>): Int {
+        var livingPlayers = 0
         for (i in 0 until Game.numPlayers) {
             if (players[i].alive) {
-                flag = true
-                break
+                livingPlayers++
             }
         }
-        if (!flag) throw Error("There is no alive players in the game")
+        return livingPlayers
+    }
+    private fun nextAlivePlayer(cursor: Int, players: Array<Player>): Int {
+        //check for alive players:
+        val livingPlayers = livingPlayersCount(players)
+        if (livingPlayers == 0) throw Error("There is no alive players in the game")
+        if (livingPlayers == 1) throw Error("There is only 1 alive person in the game")
 
         //if reached the end
         if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1,players)
@@ -206,6 +223,6 @@ object CmdManager {
         if (players[cursor+1].alive) return cursor+1
 
         //if next player is dead
-        return nextAlivePlayer(cursor+2, players)
+        return nextAlivePlayer(cursor+1, players)
     }
 }

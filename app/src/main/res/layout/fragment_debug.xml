@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toTopOf="@id/cvButtonContainer">
+        app:layout_constraintBottom_toTopOf="@id/cvTimerButtonContainer">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -81,7 +81,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cvButtonContainer"
+        android:id="@+id/cvTimerButtonContainer"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_width="wrap_content"
         android:layout_height="60dp"

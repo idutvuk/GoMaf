@@ -12,10 +12,13 @@ object TimerHandler {
     private var maxTime: Long = 60000L
     var isRunning = false
 
+    /**
+     * Starts the timer if it is **not running** right now
+     */
     fun startTimer(tvTimer: TextView, pbTimer: ProgressBar, time: Long) {
         if (isRunning) return
         isRunning = true
-        Log.d("GameLog","Timer started")
+        Log.i("GraphLog","Timer started")
         timer = object : CountDownTimer(time, 1000) { //TODO: increase countDown interval
             override fun onTick(millisUntilFinished: Long) {
                 remainingTime = millisUntilFinished
@@ -43,11 +46,14 @@ object TimerHandler {
             override fun onFinish() {
                 isRunning = false
                 pbTimer.progress = 0
-                Log.i("GameLog", "time out")
+                Log.i("GraphLog", "time out")
             }
         }.start()
     }
 
+    /**
+     * Pauses the timer if it is running right now
+     */
     fun pauseTimer() {
         if (isRunning) {
             timer.cancel()
@@ -55,6 +61,9 @@ object TimerHandler {
         }
     }
 
+    /**
+     * Pauses the timer if it is running right now
+     */
     fun resumeTimer(tvTimer: TextView, pbTimer: ProgressBar) {
         if (!isRunning) {
             startTimer(tvTimer, pbTimer, remainingTime)
@@ -70,7 +79,9 @@ object TimerHandler {
             startTimer(tvTimer, pbTimer, remainingTime)
         } else {
             remainingTime += timeToAdd
-            // Your code for updating the UI with the new remaining time
+            startTimer(tvTimer, pbTimer, remainingTime)
+            isRunning = true
+            pauseTimer()
         }
     }
 
