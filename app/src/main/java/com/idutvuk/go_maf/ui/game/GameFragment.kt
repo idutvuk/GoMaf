@@ -2,10 +2,13 @@ package com.idutvuk.go_maf.ui.game
 
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,20 +29,52 @@ class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var b: FragmentGameBinding
-    private lateinit var buttons: List<MaterialButton>
+    private val buttons = mutableListOf<MaterialButton>()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
 
-        buttons = listOf(
-            b.btn1, b.btn2, b.btn3, b.btn4, b.btn5, b.btn6,
-            b.btn7, b.btn8, b.btn9, b.btn10, b.btn11, b.btn12
+        val circlePoints = generateCirclePoints(Game.numPlayers, radius = 360)
+
+        // create a layout params object for the buttons
+        val layoutParams = ConstraintLayout.LayoutParams(
+            ConstraintLayout.LayoutParams.WRAP_CONTENT,
+            ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
 
-        for (i in 12 - 1 downTo Game.numPlayers) {
-            buttons[i].visibility = View.GONE
-            Log.d("Graphlog","Btn '${i + 1}' hidden\n")
+        //TODO: fix oval shadow
+        for (i in 0 until Game.numPlayers)
+        {
+            // create a new button
+            buttons.add(MaterialButton(requireContext(),null,R.attr.playerButtonStyle))
+
+            // set the button's id
+//            buttons.last().id = View.generateViewId()
+
+            // set the button's text
+            buttons.last().text = (i + 1).toString()
+
+            // set the button's layout params
+
+            layoutParams.apply {
+                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+            }
+
+            buttons.last().layoutParams = layoutParams
+
+            // add the button to the layout
+            b.clContainer.addView(buttons.last(), layoutParams)
+            buttons.last().x += circlePoints[i][0]
+            buttons.last().y += circlePoints[i][1]
         }
+
+
+
+
 
 //        val messages = GameMessage.getGameActionsList()
         val messages = GameMessage.createGameMessagesList(10)
@@ -49,6 +84,8 @@ class GameFragment : Fragment() {
 //subscribers
 
         viewModel.ldTimerActive.observe(viewLifecycleOwner) {
+            b.fabAdd.isEnabled = it
+            b.fabPause.isEnabled = it
             if (it) {
                 TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer,60000 )
                 //TODO: make not-only 60s timers
@@ -93,16 +130,7 @@ class GameFragment : Fragment() {
         b.bottomSheetLayout.rvLog.adapter = adapter
         b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
-        val points = generateCirclePoints(Game.numPlayers) //TODO: replace numplayers with the another constant
-        for (i in 0 until Game.numPlayers) { //TODO: replace numplayers with the another constant
-            buttons[i].x += points[i][0].toFloat()
-            buttons[i].y += points[i][1].toFloat()
-        }
-        for (i in 0 until Game.numPlayers) {
-            buttons[i].setOnClickListener {
-                //TODO: 2-click logic
-            }
-        }
+
         b.fabPeep.setOnTouchListener { view, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 for (i in 0 until Game.numPlayers)
@@ -135,9 +163,6 @@ class GameFragment : Fragment() {
         b.table.fabAdd.setOnClickListener{
             TimerHandler.addTime(b.table.tvTimer,b.table.pbTimer, 5000)
         }
-
-
-
 
         b.bottomSheetLayout.btnMain.setOnClickListener {
             viewModel.onClickBtnMain()
