@@ -3,7 +3,6 @@ package com.idutvuk.go_maf.ui.game
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
@@ -23,10 +22,9 @@ class GameViewModel : ViewModel() {
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
     private var gameState: MafiaGameState = MafiaGameState()
 
-    //Add ui params
-    //TODO: connect them to the ui
+
     val ldTime = MutableLiveData(GameTime.NIGHT)
-    val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true }) //TODO: change 10 to player count
+    val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
     val ldMainButtonState = MutableLiveData(ActionState.DEBUG)
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
@@ -39,73 +37,6 @@ class GameViewModel : ViewModel() {
 
 
 
-    private val blinkDur = 2_000
-//    fun foulTV(id: Int, b: FragmentGameBinding) {
-//        b.table.tvBig.text = Game.players[id].fouls.toString()
-//        b.table.tvUpper.text = "Player #${Game.players[id].strNum} fouls: "
-//        blink(blinkDur, b)
-//    }
-//
-//    fun gameEndTV(b: FragmentGameBinding) {
-//        b.table.tvBig.text = ""
-//        b.table.tvUpper.text = "Game over"
-//        blink(blinkDur, b)
-//    }
-    //TODO: make use for this 🙄
-
-    fun blink(dur: Int, b: FragmentGameBinding) {
-        val appearDuration = dur / 4
-        val disappearDuration = dur / 4
-        b.table.tvBig.alpha = 0f
-        b.table.tvBig.animate()
-            .alpha(1f)
-            .setDuration(appearDuration.toLong())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    b.table.tvBig.animate()
-                        .alpha(0f)
-                        .setDuration(disappearDuration.toLong())
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator) {
-                                b.table.tvBig.alpha = 0f
-                            }
-                        })
-                }
-            })
-
-        b.table.tvUpper.alpha = 0f
-        b.table.tvUpper.animate()
-            .alpha(1f)
-            .setDuration(appearDuration.toLong())
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    b.table.tvUpper.animate()
-                        .alpha(0f)
-                        .setDuration(disappearDuration.toLong())
-                        .setListener(object : AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator) {
-                                b.table.tvUpper.alpha = 0f
-                            }
-                        })
-                }
-            })
-
-
-    }
-    fun controlUndoRedo(arr: IntArray, b: FragmentGameBinding, adapter: RecyclerViewLogAdapter) {
-        when (arr[0]) {
-            -1 -> b.bottomSheetLayout.btnUndo.isEnabled = false
-            1 -> b.bottomSheetLayout.btnUndo.isEnabled = true
-            else -> {}
-        }
-        when (arr[1]) {
-            -1 -> b.bottomSheetLayout.btnRedo.isEnabled = false
-            1 -> b.bottomSheetLayout.btnRedo.isEnabled = true
-            else -> {}
-        }
-        adapter.updateMessagesList() //TODO: УБРАТЬ GOVNOCODE
-    }
-
     /**
      * Main onclick performer from main button
      * TODO: implement 2-click logic & foul logic
@@ -117,7 +48,7 @@ class GameViewModel : ViewModel() {
             //TODO: single-tap logic (if needed)
         }
 
-        gameState = CmdManager.commit(gameState.actionState)
+        gameState = CmdManager.pressMainBtn(gameState.actionState)
         updateUiParams(gameState)
     }
     private fun updateUiParams(gameState: MafiaGameState) {

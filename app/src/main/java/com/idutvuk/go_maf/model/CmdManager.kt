@@ -15,7 +15,7 @@ object CmdManager {
     val stateHistory = ArrayDeque<MafiaGameState>()
     var currentHistoryIndex = 0
 
-    fun commit(currentState: ActionState) : MafiaGameState {
+    fun pressMainBtn(currentState: ActionState) : MafiaGameState {
         //clone old game state, when modify it
         val gameState : MafiaGameState = if (stateHistory.isEmpty()) {
             MafiaGameState()//TODO: extract it to the game start. History should not be empty
