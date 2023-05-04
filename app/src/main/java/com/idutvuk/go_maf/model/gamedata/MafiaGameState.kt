@@ -32,6 +32,8 @@ class MafiaGameState(
 
     /**
      * Cursor - indication - which player is speaking rn
+     *
+     * _cursor is unchangeable from the user_
      */
     var cursor: Int = 0,
 

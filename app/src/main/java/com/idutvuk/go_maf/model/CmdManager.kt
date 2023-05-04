@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.model
 
 
 import android.util.Log
+import android.widget.Toast
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
@@ -32,7 +33,10 @@ object CmdManager {
             when (prevState) {
                 MainButtonActionState.ADD_TO_VOTE -> TODO()
                 MainButtonActionState.KILL -> TODO()
-                MainButtonActionState.CHECK_DON -> TODO()
+                MainButtonActionState.CHECK_DON -> {
+                   headingText = (players[selectedPlayers[0]].role == Role.SHR).toString()
+
+                }
                 MainButtonActionState.CHECK_SHR -> TODO()
                 else -> throw Error(
                     "VM: clicked on a player button when number is requested\n" +
@@ -40,7 +44,7 @@ object CmdManager {
                 )
                 /*
                 в общем, надо бы вызывать тут 1-кликовую логику.
-                TODO: show response on don and shr checks
+                TODO: show response on shr checks
                 TODO: add to vote on click
                 TODO: add kill logic to the click
                  */

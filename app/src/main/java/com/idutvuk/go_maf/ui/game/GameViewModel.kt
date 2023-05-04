@@ -43,9 +43,9 @@ class GameViewModel : ViewModel() {
      */
     fun onClickBtnMain() {
         gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
-        updateUiParams(gameState)
+        updateUiParams()
     }
-    private fun updateUiParams(gameState: MafiaGameState) {
+    private fun updateUiParams() {
         with(gameState) {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
@@ -70,26 +70,25 @@ class GameViewModel : ViewModel() {
 
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
         if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
-            CmdManager.pressPlayerNumber(gameState.previousMainButtonActionState)
+            gameState.selectedPlayers.add(clickedIndex)
+            gameState = CmdManager.pressPlayerNumber(gameState.previousMainButtonActionState)
+            updateUiParams()
+            return
         }
+
         if (nldSelectionMode == PlayerSelectionMode.NONE) return
+
         if (selectionState) {
-            if (!gameState.selectedPlayers.remove(clickedIndex)) {
-                throw Error("VM: attempt to unselect already unselected player")
-            }
+            gameState.selectedPlayers.remove(clickedIndex)
         } else {
-            if (gameState.selectedPlayers.contains(clickedIndex)) {
-                throw Error("VM: attempt to select already selected player")
+            if (nldSelectionMode == PlayerSelectionMode.SINGLE) {
+                gameState.selectedPlayers = arrayListOf(clickedIndex)
             } else {
-                if (nldSelectionMode == PlayerSelectionMode.SINGLE) {
-                    gameState.selectedPlayers = arrayListOf(clickedIndex)
-                } else {
-                    gameState.selectedPlayers.add(clickedIndex)
-                }
+                gameState.selectedPlayers.add(clickedIndex)
             }
         }
 
-        updateUiParams(gameState)
+        updateUiParams()
     }
 
 

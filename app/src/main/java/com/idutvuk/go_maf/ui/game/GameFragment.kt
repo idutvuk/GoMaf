@@ -104,6 +104,10 @@ class GameFragment : Fragment() {
             )
         }
 
+       viewModel.ldHeading.observe(viewLifecycleOwner) {
+           b.tvHeadline.text = it
+       }
+
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
             var shortVoteList = "${viewModel.nldSelectionMode}"
             for (element in it) {
@@ -131,7 +135,6 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldButtonsSelected.observe(viewLifecycleOwner) {
-            Log.d("GraphLog","Gotcha!")
             for(i in 0 until Game.numPlayers) {
                 buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
