@@ -129,6 +129,9 @@ class GameFragment : Fragment() {
             }
         }
 
+        viewModel.ldCursor.observe(viewLifecycleOwner) {
+            pointArrowOnPlayer(it)
+        }
 
         //setup bottom sheet behavior
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
