@@ -20,6 +20,7 @@ import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
 
 import com.idutvuk.go_maf.model.gamedata.GameTime
+import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
 import kotlin.math.sin
@@ -66,7 +67,25 @@ class GameFragment : Fragment() {
             buttons[i].layoutParams = layoutParams
 
             buttons[i].setOnClickListener {
-                viewModel.performPlayerBtnClick(i, viewModel.ldButtonsSelected.value!![i])
+                when(viewModel.selectionMode) {
+
+                    PlayerSelectionMode.NONE -> {
+                        //just ignore the click lol
+                    }
+
+                    PlayerSelectionMode.SINGLE -> viewModel.performPlayerBtnClick(
+                        i,
+                        viewModel.ldButtonsSelected.value!![i],
+                        true
+                    )
+
+                    PlayerSelectionMode.MULTIPLE -> viewModel.performPlayerBtnClick(
+                        i,
+                        viewModel.ldButtonsSelected.value!![i]
+                    )
+
+                }
+
                 Log.d("GraphLog", "Clicked $i")
             }
             // add the button to the layout
@@ -100,6 +119,14 @@ class GameFragment : Fragment() {
                 if (it == GameTime.DAY) R.drawable.ic_sun
                 else R.drawable.ic_moon
             )
+        }
+
+        viewModel.ldVoteList.observe(viewLifecycleOwner) {
+            var shortVoteList = ""
+            for (element in it) {
+                shortVoteList += element.number.toString() + ", "
+            }
+            b.table.tvContextInfo.text = shortVoteList
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {

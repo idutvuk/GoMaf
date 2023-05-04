@@ -30,7 +30,7 @@ class MafiaGameState(
     var firstSpokedPlayer: Int = -1,
 
     /**
-     * Selected players is a selector of currently speaking player
+     * Cursor - indication - which player is speaking rn
      */
     var cursor: Int = 0,
 
@@ -39,6 +39,7 @@ class MafiaGameState(
      * like cursor, but used when multiple players selected
      */
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
+    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE,
     var headingText: String = "Default heading",
     var descriptionText: String = "Default description",
     var isTimerActive: Boolean = false,

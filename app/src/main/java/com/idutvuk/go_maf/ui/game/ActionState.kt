@@ -1,13 +1,14 @@
 package com.idutvuk.go_maf.ui.game
 
 import com.idutvuk.go_maf.R
+import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
 
 //TODO: add possibility to make any action in any time via holding the main button
 enum class ActionState(
     val text: String,
     val icon: Int = R.drawable.ic_debug,
-    val requireNumber: Boolean
+    val requireNumber: PlayerSelectionMode
 ) {
     //Misc/debug states
     /**
@@ -16,7 +17,7 @@ enum class ActionState(
     NEXT(
         text = "Skip",
         icon = R.drawable.ic_arrow_right,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -25,7 +26,7 @@ enum class ActionState(
     DEBUG(
         text = "Debug mainBtn state",
         icon = R.drawable.ic_debug,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
 
@@ -37,7 +38,7 @@ enum class ActionState(
     START_GAME(
         text = "Start game",
         icon = R.drawable.ic_play,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -46,7 +47,7 @@ enum class ActionState(
     END_GAME(
         text = "End game",
         icon = R.drawable.ic_stop,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     //DayTimes
@@ -56,7 +57,7 @@ enum class ActionState(
      */
     START_VOTE(
         text = "Start vote",
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -65,7 +66,7 @@ enum class ActionState(
     START_DAY(
         text = "Start day",
         icon = R.drawable.ic_sun,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -74,7 +75,7 @@ enum class ActionState(
     START_NIGHT(
         text = "Start night",
         icon = R.drawable.ic_moon,
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     //Day actions
@@ -84,7 +85,7 @@ enum class ActionState(
      */
     START_SPEECH(
         text = "Start speech",
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -94,7 +95,7 @@ enum class ActionState(
     @Deprecated("Should not be used in game")
     END_SPEECH(
         text = "End speech",
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -102,7 +103,7 @@ enum class ActionState(
      */
     ADD_TO_VOTE(
         text = "Add to vote",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     //vote actions
@@ -112,7 +113,7 @@ enum class ActionState(
     @Deprecated("Currently under development")
     VOTE_FOR(
         text = "THIS NOT SHOULD BE READABLE",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
     /**
@@ -120,7 +121,7 @@ enum class ActionState(
      */
     KILL_IN_VOTE( //TODO: replace with @VOTE_FOR
         text = "Kill by vote",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     /**
@@ -128,8 +129,7 @@ enum class ActionState(
      */
     RE_VOTE(
         text = "Re-vote",
-        requireNumber = true
-    //TODO maybe it's more than just require number
+        requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
     /**
@@ -137,8 +137,7 @@ enum class ActionState(
      */
     FINAL_VOTE( //TODO: change the @text
         text = "Final vote",
-        requireNumber = true
-        //TODO maybe it's more than just require number
+        requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
     // Night actions
@@ -148,7 +147,7 @@ enum class ActionState(
      */
     START_MAFIA_SPEECH(
         text = "Mafia speech",
-        requireNumber = false
+        requireNumber = PlayerSelectionMode.NONE
     ),
 
     /**
@@ -158,7 +157,7 @@ enum class ActionState(
     KILL(
         text = "Kill",
         icon = R.drawable.ic_gun_target,
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     /**
@@ -166,7 +165,7 @@ enum class ActionState(
      */
     CHECK_DON(
         text = "Don check",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     /**
@@ -174,7 +173,7 @@ enum class ActionState(
      */
     CHECK_SHR(
         text = "Sheriff check",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     /**
@@ -182,10 +181,10 @@ enum class ActionState(
      */
     BEST_MOVE(
         text = "Best move",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.MULTIPLE
     );
     constructor(nominee: String) : this(
         text = "Vote for $nominee",
-        requireNumber = true
+        requireNumber = PlayerSelectionMode.SINGLE
     )
 }

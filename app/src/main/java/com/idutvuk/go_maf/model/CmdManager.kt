@@ -121,7 +121,7 @@ object CmdManager {
 
                 ActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog","(CmdM) Added to vote")
-                    voteList.add(players[cursor])
+                    voteList.add(players[cursor]) //TODO: replace to the selectedPlayers
                     actionState = ActionState.END_SPEECH
                 }
 

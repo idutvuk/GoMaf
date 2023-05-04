@@ -1,17 +1,15 @@
 package com.idutvuk.go_maf.ui.game
 
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.Player
+import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
 
 class GameViewModel : ViewModel() {
@@ -22,6 +20,7 @@ class GameViewModel : ViewModel() {
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
     private var gameState: MafiaGameState = MafiaGameState()
 
+    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE
 
     val ldTime = MutableLiveData(GameTime.NIGHT)
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
@@ -43,12 +42,6 @@ class GameViewModel : ViewModel() {
      * TODO: implement 2-click logic & foul logic
      */
     fun onClickBtnMain() {
-        if (gameState.actionState.requireNumber) {
-            //TODO: w/number logic
-        } else {
-            //TODO: single-tap logic (if needed)
-        }
-
         gameState = CmdManager.pressMainBtn(gameState.actionState)
         updateUiParams(gameState)
     }
@@ -73,18 +66,25 @@ class GameViewModel : ViewModel() {
         return gameState.players[i].emoji
     }
 
-    fun performPlayerBtnClick(i: Int, isSelected: Boolean) {
-        if (isSelected) {
-            if (!gameState.selectedPlayers.remove(i)) {
+    fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean, isSingleClick: Boolean = true) {
+
+        if (selectionState) {
+            if (!gameState.selectedPlayers.remove(clickedIndex)) {
                 throw Error("VM: attempt to unselect already unselected player")
             }
         } else {
-            if (gameState.selectedPlayers.contains(i)) {
+            if (gameState.selectedPlayers.contains(clickedIndex)) {
                 throw Error("VM: attempt to select already selected player")
             } else {
-                gameState.selectedPlayers.add(i)
+                if (isSingleClick) {
+                    gameState.selectedPlayers = arrayListOf(clickedIndex)
+                } else {
+                    gameState.selectedPlayers.add(clickedIndex)
+                }
             }
         }
+
+
         updateUiParams(gameState)
     }
 
