@@ -186,8 +186,10 @@ enum class MainButtonActionState(
 
     /**
      * Similar to NEXT, used when need to select the button
+     * Currently only for single-click
+     * //TODO: expand or declare as single-click
      */
-    CANCEL(
+    WAITING_FOR_CLICK(
         text = "Cancel",
         requireNumber = PlayerSelectionMode.NONE
     );

@@ -16,16 +16,50 @@ object CmdManager {
     val stateHistory = ArrayDeque<MafiaGameState>()
     var currentHistoryIndex = 0
 
-    fun pressMainBtn(currentState: MainButtonActionState) : MafiaGameState {
+    fun pressPlayerNumber(prevState: MainButtonActionState): MafiaGameState {
         //clone old game state, when modify it
-        val gameState : MafiaGameState = if (stateHistory.isEmpty()) {
+        val gameState: MafiaGameState = stateHistory.last()
+        with(gameState) {
+
+            /**
+             * Use for:
+             * CHECK_DON
+             * CHECK_SHR
+             * ADD_TO_VOTE
+             * KILL
+             * TODO: FOUL (?)
+             */
+            when (prevState) {
+                MainButtonActionState.ADD_TO_VOTE -> TODO()
+                MainButtonActionState.KILL -> TODO()
+                MainButtonActionState.CHECK_DON -> TODO()
+                MainButtonActionState.CHECK_SHR -> TODO()
+                else -> throw Error(
+                    "VM: clicked on a player button when number is requested\n" +
+                            "but from undescrbed state"
+                )
+                /*
+                в общем, надо бы вызывать тут 1-кликовую логику.
+                TODO: show response on don and shr checks
+                TODO: add to vote on click
+                TODO: add kill logic to the click
+                 */
+            }
+            selectedPlayers = ArrayList()
+        }
+        stateHistory.add(gameState)
+        return gameState
+    }
+
+    fun pressMainBtn(currentState: MainButtonActionState): MafiaGameState {
+        //clone old game state, when modify it
+        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
             MafiaGameState() //TODO: extract it to the game start. History should not be empty
         } else {
             stateHistory.last()
         }
 
         with(gameState) {
-            selectedPlayers = ArrayList()
 
             when (currentState) {
 
@@ -41,9 +75,9 @@ object CmdManager {
                 }
 
                 MainButtonActionState.START_MAFIA_SPEECH -> {
-                        isTimerActive = true
-                        delayedMainButtonActionState = MainButtonActionState.CHECK_DON
-                        mainButtonActionState = MainButtonActionState.NEXT
+                    isTimerActive = true
+                    delayedMainButtonActionState = MainButtonActionState.CHECK_DON
+                    mainButtonActionState = MainButtonActionState.NEXT
                 }
 
 
@@ -54,14 +88,16 @@ object CmdManager {
 
                 MainButtonActionState.CHECK_DON -> {
                     selectionMode = PlayerSelectionMode.SINGLE
+
                     if (passedPhases != 0) {
                         val response = players[cursor].role == Role.SHR
 
                         //TODO: replace it to the ui change
                         Log.i("GameLog", "Sheriff checked $cursor and the result is $response")
                     }
+                    previousMainButtonActionState = MainButtonActionState.CHECK_DON
                     delayedMainButtonActionState = MainButtonActionState.CHECK_SHR
-                    mainButtonActionState = MainButtonActionState.CANCEL
+                    mainButtonActionState = MainButtonActionState.WAITING_FOR_CLICK
                 }
 
 
@@ -74,11 +110,15 @@ object CmdManager {
                         Log.i("GameLog", "Sheriff checked $cursor and the result is $response")
                     }
 
-                    mainButtonActionState = if (
+                    previousMainButtonActionState = MainButtonActionState.CHECK_SHR
+
+                    delayedMainButtonActionState = if (
                         livingPlayersCount(players) + 2 >= Game.numPlayers &&
                         passedPhases == 2
-                        )
+                    )
                         MainButtonActionState.BEST_MOVE else MainButtonActionState.START_DAY
+
+                    mainButtonActionState = MainButtonActionState.WAITING_FOR_CLICK
                 }
 
 
@@ -100,14 +140,14 @@ object CmdManager {
                     mainButtonActionState = delayedMainButtonActionState
                 }
 
-                MainButtonActionState.CANCEL -> {
+                MainButtonActionState.WAITING_FOR_CLICK -> {
                     //TODO: logic for each action
                     selectionMode = PlayerSelectionMode.NONE
                     mainButtonActionState = delayedMainButtonActionState
                 }
 
                 MainButtonActionState.DEBUG -> {
-                    Log.e("GameLog","Bug! Activated debug button. Switching to START_GAME...")
+                    Log.e("GameLog", "Bug! Activated debug button. Switching to START_GAME...")
                     //TODO: fix reaching debug
                     mainButtonActionState = MainButtonActionState.START_GAME
                 }
@@ -129,7 +169,7 @@ object CmdManager {
                 }
 
                 MainButtonActionState.ADD_TO_VOTE -> {
-                    Log.d("GameLog","(CmdM) Added to vote")
+                    Log.d("GameLog", "(CmdM) Added to vote")
                     voteList.add(players[cursor]) //TODO: replace to the selectedPlayers
                     mainButtonActionState = MainButtonActionState.END_SPEECH
                 }
@@ -138,18 +178,22 @@ object CmdManager {
                     isTimerActive = false
 
 
-                     if (nextAlivePlayer(cursor, players) != closestAlivePlayer(firstSpokedPlayer, players)) {//TODO: check for bugs
-                         cursor = nextAlivePlayer(cursor, players)
-                         mainButtonActionState = MainButtonActionState.START_SPEECH
-                     } else {
-                         mainButtonActionState = MainButtonActionState.START_VOTE
-                         Log.i("GameLog","(CmdM) all players spoke")
-                     }
+                    if (nextAlivePlayer(cursor, players) != closestAlivePlayer(
+                            firstSpokedPlayer,
+                            players
+                        )
+                    ) {//TODO: check for bugs
+                        cursor = nextAlivePlayer(cursor, players)
+                        mainButtonActionState = MainButtonActionState.START_SPEECH
+                    } else {
+                        mainButtonActionState = MainButtonActionState.START_VOTE
+                        Log.i("GameLog", "(CmdM) all players spoke")
+                    }
                 }
 
                 MainButtonActionState.START_VOTE -> {
                     //check for empty votelist
-                    if(voteList.isEmpty()) {
+                    if (voteList.isEmpty()) {
                         Log.i("GameLog", "Skip vote phase (nobody was elected)")
                         //TODO: Visual indication for it
                         mainButtonActionState = MainButtonActionState.START_NIGHT
@@ -161,10 +205,10 @@ object CmdManager {
                 MainButtonActionState.VOTE_FOR -> TODO()
 
                 MainButtonActionState.KILL_IN_VOTE -> {
-                    if(kill(players,cursor))
+                    if (kill(players, cursor))
                         mainButtonActionState = MainButtonActionState.END_GAME
                     else {
-                        Log.i("GameLog","Player $cursor was killed in the vote")
+                        Log.i("GameLog", "Player $cursor was killed in the vote")
                         mainButtonActionState = MainButtonActionState.START_NIGHT
                     }
                 }
@@ -179,6 +223,7 @@ object CmdManager {
                 }
 
             }
+            selectedPlayers = ArrayList()
         }
         stateHistory.add(gameState)
 //        Log.d("GameLog","(from CmdM) MB clicked: ${currentState.name}")
@@ -194,8 +239,8 @@ object CmdManager {
         for (i in 0 until Game.numPlayers) {
             if (players[i].role.isRed) redCounter++ else blackCounter++
         }
-        if (redCounter<=blackCounter) return false //black wins
-        if(blackCounter<=0) return false //red wins
+        if (redCounter <= blackCounter) return false //black wins
+        if (blackCounter <= 0) return false //red wins
         return true //game continues
     }
 
@@ -248,12 +293,12 @@ object CmdManager {
         if (livingPlayers == 1) throw Error("There is only 1 alive person in the game")
 
         //if reached the end
-        if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1,players)
+        if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1, players)
 
         //if next player is alive
-        if (players[cursor+1].alive) return cursor+1
+        if (players[cursor + 1].alive) return cursor + 1
 
         //if next player is dead
-        return nextAlivePlayer(cursor+1, players)
+        return nextAlivePlayer(cursor + 1, players)
     }
 }

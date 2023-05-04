@@ -21,6 +21,7 @@ class MafiaGameState(
     var passedPhases: Int = 0,
     var time: GameTime = GameTime.NIGHT,
     var mainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+    var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
     var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
     var mainButtonOverwriteString: String = "",
 
@@ -39,7 +40,20 @@ class MafiaGameState(
      * like cursor, but used when multiple players selected
      */
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
+
+    /**
+     * NONE - you can't select anyone
+     * SINGLE - you can select someone, but only one person
+     * MULTIPLE - you can select anyone you want
+     */
     var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE,
+
+    /**
+     * TODO: If selection requested, players should start shaking
+     */
+    var selectionRequested: Boolean = false,
+
+
     var headingText: String = "Default heading",
     var descriptionText: String = "Default description",
     var isTimerActive: Boolean = false,
@@ -53,6 +67,7 @@ class MafiaGameState(
                 "time=$time, \n" +
                 "is timer active = $isTimerActive, \n" +
                 "mainButtonActionState=$mainButtonActionState, \n" +
+                "previous mainButtonActionState=$delayedMainButtonActionState, \n" +
                 "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
                 "selected=$selectedPlayers, \n" +
                 "headingText='$headingText, \n" +

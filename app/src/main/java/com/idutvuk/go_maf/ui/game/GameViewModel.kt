@@ -69,6 +69,9 @@ class GameViewModel : ViewModel() {
     }
 
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
+        if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
+            CmdManager.pressPlayerNumber(gameState.previousMainButtonActionState)
+        }
         if (nldSelectionMode == PlayerSelectionMode.NONE) return
         if (selectionState) {
             if (!gameState.selectedPlayers.remove(clickedIndex)) {
