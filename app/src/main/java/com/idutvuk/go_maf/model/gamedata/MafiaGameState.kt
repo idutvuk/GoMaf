@@ -1,6 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
-import com.idutvuk.go_maf.ui.game.ActionState
+import com.idutvuk.go_maf.ui.game.MainButtonActionState
 
 /**
  * The state of a game.
@@ -20,8 +20,8 @@ class MafiaGameState(
      */
     var passedPhases: Int = 0,
     var time: GameTime = GameTime.NIGHT,
-    var actionState: ActionState = ActionState.DEBUG,
-    var delayedActionState: ActionState = ActionState.DEBUG,
+    var mainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+    var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
     var mainButtonOverwriteString: String = "",
 
     /**
@@ -52,8 +52,8 @@ class MafiaGameState(
                 "isOver=$isOver, \n" +
                 "time=$time, \n" +
                 "is timer active = $isTimerActive, \n" +
-                "actionState=$actionState, \n" +
-                "delayed actionState=$delayedActionState, \n" +
+                "mainButtonActionState=$mainButtonActionState, \n" +
+                "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
                 "selected=$selectedPlayers, \n" +
                 "headingText='$headingText, \n" +
                 "descriptionText='$descriptionText\n" +

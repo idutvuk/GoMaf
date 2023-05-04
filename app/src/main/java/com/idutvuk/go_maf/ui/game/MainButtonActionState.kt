@@ -5,10 +5,10 @@ import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
 
 //TODO: add possibility to make any action in any time via holding the main button
-enum class ActionState(
+enum class MainButtonActionState(
     val text: String,
     val icon: Int = R.drawable.ic_debug,
-    val requireNumber: PlayerSelectionMode
+    val requireNumber: PlayerSelectionMode //TODO: check for necessity
 ) {
     //Misc/debug states
     /**
@@ -182,7 +182,16 @@ enum class ActionState(
     BEST_MOVE(
         text = "Best move",
         requireNumber = PlayerSelectionMode.MULTIPLE
+    ),
+
+    /**
+     * Similar to NEXT, used when need to select the button
+     */
+    CANCEL(
+        text = "Cancel",
+        requireNumber = PlayerSelectionMode.NONE
     );
+
     constructor(nominee: String) : this(
         text = "Vote for $nominee",
         requireNumber = PlayerSelectionMode.SINGLE

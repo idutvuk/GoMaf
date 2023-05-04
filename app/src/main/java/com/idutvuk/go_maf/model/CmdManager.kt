@@ -6,8 +6,9 @@ import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.Player
+import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import com.idutvuk.go_maf.model.gamedata.Role
-import com.idutvuk.go_maf.ui.game.ActionState
+import com.idutvuk.go_maf.ui.game.MainButtonActionState
 import java.lang.Error
 
 
@@ -15,55 +16,57 @@ object CmdManager {
     val stateHistory = ArrayDeque<MafiaGameState>()
     var currentHistoryIndex = 0
 
-    fun pressMainBtn(currentState: ActionState) : MafiaGameState {
+    fun pressMainBtn(currentState: MainButtonActionState) : MafiaGameState {
         //clone old game state, when modify it
         val gameState : MafiaGameState = if (stateHistory.isEmpty()) {
-            MafiaGameState()//TODO: extract it to the game start. History should not be empty
+            MafiaGameState() //TODO: extract it to the game start. History should not be empty
         } else {
             stateHistory.last()
         }
 
         with(gameState) {
-
             selectedPlayers = ArrayList()
 
             when (currentState) {
 
-                ActionState.START_NIGHT -> {
+                MainButtonActionState.START_NIGHT -> {
                     passedPhases++
                     time = GameTime.NIGHT
 
                     if (passedPhases == 0) {
-                        actionState = ActionState.START_MAFIA_SPEECH
+                        mainButtonActionState = MainButtonActionState.START_MAFIA_SPEECH
                     } else {
-                        actionState = ActionState.CHECK_DON
+                        mainButtonActionState = MainButtonActionState.CHECK_DON
                     }
                 }
 
-                ActionState.START_MAFIA_SPEECH -> {
+                MainButtonActionState.START_MAFIA_SPEECH -> {
                         isTimerActive = true
-                        delayedActionState = ActionState.CHECK_DON
-                        actionState = ActionState.NEXT
+                        delayedMainButtonActionState = MainButtonActionState.CHECK_DON
+                        mainButtonActionState = MainButtonActionState.NEXT
                 }
 
 
-                ActionState.KILL -> {
+                MainButtonActionState.KILL -> {
                     //TODO: kill logic
                 }
 
 
-                ActionState.CHECK_DON -> {
+                MainButtonActionState.CHECK_DON -> {
+                    selectionMode = PlayerSelectionMode.SINGLE
                     if (passedPhases != 0) {
                         val response = players[cursor].role == Role.SHR
 
                         //TODO: replace it to the ui change
                         Log.i("GameLog", "Sheriff checked $cursor and the result is $response")
                     }
-                    actionState = ActionState.CHECK_SHR
+                    delayedMainButtonActionState = MainButtonActionState.CHECK_SHR
+                    mainButtonActionState = MainButtonActionState.CANCEL
                 }
 
 
-                ActionState.CHECK_SHR -> {
+                MainButtonActionState.CHECK_SHR -> {
+                    selectionMode = PlayerSelectionMode.SINGLE
                     if (passedPhases != 0) {
                         val response = players[cursor].role.isRed
 
@@ -71,101 +74,107 @@ object CmdManager {
                         Log.i("GameLog", "Sheriff checked $cursor and the result is $response")
                     }
 
-                    actionState = if (
+                    mainButtonActionState = if (
                         livingPlayersCount(players) + 2 >= Game.numPlayers &&
                         passedPhases == 2
                         )
-                        ActionState.BEST_MOVE else ActionState.START_DAY
+                        MainButtonActionState.BEST_MOVE else MainButtonActionState.START_DAY
                 }
 
 
-                ActionState.BEST_MOVE -> {
+                MainButtonActionState.BEST_MOVE -> {
                     //TODO: Add 20-sec timer
 
-                    actionState = ActionState.START_DAY
+                    mainButtonActionState = MainButtonActionState.START_DAY
                 }
 
-                ActionState.START_GAME -> {
+                MainButtonActionState.START_GAME -> {
                     cursor = 0
                     isOver = false
-                    actionState = ActionState.START_NIGHT
+                    mainButtonActionState = MainButtonActionState.START_NIGHT
                 }
 
 
-                ActionState.NEXT -> {
+                MainButtonActionState.NEXT -> {
                     isTimerActive = false
-                    actionState = delayedActionState
+                    mainButtonActionState = delayedMainButtonActionState
                 }
 
-                ActionState.DEBUG -> {
+                MainButtonActionState.CANCEL -> {
+                    //TODO: logic for each action
+                    selectionMode = PlayerSelectionMode.NONE
+                    mainButtonActionState = delayedMainButtonActionState
+                }
+
+                MainButtonActionState.DEBUG -> {
                     Log.e("GameLog","Bug! Activated debug button. Switching to START_GAME...")
                     //TODO: fix reaching debug
-                    actionState = ActionState.START_GAME
+                    mainButtonActionState = MainButtonActionState.START_GAME
                 }
 
 
-                ActionState.START_DAY -> {
+                MainButtonActionState.START_DAY -> {
                     passedPhases++
                     time = GameTime.DAY
                     firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
                     cursor = firstSpokedPlayer
-                    actionState = ActionState.START_SPEECH
+                    mainButtonActionState = MainButtonActionState.START_SPEECH
                 }
 
 
-                ActionState.START_SPEECH -> {
+                MainButtonActionState.START_SPEECH -> {
                     isTimerActive = true
                     Log.d("GameLog", "Speech started. Cursor: $cursor")
-                    actionState = ActionState.ADD_TO_VOTE
+                    mainButtonActionState = MainButtonActionState.ADD_TO_VOTE
                 }
 
-                ActionState.ADD_TO_VOTE -> {
+                MainButtonActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog","(CmdM) Added to vote")
                     voteList.add(players[cursor]) //TODO: replace to the selectedPlayers
-                    actionState = ActionState.END_SPEECH
+                    mainButtonActionState = MainButtonActionState.END_SPEECH
                 }
 
-                ActionState.END_SPEECH -> {
+                MainButtonActionState.END_SPEECH -> {
                     isTimerActive = false
 
 
                      if (nextAlivePlayer(cursor, players) != closestAlivePlayer(firstSpokedPlayer, players)) {//TODO: check for bugs
                          cursor = nextAlivePlayer(cursor, players)
-                         actionState = ActionState.START_SPEECH
+                         mainButtonActionState = MainButtonActionState.START_SPEECH
                      } else {
-                         actionState = ActionState.START_VOTE
+                         mainButtonActionState = MainButtonActionState.START_VOTE
                          Log.i("GameLog","(CmdM) all players spoke")
                      }
                 }
 
-                ActionState.START_VOTE -> {
+                MainButtonActionState.START_VOTE -> {
                     //check for empty votelist
                     if(voteList.isEmpty()) {
                         Log.i("GameLog", "Skip vote phase (nobody was elected)")
                         //TODO: Visual indication for it
-                        actionState = ActionState.START_NIGHT
+                        mainButtonActionState = MainButtonActionState.START_NIGHT
                     } else {
-                        actionState = ActionState.KILL_IN_VOTE
+                        mainButtonActionState = MainButtonActionState.KILL_IN_VOTE
                     }
                 }
 
-                ActionState.VOTE_FOR -> TODO()
+                MainButtonActionState.VOTE_FOR -> TODO()
 
-                ActionState.KILL_IN_VOTE -> {
+                MainButtonActionState.KILL_IN_VOTE -> {
                     if(kill(players,cursor))
-                        actionState = ActionState.END_GAME
+                        mainButtonActionState = MainButtonActionState.END_GAME
                     else {
                         Log.i("GameLog","Player $cursor was killed in the vote")
-                        actionState = ActionState.START_NIGHT
+                        mainButtonActionState = MainButtonActionState.START_NIGHT
                     }
                 }
 
-                ActionState.RE_VOTE -> TODO()
+                MainButtonActionState.RE_VOTE -> TODO()
 
 
-                ActionState.FINAL_VOTE -> TODO()
+                MainButtonActionState.FINAL_VOTE -> TODO()
 
-                ActionState.END_GAME -> {
+                MainButtonActionState.END_GAME -> {
                     isOver = true //TODO: remove if it is unnecessary
                 }
 

@@ -20,12 +20,12 @@ class GameViewModel : ViewModel() {
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
     private var gameState: MafiaGameState = MafiaGameState()
 
-    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE
+    var nldSelectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
 
     val ldTime = MutableLiveData(GameTime.NIGHT)
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
     val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
-    val ldMainButtonState = MutableLiveData(ActionState.DEBUG)
+    val ldMainButtonState = MutableLiveData(MainButtonActionState.DEBUG)
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
@@ -42,7 +42,7 @@ class GameViewModel : ViewModel() {
      * TODO: implement 2-click logic & foul logic
      */
     fun onClickBtnMain() {
-        gameState = CmdManager.pressMainBtn(gameState.actionState)
+        gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
         updateUiParams(gameState)
     }
     private fun updateUiParams(gameState: MafiaGameState) {
@@ -50,7 +50,7 @@ class GameViewModel : ViewModel() {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
             ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayers.contains(it)})
-            ldMainButtonState.value = actionState
+            ldMainButtonState.value = mainButtonActionState
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
@@ -59,6 +59,8 @@ class GameViewModel : ViewModel() {
             ldDescription.value = descriptionText
             ldTimerActive.value = isTimerActive
             ldCursor.value = cursor
+
+            nldSelectionMode = selectionMode
         }
     }
 
@@ -66,8 +68,8 @@ class GameViewModel : ViewModel() {
         return gameState.players[i].emoji
     }
 
-    fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean, isSingleClick: Boolean = true) {
-
+    fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
+        if (nldSelectionMode == PlayerSelectionMode.NONE) return
         if (selectionState) {
             if (!gameState.selectedPlayers.remove(clickedIndex)) {
                 throw Error("VM: attempt to unselect already unselected player")
@@ -76,14 +78,13 @@ class GameViewModel : ViewModel() {
             if (gameState.selectedPlayers.contains(clickedIndex)) {
                 throw Error("VM: attempt to select already selected player")
             } else {
-                if (isSingleClick) {
+                if (nldSelectionMode == PlayerSelectionMode.SINGLE) {
                     gameState.selectedPlayers = arrayListOf(clickedIndex)
                 } else {
                     gameState.selectedPlayers.add(clickedIndex)
                 }
             }
         }
-
 
         updateUiParams(gameState)
     }

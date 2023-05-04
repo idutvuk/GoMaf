@@ -67,27 +67,10 @@ class GameFragment : Fragment() {
             buttons[i].layoutParams = layoutParams
 
             buttons[i].setOnClickListener {
-                when(viewModel.selectionMode) {
-
-                    PlayerSelectionMode.NONE -> {
-                        //just ignore the click lol
-                    }
-
-                    PlayerSelectionMode.SINGLE -> viewModel.performPlayerBtnClick(
-                        i,
-                        viewModel.ldButtonsSelected.value!![i],
-                        true
-                    )
-
-                    PlayerSelectionMode.MULTIPLE -> viewModel.performPlayerBtnClick(
-                        i,
-                        viewModel.ldButtonsSelected.value!![i]
-                    )
-
-                }
-
+                viewModel.performPlayerBtnClick(i,viewModel.ldButtonsSelected.value!![i])
                 Log.d("GraphLog", "Clicked $i")
             }
+
             // add the button to the layout
             b.clContainer.addView(buttons[i], layoutParams)
             buttons[i].x += pivotPoints[i][0]
@@ -122,7 +105,7 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
-            var shortVoteList = ""
+            var shortVoteList = "${viewModel.nldSelectionMode}"
             for (element in it) {
                 shortVoteList += element.number.toString() + ", "
             }
