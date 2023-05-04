@@ -54,7 +54,7 @@ class GameFragment : Fragment() {
         //TODO: fix oval shadow
         for (i in 0 until Game.numPlayers) {
             buttons.add(MaterialButton(requireContext(), null, R.attr.playerButtonStyle))
-            buttons.last().text = (i).toString() //TODO: replace to (i + 1)
+            buttons[i].text = (i).toString() //TODO: replace to (i + 1)
 
             layoutParams.apply {
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -62,15 +62,17 @@ class GameFragment : Fragment() {
                 bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             }
-            buttons.last().layoutParams = layoutParams
-            buttons.last().setOnClickListener {
+
+            buttons[i].layoutParams = layoutParams
+
+            buttons[i].setOnClickListener {
+                viewModel.performPlayerBtnClick(i, viewModel.ldButtonsSelected.value!![i])
                 Log.d("GraphLog", "Clicked $i")
-                pointArrowOnPlayer(i)
             }
             // add the button to the layout
-            b.clContainer.addView(buttons.last(), layoutParams)
-            buttons.last().x += pivotPoints[i][0]
-            buttons.last().y += pivotPoints[i][1]
+            b.clContainer.addView(buttons[i], layoutParams)
+            buttons[i].x += pivotPoints[i][0]
+            buttons[i].y += pivotPoints[i][1]
         }
 
 
@@ -115,6 +117,13 @@ class GameFragment : Fragment() {
             Log.d("GraphLog", "Player visibility changed")
             for (i in 0 until Game.numPlayers) {
                 buttons[i].isEnabled = it[i]
+            }
+        }
+
+        viewModel.ldButtonsSelected.observe(viewLifecycleOwner) {
+            Log.d("GraphLog","Gotcha!")
+            for(i in 0 until Game.numPlayers) {
+                buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
         }
 

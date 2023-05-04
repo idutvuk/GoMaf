@@ -22,7 +22,11 @@ object CmdManager {
         } else {
             stateHistory.last()
         }
+
         with(gameState) {
+
+            selectedPlayers = ArrayList()
+
             when (currentState) {
 
                 ActionState.START_NIGHT -> {

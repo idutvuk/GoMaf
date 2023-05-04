@@ -24,6 +24,7 @@ class GameViewModel : ViewModel() {
 
 
     val ldTime = MutableLiveData(GameTime.NIGHT)
+    val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
     val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
     val ldMainButtonState = MutableLiveData(ActionState.DEBUG)
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
@@ -55,6 +56,7 @@ class GameViewModel : ViewModel() {
         with(gameState) {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
+            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayers.contains(it)})
             ldMainButtonState.value = actionState
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
@@ -69,6 +71,21 @@ class GameViewModel : ViewModel() {
 
     fun getEmoji(i: Int): CharSequence {
         return gameState.players[i].emoji
+    }
+
+    fun performPlayerBtnClick(i: Int, isSelected: Boolean) {
+        if (isSelected) {
+            if (!gameState.selectedPlayers.remove(i)) {
+                throw Error("VM: attempt to unselect already unselected player")
+            }
+        } else {
+            if (gameState.selectedPlayers.contains(i)) {
+                throw Error("VM: attempt to select already selected player")
+            } else {
+                gameState.selectedPlayers.add(i)
+            }
+        }
+        updateUiParams(gameState)
     }
 
 
