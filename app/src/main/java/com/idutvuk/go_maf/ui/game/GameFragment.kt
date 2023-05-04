@@ -50,18 +50,9 @@ class GameFragment : Fragment() {
         )
 
         //TODO: fix oval shadow
-        for (i in 0 until Game.numPlayers)
-        {
-            // create a new button
+        for (i in 0 until Game.numPlayers) {
             buttons.add(MaterialButton(requireContext(),null,R.attr.playerButtonStyle))
-
-            // set the button's id
-//            buttons.last().id = View.generateViewId()
-
-            // set the button's text
-            buttons.last().text = (i + 1).toString()
-
-            // set the button's layout params
+            buttons.last().text = (i).toString() //TODO: replace to (i + 1)
 
             layoutParams.apply {
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -69,7 +60,6 @@ class GameFragment : Fragment() {
                 bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             }
-
             buttons.last().layoutParams = layoutParams
             buttons.last().setOnClickListener {
                 Log.d("GraphLog","Clicked $i")
@@ -151,7 +141,7 @@ class GameFragment : Fragment() {
                 view.performClick()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 for (i in 0 until Game.numPlayers)
-                    buttons[i].text = (i + 1).toString()
+                    buttons[i].text = (i).toString() //TODO: replcae to (i + 1)
                 view.performClick()
             }
             false
@@ -191,6 +181,9 @@ class GameFragment : Fragment() {
         return b.root
     }
 
+    /**
+     * just give this method a number of player to point at
+     */
     private fun pointArrowOnPlayer(playerNumber: Int) {
         val newAngle = Math.toDegrees(angles[playerNumber].toDouble()).toFloat() + 180F
         val pivotX: Float = (b.table.ivArrow.width / 2).toFloat()

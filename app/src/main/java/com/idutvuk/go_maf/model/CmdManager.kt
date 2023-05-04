@@ -82,7 +82,8 @@ object CmdManager {
                 }
 
                 ActionState.START_GAME -> {
-                    isOver = false //TODO: remove if it is unnecessary
+                    cursor = 0
+                    isOver = false
                     actionState = ActionState.START_NIGHT
                 }
 
@@ -123,10 +124,11 @@ object CmdManager {
                 ActionState.END_SPEECH -> {
                     isTimerActive = false
 
-                    cursor = nextAlivePlayer(cursor, players)
-                     if (nextAlivePlayer(cursor, players) != firstSpokedPlayer) //TODO: fix this logic
+
+                     if (nextAlivePlayer(cursor, players) != closestAlivePlayer(firstSpokedPlayer, players)) {//TODO: check for bugs
+                         cursor = nextAlivePlayer(cursor, players)
                          actionState = ActionState.START_SPEECH
-                    else {
+                     } else {
                          actionState = ActionState.START_VOTE
                          Log.i("GameLog","(CmdM) all players spoke")
                      }
@@ -210,6 +212,22 @@ object CmdManager {
         }
         return livingPlayers
     }
+
+    /**
+     * Returns closest alive player to selected player
+     * _Example:_
+     * 0-1-2-3-4-5-[6]-7-8-9
+     * Returns 6 if 6 is alive
+     * Returns 7 if 6 is dead and 7 is alive
+     */
+    private fun closestAlivePlayer(cursor: Int, players: Array<Player>): Int {
+        if (players[cursor].alive) return cursor
+        return nextAlivePlayer(cursor, players)
+    }
+
+    /**
+     * returns next alive player
+     */
     private fun nextAlivePlayer(cursor: Int, players: Array<Player>): Int {
         //check for alive players:
         val livingPlayers = livingPlayersCount(players)
