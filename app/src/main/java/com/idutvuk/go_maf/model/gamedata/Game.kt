@@ -19,4 +19,7 @@ object Game {
             }
         }
     //TODO: Make ghost games possible
+
+    //TODO: remove it
+    var lastAngle: Float = -1F
 }

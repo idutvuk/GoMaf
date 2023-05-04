@@ -2,12 +2,13 @@ package com.idutvuk.go_maf.ui.game
 
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.animation.Animation
+import android.view.animation.RotateAnimation
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,9 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
-import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
+
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
@@ -29,14 +30,18 @@ class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel
     private lateinit var b: FragmentGameBinding
+
+    private val angles = generatePlayerAngles(Game.numPlayers)
+    private val pivotPoints = generatePivotPoints(angles)
+
     private val buttons = mutableListOf<MaterialButton>()
+    private var lastAngle: Float = -1F
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
 
-        val angles = generatePlayerAngles(Game.numPlayers)
-        val pivotPoints = generatePivotPoints(angles)
+
 
         // create a layout params object for the buttons
         val layoutParams = ConstraintLayout.LayoutParams(
@@ -66,7 +71,10 @@ class GameFragment : Fragment() {
             }
 
             buttons.last().layoutParams = layoutParams
-
+            buttons.last().setOnClickListener {
+                Log.d("GraphLog","Clicked $i")
+                pointArrowOnPlayer(i)
+            }
             // add the button to the layout
             b.clContainer.addView(buttons.last(), layoutParams)
             buttons.last().x += pivotPoints[i][0]
@@ -171,31 +179,51 @@ class GameFragment : Fragment() {
             viewModel.onClickBtnMain()
         }
 
-
+        b.fabDebug.setOnClickListener {
+            pointArrowOnPlayer(7)
+        }
 
         //TODO: make GameFragment readable
 
         return b.root
     }
+
+    private fun pointArrowOnPlayer(playerNumber: Int) {
+        val newAngle = Math.toDegrees(angles[playerNumber].toDouble()).toFloat() + 180F
+        val pivotX: Float = (b.table.ivArrow.width / 2).toFloat()
+        val pivotY: Float = (b.table.ivArrow.height / 2).toFloat()
+        val animation: Animation =
+            RotateAnimation(if (lastAngle == -1F) 180F else lastAngle, newAngle, pivotX, pivotY)
+        lastAngle = newAngle
+        animation.duration = 500
+        animation.fillAfter = true
+        b.table.ivArrow.startAnimation(animation)
+    }
+
 }
 
-private fun generatePlayerAngles(numPlayers: Int): Array<Float> {
-    val angles: Array<Float> = Array(numPlayers) { 0f }
+/**
+ * generates some angles in radians
+ */
+private fun generatePlayerAngles(numPlayers: Int): ArrayList<Float> {
+    val angles: ArrayList<Float> = ArrayList(numPlayers)
     val angleOffset = Math.toRadians(60.0)
     for (i in 0 until numPlayers) {
-        angles[i] = ((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat()
+        angles.add(((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat())
     }
     return angles
 }
 
 
-private fun generatePivotPoints(angles: Array<Float>,radius: Int = 330): Array<IntArray> {
+private fun generatePivotPoints(angles: ArrayList<Float>,radius: Int = 330): Array<IntArray> {
     val numPlayers = angles.size;
     val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
     for (i in 0 until numPlayers) {
-        val x = -(radius * sin(angles[i].toDouble())).toInt()
-        val y = (radius * cos(angles[i].toDouble())).toInt()
+        val x = -(radius * sin(angles[i])).toInt()
+        val y = (radius * cos(angles[i])).toInt()
         pivotPoints[i] = intArrayOf(x, y)
     }
     return pivotPoints
 }
+
+
