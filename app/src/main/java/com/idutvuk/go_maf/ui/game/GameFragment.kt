@@ -35,7 +35,8 @@ class GameFragment : Fragment() {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
 
-        val circlePoints = generateCirclePoints(Game.numPlayers, radius = 310)
+        val angles = generatePlayerAngles(Game.numPlayers)
+        val pivotPoints = generatePivotPoints(angles)
 
         // create a layout params object for the buttons
         val layoutParams = ConstraintLayout.LayoutParams(
@@ -68,8 +69,8 @@ class GameFragment : Fragment() {
 
             // add the button to the layout
             b.clContainer.addView(buttons.last(), layoutParams)
-            buttons.last().x += circlePoints[i][0]
-            buttons.last().y += circlePoints[i][1]
+            buttons.last().x += pivotPoints[i][0]
+            buttons.last().y += pivotPoints[i][1]
         }
 
 
@@ -178,20 +179,22 @@ class GameFragment : Fragment() {
     }
 }
 
-private fun generateCirclePoints(
-    numPlayers: Int,
-    radius: Int = 330,
-): Array<IntArray> {
-    //TODO: create cursor
-    val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
-
+private fun generatePlayerAngles(numPlayers: Int): Array<Float> {
+    val angles: Array<Float> = Array(numPlayers) { 0f }
     val angleOffset = Math.toRadians(60.0)
     for (i in 0 until numPlayers) {
-        val angle =
-            ((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat()
+        angles[i] = ((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat()
+    }
+    return angles
+}
 
-        val x = -(radius * sin(angle.toDouble())).toInt()
-        val y = (radius * cos(angle.toDouble())).toInt()
+
+private fun generatePivotPoints(angles: Array<Float>,radius: Int = 330): Array<IntArray> {
+    val numPlayers = angles.size;
+    val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
+    for (i in 0 until numPlayers) {
+        val x = -(radius * sin(angles[i].toDouble())).toInt()
+        val y = (radius * cos(angles[i].toDouble())).toInt()
         pivotPoints[i] = intArrayOf(x, y)
     }
     return pivotPoints
