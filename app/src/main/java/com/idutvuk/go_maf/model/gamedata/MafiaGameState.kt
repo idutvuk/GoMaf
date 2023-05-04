@@ -27,7 +27,7 @@ class MafiaGameState(
     /**
      * used for prevent infinite-speech loop
      */
-    var firstSpokedPlayer: Int = 0,
+    var firstSpokedPlayer: Int = -1,
 
     /**
      * Selected players is a selector of currently speaking player

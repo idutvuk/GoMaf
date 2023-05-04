@@ -35,6 +35,7 @@ class GameViewModel : ViewModel() {
     val ldHeading = MutableLiveData("Def heading")
     val ldDescription = MutableLiveData("Def text")
     val ldTimerActive = MutableLiveData(false)
+    val ldCursor = MutableLiveData(0)
 
 
 
@@ -131,12 +132,15 @@ class GameViewModel : ViewModel() {
             ldHeading.value = headingText
             ldDescription.value = descriptionText
             ldTimerActive.value = isTimerActive
+            ldCursor.value = cursor
         }
     }
 
     fun getEmoji(i: Int): CharSequence {
         return gameState.players[i].emoji
     }
+
+
 }
 
 
