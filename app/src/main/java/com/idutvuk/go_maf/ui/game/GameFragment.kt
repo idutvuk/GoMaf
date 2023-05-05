@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.GameMessage
@@ -174,6 +175,29 @@ class GameFragment : Fragment() {
 
 //        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 
+        b.ibDayTime.setOnClickListener {
+            if (viewModel.ldTime.value == GameTime.DAY) { //if pressed on day
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Are you really want to skip day?")
+                    .setMessage("This will skip:\nPlayer speeches\nVote")
+                    .setPositiveButton("Skip") { _, which ->
+                        viewModel.skipDay()
+                    }
+                    .setNegativeButton("Cancel") {dialog, which ->
+                    }
+                    .show()
+            } else { //if pressed on night
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Are you really want to skip night?")
+                    .setMessage("This will skip:\nMafia kill\nDon check\nSheriff check\nBest move")
+                    .setPositiveButton("Skip") { _, which ->
+                        viewModel.skipNight()
+                    }
+                    .setNegativeButton("Cancel") {dialog, which ->
+                    }
+                    .show()
+            }
+        }
 
         b.table.fabPause.setOnClickListener {
             if (TimerHandler.isRunning) {

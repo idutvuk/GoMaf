@@ -84,6 +84,11 @@ class MafiaGameState(
     var mafiaMissStreak: Int = 0,
 
     /**
+     * true only at night if mafia kill was cancelled
+     * used in skip night
+     */
+    var isMafiaMissedToday: Boolean = false,
+    /**
      * toggles the timer (via LiveData)
      */
     var isTimerActive: Boolean = false,

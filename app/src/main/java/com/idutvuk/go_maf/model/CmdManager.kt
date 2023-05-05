@@ -17,6 +17,56 @@ object CmdManager {
     val stateHistory = ArrayDeque<MafiaGameState>()
     var currentHistoryIndex = 0
 
+    fun skipNight() : MafiaGameState{
+        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
+            MafiaGameState() //TODO: extract it to the game start. History should not be empty
+        } else {
+            stateHistory.last()
+        }
+
+        with(gameState) {
+            if (!isMafiaMissedToday) mafiaMissStreak++
+            if (mafiaMissStreak >= 3) { //if 3 nights passed
+                mainButtonActionState = MainButtonActionState.END_GAME
+            } else {
+                currentPhaseNumber++
+                descriptionText = currentPhaseNumber.toString()
+                time = GameTime.DAY
+                firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
+                cursor = firstSpokedPlayer
+                mainButtonActionState = MainButtonActionState.START_SPEECH
+            }
+        }
+        return gameState
+    }
+
+    fun skipDay() : MafiaGameState{
+        //TODO: auto-kill single-voted person
+        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
+            MafiaGameState() //TODO: extract it to the game start. History should not be empty
+        } else {
+            stateHistory.last()
+        }
+
+        with(gameState) {
+            time = GameTime.NIGHT
+            voteList.clear()
+
+            currentPhaseNumber++
+            descriptionText = currentPhaseNumber.toString()
+
+            if (currentPhaseNumber == 1) {
+                mainButtonActionState = MainButtonActionState.START_MAFIA_SPEECH
+            } else {
+                selectionMode = PlayerSelectionMode.SINGLE
+                mainButtonActionState = MainButtonActionState.KILL
+            }
+
+        }
+
+        return gameState
+    }
+
     fun pressPlayerNumber(prevState: MainButtonActionState): MafiaGameState {
         //clone old game state, when modify it
         val gameState: MafiaGameState = stateHistory.last()
@@ -194,6 +244,7 @@ object CmdManager {
                     when(previousMainButtonActionState) {
                         MainButtonActionState.KILL -> {
                             mafiaMissStreak++
+                            isMafiaMissedToday = true
                             descriptionText += " missStreak $mafiaMissStreak"
                             if (mafiaMissStreak >= 3) { //if 3 nights passed
                                delayedMainButtonActionState = MainButtonActionState.END_GAME
@@ -219,6 +270,7 @@ object CmdManager {
 
 
                 MainButtonActionState.START_DAY -> {
+                    isMafiaMissedToday = false
                     currentPhaseNumber++
                     descriptionText = currentPhaseNumber.toString()
                     time = GameTime.DAY
