@@ -13,16 +13,28 @@ class MafiaGameState(
     var isOver: Boolean = false,
 
     /**
-     * ## passed nights + passed days.
-     * - pP%2==0 -> night
-     * - pP%2==1 -> day
+     * ## passed nights + passed days + current phase.
+     * - pP%2==0 -> currently is day
+     * - pP%2==1 -> currently is night
      * - pP//2 -> passed cycles
      */
-    var passedPhases: Int = 0,
+    var currentPhaseNumber: Int = 0,
+
+    /**
+     * current game time
+     *
+     * Can be only DAY & NIGHT
+     */
     var time: GameTime = GameTime.NIGHT,
+
+
     var mainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
     var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
     var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+
+    /**
+     * if not empty, overwrites the main button text
+     */
     var mainButtonOverwriteString: String = "",
 
     /**
@@ -55,9 +67,25 @@ class MafiaGameState(
      */
     var selectionRequested: Boolean = false,
 
-
+    /**
+     * changes heading on the top of the fragment
+     */
     var headingText: String = "Default heading",
+
+    /**
+     * changes description on the top of the fragment
+     */
     var descriptionText: String = "Default description",
+
+    /**
+     * if mafia missed three times, game ends
+     * used for best move calculation
+     */
+    var mafiaMissStreak: Int = 0,
+
+    /**
+     * toggles the timer (via LiveData)
+     */
     var isTimerActive: Boolean = false,
     ) {
     override fun toString(): String {

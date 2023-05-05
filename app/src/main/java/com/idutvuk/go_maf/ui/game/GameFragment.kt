@@ -18,9 +18,7 @@ import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
-
 import com.idutvuk.go_maf.model.gamedata.GameTime
-import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
 import kotlin.math.sin
@@ -108,8 +106,12 @@ class GameFragment : Fragment() {
            b.tvHeadline.text = it
        }
 
+        viewModel.ldDescription.observe(viewLifecycleOwner) {
+            b.tvDescription.text = it
+        }
+
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
-            var shortVoteList = "${viewModel.nldSelectionMode}"
+            var shortVoteList = ""
             for (element in it) {
                 shortVoteList += "$element, "
             }
@@ -127,8 +129,6 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldPlayersVis.observe(viewLifecycleOwner) {
-            //TODO: fix it so it wouldn't restart every time
-            Log.d("GraphLog", "Player visibility changed")
             for (i in 0 until Game.numPlayers) {
                 buttons[i].isEnabled = it[i]
             }
