@@ -85,8 +85,8 @@ class GameFragment : Fragment() {
 //subscribers
 
         viewModel.ldTimerActive.observe(viewLifecycleOwner) {
-            b.fabAdd.isEnabled = it
-            b.fabPause.isEnabled = it
+            b.bottomSheetLayout.fabAdd.isEnabled = it
+            b.bottomSheetLayout.fabPause.isEnabled = it
             if (it) {
                 TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer, 60000)
                 //TODO: make not-only 60s timers
@@ -199,17 +199,17 @@ class GameFragment : Fragment() {
             }
         }
 
-        b.table.fabPause.setOnClickListener {
+        b.bottomSheetLayout.fabPause.setOnClickListener {
             if (TimerHandler.isRunning) {
                 TimerHandler.pauseTimer()
-                b.table.fabPause.setImageResource(R.drawable.ic_play)
+                b.bottomSheetLayout.fabPause.setImageResource(R.drawable.ic_play)
             } else {
                 TimerHandler.resumeTimer(b.table.tvTimer, b.table.pbTimer)
-                b.table.fabPause.setImageResource(R.drawable.ic_pause)
+                b.bottomSheetLayout.fabPause.setImageResource(R.drawable.ic_pause)
             }
         }
 
-        b.table.fabAdd.setOnClickListener {
+        b.bottomSheetLayout.fabAdd.setOnClickListener {
             TimerHandler.addTime(b.table.tvTimer, b.table.pbTimer, 5000)
         }
 
