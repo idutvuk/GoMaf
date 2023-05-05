@@ -1,6 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
-import com.idutvuk.go_maf.ui.game.ActionState
+import com.idutvuk.go_maf.ui.game.MainButtonActionState
 
 /**
  * The state of a game.
@@ -9,19 +9,32 @@ import com.idutvuk.go_maf.ui.game.ActionState
 class MafiaGameState(
     var numPlayers: Int = 10,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-    var voteList: ArrayList<Player> = ArrayList(),
+    var voteList: MutableSet<Int> = mutableSetOf(),
     var isOver: Boolean = false,
 
     /**
-     * ## passed nights + passed days.
-     * - pP%2==0 -> night
-     * - pP%2==1 -> day
+     * ## passed nights + passed days + current phase.
+     * - pP%2==0 -> currently is day
+     * - pP%2==1 -> currently is night
      * - pP//2 -> passed cycles
      */
-    var passedPhases: Int = 0,
+    var currentPhaseNumber: Int = 0,
+
+    /**
+     * current game time
+     *
+     * Can be only DAY & NIGHT
+     */
     var time: GameTime = GameTime.NIGHT,
-    var actionState: ActionState = ActionState.DEBUG,
-    var delayedActionState: ActionState = ActionState.DEBUG,
+
+
+    var mainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+    var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+    var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+
+    /**
+     * if not empty, overwrites the main button text
+     */
     var mainButtonOverwriteString: String = "",
 
     /**
@@ -30,7 +43,9 @@ class MafiaGameState(
     var firstSpokedPlayer: Int = -1,
 
     /**
-     * Selected players is a selector of currently speaking player
+     * Cursor - indication - which player is speaking rn
+     *
+     * _cursor is unchangeable from the user_
      */
     var cursor: Int = 0,
 
@@ -39,8 +54,38 @@ class MafiaGameState(
      * like cursor, but used when multiple players selected
      */
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
+
+    /**
+     * NONE - you can't select anyone
+     * SINGLE - you can select someone, but only one person
+     * MULTIPLE - you can select anyone you want
+     */
+    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE,
+
+    /**
+     * TODO: If selection requested, players should start shaking
+     */
+    var selectionRequested: Boolean = false,
+
+    /**
+     * changes heading on the top of the fragment
+     */
     var headingText: String = "Default heading",
+
+    /**
+     * changes description on the top of the fragment
+     */
     var descriptionText: String = "Default description",
+
+    /**
+     * if mafia missed three times, game ends
+     * used for best move calculation
+     */
+    var mafiaMissStreak: Int = 0,
+
+    /**
+     * toggles the timer (via LiveData)
+     */
     var isTimerActive: Boolean = false,
     ) {
     override fun toString(): String {
@@ -51,8 +96,9 @@ class MafiaGameState(
                 "isOver=$isOver, \n" +
                 "time=$time, \n" +
                 "is timer active = $isTimerActive, \n" +
-                "actionState=$actionState, \n" +
-                "delayed actionState=$delayedActionState, \n" +
+                "mainButtonActionState=$mainButtonActionState, \n" +
+                "previous mainButtonActionState=$delayedMainButtonActionState, \n" +
+                "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
                 "selected=$selectedPlayers, \n" +
                 "headingText='$headingText, \n" +
                 "descriptionText='$descriptionText\n" +

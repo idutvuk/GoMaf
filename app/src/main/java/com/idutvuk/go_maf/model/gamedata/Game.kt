@@ -1,7 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
 import android.util.Log
-import com.idutvuk.go_maf.model.CmdManager
 
 /**
  * Singleton object that holds game status inside of it like positions, roles.

@@ -6,7 +6,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 
 
-object TimerHandler {
+object TimerHandler { //TODO: extract it to the GameFragment
     private lateinit var timer: CountDownTimer
     private var remainingTime: Long = 0
     private var maxTime: Long = 60000L

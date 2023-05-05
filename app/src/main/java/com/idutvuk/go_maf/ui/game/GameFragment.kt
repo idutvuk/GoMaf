@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,6 @@ import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
-
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
@@ -37,10 +35,13 @@ class GameFragment : Fragment() {
     private val buttons = mutableListOf<MaterialButton>()
     private var lastAngle: Float = -1F
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         viewModel = ViewModelProvider(this)[GameViewModel::class.java]
         b = FragmentGameBinding.inflate(inflater, container, false)
-
 
 
         // create a layout params object for the buttons
@@ -51,8 +52,8 @@ class GameFragment : Fragment() {
 
         //TODO: fix oval shadow
         for (i in 0 until Game.numPlayers) {
-            buttons.add(MaterialButton(requireContext(),null,R.attr.playerButtonStyle))
-            buttons.last().text = (i).toString() //TODO: replace to (i + 1)
+            buttons.add(MaterialButton(requireContext(), null, R.attr.playerButtonStyle))
+            buttons[i].text = (i).toString() //TODO: replace to (i + 1)
 
             layoutParams.apply {
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -60,19 +61,19 @@ class GameFragment : Fragment() {
                 bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
             }
-            buttons.last().layoutParams = layoutParams
-            buttons.last().setOnClickListener {
-                Log.d("GraphLog","Clicked $i")
-                pointArrowOnPlayer(i)
+
+            buttons[i].layoutParams = layoutParams
+
+            buttons[i].setOnClickListener {
+                viewModel.performPlayerBtnClick(i,viewModel.ldButtonsSelected.value!![i])
+                Log.d("GraphLog", "Clicked $i")
             }
+
             // add the button to the layout
-            b.clContainer.addView(buttons.last(), layoutParams)
-            buttons.last().x += pivotPoints[i][0]
-            buttons.last().y += pivotPoints[i][1]
+            b.clContainer.addView(buttons[i], layoutParams)
+            buttons[i].x += pivotPoints[i][0]
+            buttons[i].y += pivotPoints[i][1]
         }
-
-
-
 
 
 //        val messages = GameMessage.getGameActionsList()
@@ -86,7 +87,7 @@ class GameFragment : Fragment() {
             b.fabAdd.isEnabled = it
             b.fabPause.isEnabled = it
             if (it) {
-                TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer,60000 )
+                TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer, 60000)
                 //TODO: make not-only 60s timers
             } else {
                 TimerHandler.skipTimer(b.table.tvTimer, b.table.pbTimer)
@@ -95,27 +96,47 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
-                b.ibDayTime.setImageResource(
-                    if (it == GameTime.DAY) R.drawable.ic_sun
-                    else R.drawable.ic_moon
-                ) //TODO: fix the code (get id from the enum class
+            b.ibDayTime.setImageResource(
+                if (it == GameTime.DAY) R.drawable.ic_sun
+                else R.drawable.ic_moon
+            )
+        }
+
+       viewModel.ldHeading.observe(viewLifecycleOwner) {
+           b.tvHeadline.text = it
+       }
+
+        viewModel.ldDescription.observe(viewLifecycleOwner) {
+            b.tvDescription.text = it
+        }
+
+        viewModel.ldVoteList.observe(viewLifecycleOwner) {
+            var shortVoteList = ""
+            for (element in it) {
+                shortVoteList += "$element, "
+            }
+            b.table.tvContextInfo.text = shortVoteList
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
-            Log.d("GameLog","(GameFragment) main button changed in the UI to the $it")
+            Log.d("GameLog", "(GameFragment) main button changed in the UI to the $it")
             with(b.bottomSheetLayout.btnMain) {
                 val tmp = viewModel.ldMainButtonOverwriteString.value
                 text = if (!tmp.isNullOrEmpty()) it.text + tmp else it.text
                 viewModel.ldMainButtonOverwriteString.value = ""
-                setCompoundDrawablesWithIntrinsicBounds(it.icon,0,0,0)
+                setCompoundDrawablesWithIntrinsicBounds(it.icon, 0, 0, 0)
             }
         }
 
         viewModel.ldPlayersVis.observe(viewLifecycleOwner) {
-            //TODO: fix it so it wouldn't restart every time
-            Log.d("GraphLog","Player visibility changed")
             for (i in 0 until Game.numPlayers) {
                 buttons[i].isEnabled = it[i]
+            }
+        }
+
+        viewModel.ldButtonsSelected.observe(viewLifecycleOwner) {
+            for(i in 0 until Game.numPlayers) {
+                buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
         }
 
@@ -155,7 +176,7 @@ class GameFragment : Fragment() {
 
 
         b.table.fabPause.setOnClickListener {
-            if(TimerHandler.isRunning) {
+            if (TimerHandler.isRunning) {
                 TimerHandler.pauseTimer()
                 b.table.fabPause.setImageResource(R.drawable.ic_play)
             } else {
@@ -164,8 +185,8 @@ class GameFragment : Fragment() {
             }
         }
 
-        b.table.fabAdd.setOnClickListener{
-            TimerHandler.addTime(b.table.tvTimer,b.table.pbTimer, 5000)
+        b.table.fabAdd.setOnClickListener {
+            TimerHandler.addTime(b.table.tvTimer, b.table.pbTimer, 5000)
         }
 
         b.bottomSheetLayout.btnMain.setOnClickListener {
@@ -211,8 +232,8 @@ private fun generatePlayerAngles(numPlayers: Int): ArrayList<Float> {
 }
 
 
-private fun generatePivotPoints(angles: ArrayList<Float>,radius: Int = 330): Array<IntArray> {
-    val numPlayers = angles.size;
+private fun generatePivotPoints(angles: ArrayList<Float>, radius: Int = 330): Array<IntArray> {
+    val numPlayers = angles.size
     val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
     for (i in 0 until numPlayers) {
         val x = -(radius * sin(angles[i])).toInt()
