@@ -29,7 +29,7 @@ class GameViewModel : ViewModel() {
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
-    val ldVoteList = MutableLiveData<List<Player>>()
+    val ldVoteList = MutableLiveData<Set<Int>>()
     val ldHeading = MutableLiveData("Def heading")
     val ldDescription = MutableLiveData("Def text")
     val ldTimerActive = MutableLiveData(false)

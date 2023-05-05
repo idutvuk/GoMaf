@@ -31,13 +31,22 @@ object CmdManager {
              * TODO: FOUL (?)
              */
             when (prevState) {
-                MainButtonActionState.ADD_TO_VOTE -> TODO()
-                MainButtonActionState.KILL -> TODO()
-                MainButtonActionState.CHECK_DON -> {
-                   headingText = (players[selectedPlayers[0]].role == Role.SHR).toString()
-
+                MainButtonActionState.ADD_TO_VOTE -> {
+                    voteList.add(selectedPlayers[0])
                 }
-                MainButtonActionState.CHECK_SHR -> TODO()
+
+                MainButtonActionState.KILL -> {
+                    players[selectedPlayers[0]].alive = false
+                }
+                MainButtonActionState.CHECK_DON -> {
+                   headingText = if (players[selectedPlayers[0]].role == Role.SHR) "shr" else "not shr"
+                    //TODO: change it to response
+                }
+
+                MainButtonActionState.CHECK_SHR -> {
+                    headingText = if (players[selectedPlayers[0]].role.isRed) "RED" else "BLACK"
+                    //TODO: change it to response
+                }
                 else -> throw Error(
                     "VM: clicked on a player button when number is requested\n" +
                             "but from undescrbed state"
@@ -50,7 +59,9 @@ object CmdManager {
                  */
             }
             selectedPlayers = ArrayList()
+            mainButtonActionState = delayedMainButtonActionState
         }
+
         stateHistory.add(gameState)
         return gameState
     }
@@ -167,6 +178,7 @@ object CmdManager {
 
 
                 MainButtonActionState.START_SPEECH -> {
+                    selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
                     isTimerActive = true
                     Log.d("GameLog", "Speech started. Cursor: $cursor")
                     mainButtonActionState = MainButtonActionState.ADD_TO_VOTE
@@ -174,8 +186,14 @@ object CmdManager {
 
                 MainButtonActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog", "(CmdM) Added to vote")
-                    voteList.add(players[cursor]) //TODO: replace to the selectedPlayers
-                    mainButtonActionState = MainButtonActionState.END_SPEECH
+                    if (selectedPlayers.size == 1) { //if player already selected
+                        voteList.add(selectedPlayers[0])
+                        mainButtonActionState = MainButtonActionState.END_SPEECH
+                    } else {
+                        previousMainButtonActionState = MainButtonActionState.ADD_TO_VOTE
+                        delayedMainButtonActionState = MainButtonActionState.END_SPEECH
+                        mainButtonActionState = MainButtonActionState.WAITING_FOR_CLICK
+                    }
                 }
 
                 MainButtonActionState.END_SPEECH -> {

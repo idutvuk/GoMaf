@@ -9,7 +9,7 @@ import com.idutvuk.go_maf.ui.game.MainButtonActionState
 class MafiaGameState(
     var numPlayers: Int = 10,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-    var voteList: ArrayList<Player> = ArrayList(),
+    var voteList: MutableSet<Int> = mutableSetOf(),
     var isOver: Boolean = false,
 
     /**

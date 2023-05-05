@@ -111,7 +111,7 @@ class GameFragment : Fragment() {
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
             var shortVoteList = "${viewModel.nldSelectionMode}"
             for (element in it) {
-                shortVoteList += element.number.toString() + ", "
+                shortVoteList += "$element, "
             }
             b.table.tvContextInfo.text = shortVoteList
         }
