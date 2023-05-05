@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <style name="icon_button" parent="Widget.MaterialComponents.Button.OutlinedButton">-->
-<!--        <item name="iconPadding">0dp</item>-->
-<!--        <item name="iconGravity">textStart</item>-->
-<!--    </style>-->
+
     <style name="PlayerButtonStyle" parent="Widget.Material3.Button.IconButton" >
-        <item name="android:textSize">30sp</item>
-        <item name="android:padding">6dp</item>
-        <item name="android:layout_width">60dp</item>
-        <item name="android:height">60dp</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:paddingVertical">15dp</item>
+        <item name="android:layout_width">100dp</item>
         <item name="android:layout_margin">5dp</item>
     </style>
 
+    <style name="bottom_icon_button" parent="Widget.Material3.Button.IconButton">
+        <item name="iconPadding">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="paddingStart">12dp</item>
+        <item name="paddingEnd">12dp</item>
+    </style>
 
 
 </resources>

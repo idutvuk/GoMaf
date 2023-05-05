@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +55,7 @@ class GameFragment : Fragment() {
         //TODO: fix oval shadow
         for (i in 0 until Game.numPlayers) {
             buttons.add(MaterialButton(requireContext(), null, R.attr.playerButtonStyle))
-            buttons[i].text = (i).toString() //TODO: replace to (i + 1)
+            buttons[i].text = "  $i  " //TODO: replace to (i + 1)
 
             layoutParams.apply {
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -85,8 +86,8 @@ class GameFragment : Fragment() {
 //subscribers
 
         viewModel.ldTimerActive.observe(viewLifecycleOwner) {
-            b.bottomSheetLayout.fabAdd.isEnabled = it
-            b.bottomSheetLayout.fabPause.isEnabled = it
+            b.bottomSheetLayout.btnAddTime.isEnabled = it
+            b.bottomSheetLayout.btnPause.isEnabled = it
             if (it) {
                 TimerHandler.startTimer(b.table.tvTimer, b.table.pbTimer, 60000)
                 //TODO: make not-only 60s timers
@@ -97,9 +98,13 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
-            b.ibDayTime.setImageResource(
+            b.bottomSheetLayout.btnPrevPhase.icon = ContextCompat.getDrawable(requireContext(),
                 if (it == GameTime.DAY) R.drawable.ic_sun
                 else R.drawable.ic_moon
+            )
+            b.bottomSheetLayout.btnNextPhase.icon = ContextCompat.getDrawable(requireContext(),
+                if (it == GameTime.DAY) R.drawable.ic_moon
+            else R.drawable.ic_sun
             )
         }
 
@@ -175,7 +180,7 @@ class GameFragment : Fragment() {
 
 //        b.bottomSheetLayout.btnRedo.setOnClickListener { viewModel.controlUndoRedo(CmdManager.redo(), b,adapter) }
 
-        b.ibDayTime.setOnClickListener {
+        b.bottomSheetLayout.btnNextPhase.setOnClickListener {
             if (viewModel.ldTime.value == GameTime.DAY) { //if pressed on day
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Are you really want to skip day?")
@@ -199,17 +204,17 @@ class GameFragment : Fragment() {
             }
         }
 
-        b.bottomSheetLayout.fabPause.setOnClickListener {
+        b.bottomSheetLayout.btnPause.setOnClickListener {
             if (TimerHandler.isRunning) {
                 TimerHandler.pauseTimer()
-                b.bottomSheetLayout.fabPause.setImageResource(R.drawable.ic_play)
+                b.bottomSheetLayout.btnPause.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_play)
             } else {
                 TimerHandler.resumeTimer(b.table.tvTimer, b.table.pbTimer)
-                b.bottomSheetLayout.fabPause.setImageResource(R.drawable.ic_pause)
+                b.bottomSheetLayout.btnPause.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_pause)
             }
         }
 
-        b.bottomSheetLayout.fabAdd.setOnClickListener {
+        b.bottomSheetLayout.btnAddTime.setOnClickListener {
             TimerHandler.addTime(b.table.tvTimer, b.table.pbTimer, 5000)
         }
 
@@ -256,7 +261,7 @@ private fun generatePlayerAngles(numPlayers: Int): ArrayList<Float> {
 }
 
 
-private fun generatePivotPoints(angles: ArrayList<Float>, radius: Int = 330): Array<IntArray> {
+private fun generatePivotPoints(angles: ArrayList<Float>, radius: Int = 390): Array<IntArray> { //TODO: change to dynamic radius
     val numPlayers = angles.size
     val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
     for (i in 0 until numPlayers) {

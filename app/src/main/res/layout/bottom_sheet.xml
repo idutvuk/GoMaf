@@ -14,7 +14,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_minimize"
+        app:icon="@drawable/ic_minimize"
         android:layout_gravity="center"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,11 +22,10 @@
         android:layout_height="wrap_content">
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btnMain"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_marginTop="10dp"
-            android:text="deftext"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,10 +33,14 @@
             android:layout_marginEnd="10dp"
             />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnPrevPhase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Button.IconButton"
+            app:icon="@drawable/ic_sun"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:layout_marginHorizontal="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
@@ -46,52 +49,66 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnMain" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUndo"
-            style="@style/ThemeOverlay.Material3.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:layout_marginTop="10dp"
             android:enabled="false"
-            android:src="@drawable/ic_skip_previous"
-            app:layout_constraintEnd_toStartOf="@id/fabPause"
+            app:icon="@drawable/ic_skip_previous"
+            app:layout_constraintEnd_toStartOf="@id/btnPause"
             app:layout_constraintStart_toEndOf="@id/btnPrevPhase"
             app:layout_constraintTop_toBottomOf="@id/btnMain" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabPause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_play"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPause"
+            app:icon="@drawable/ic_play"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fabAdd"
+            app:layout_constraintEnd_toStartOf="@id/btnAddTime"
             app:layout_constraintStart_toEndOf="@id/btnUndo" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabAdd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddTime"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:layout_marginEnd="5dp"
-            android:src="@drawable/ic_add_timer"
+            app:icon="@drawable/ic_add_timer"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnRedo"
-            app:layout_constraintStart_toEndOf="@id/fabPause" />
+            app:layout_constraintStart_toEndOf="@id/btnPause" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRedo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.Material3.Button.IconButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:layout_marginTop="10dp"
             android:enabled="false"
-            android:src="@drawable/ic_skip_next"
+            app:icon="@drawable/ic_skip_next"
             app:layout_constraintEnd_toStartOf="@id/btnNextPhase"
-            app:layout_constraintStart_toEndOf="@id/fabAdd"
+            app:layout_constraintStart_toEndOf="@id/btnAddTime"
             app:layout_constraintTop_toBottomOf="@id/btnMain" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNextPhase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
+            style="@style/Widget.Material3.Button.IconButton"
+            app:icon="@drawable/ic_moon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btnMain"
@@ -99,8 +116,6 @@
             android:layout_marginHorizontal="5dp"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cv_log_container"
         style="@style/Widget.Material3.CardView.Filled"

@@ -29,6 +29,7 @@ object CmdManager {
             if (mafiaMissStreak >= 3) { //if 3 nights passed
                 mainButtonActionState = MainButtonActionState.END_GAME
             } else {
+                isTimerActive = false
                 currentPhaseNumber++
                 descriptionText = currentPhaseNumber.toString()
                 time = GameTime.DAY
@@ -51,6 +52,7 @@ object CmdManager {
         with(gameState) {
             time = GameTime.NIGHT
             voteList.clear()
+            isTimerActive = false
 
             currentPhaseNumber++
             descriptionText = currentPhaseNumber.toString()
