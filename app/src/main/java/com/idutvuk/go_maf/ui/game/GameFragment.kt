@@ -168,7 +168,7 @@ class GameFragment : Fragment() {
                 view.performClick()
             } else if (motionEvent.action == MotionEvent.ACTION_UP) {
                 for (i in 0 until Game.numPlayers)
-                    buttons[i].text = (i).toString() //TODO: replcae to (i + 1)
+                    buttons[i].text = "  $i  " //TODO: replace to (i + 1)
                 view.performClick()
             }
             false

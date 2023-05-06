@@ -7,6 +7,19 @@ class Player(
     val role: Role = Role.CIV,
     val nickname: String = "Debugger",
     var isEnabled: Boolean = true,
+
+    /**
+     * is player voted
+     */
+    var voted: Boolean = false,
+
+    /**
+     * set of players that voted in current player
+     *
+     * Null - Player was not voted
+     * Empty set - Player was voted with 0 popularity
+     */
+    var votedPlayers: MutableSet<Player>? = null
 //    val isGhost: Boolean = false //TODO: add ghost logic
 ) {
     var alive = true
