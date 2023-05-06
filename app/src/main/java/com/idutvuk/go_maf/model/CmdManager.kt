@@ -35,7 +35,7 @@ object CmdManager {
                 currentPhaseNumber++
                 descriptionText = currentPhaseNumber.toString()
                 time = GameTime.DAY
-                firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
+                firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
                 cursor = firstSpokedPlayer
                 mainButtonActionState = MainButtonActionState.START_SPEECH
             }
@@ -188,7 +188,7 @@ object CmdManager {
                          * can we do best move today?
                          */
                         val nextPhase = if (
-                            livingPlayersCount(players) + 2 >= Game.numPlayers
+                            livingPlayersCount() + 2 >= Game.numPlayers
                             && currentPhaseNumber == 2
                         )
                             MainButtonActionState.BEST_MOVE else MainButtonActionState.START_DAY
@@ -273,7 +273,7 @@ object CmdManager {
                     currentPhaseNumber++
                     descriptionText = currentPhaseNumber.toString()
                     time = GameTime.DAY
-                    firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer, players)
+                    firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
                     cursor = firstSpokedPlayer
                     mainButtonActionState = MainButtonActionState.START_SPEECH
                 }
@@ -312,12 +312,9 @@ object CmdManager {
                     isTimerActive = false
 
 
-                    if (nextAlivePlayer(cursor, players) != closestAlivePlayer(
-                            firstSpokedPlayer,
-                            players
-                        )
+                    if (nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer)
                     ) {//TODO: check for bugs
-                        cursor = nextAlivePlayer(cursor, players)
+                        cursor = nextAlivePlayer(cursor)
                         mainButtonActionState = MainButtonActionState.START_SPEECH
                     } else {
                         mainButtonActionState = MainButtonActionState.START_VOTE
@@ -445,44 +442,5 @@ object CmdManager {
 //        return result
 //    }
 
-    private fun livingPlayersCount(players: Array<Player>): Int {
-        var livingPlayers = 0
-        for (i in 0 until Game.numPlayers) {
-            if (players[i].alive) {
-                livingPlayers++
-            }
-        }
-        return livingPlayers
-    }
 
-    /**
-     * Returns closest alive player to selected player
-     * _Example:_
-     * 0-1-2-3-4-5-[6]-7-8-9
-     * Returns 6 if 6 is alive
-     * Returns 7 if 6 is dead and 7 is alive
-     */
-    private fun closestAlivePlayer(cursor: Int, players: Array<Player>): Int {
-        if (players[cursor].alive) return cursor
-        return nextAlivePlayer(cursor, players)
-    }
-
-    /**
-     * returns next alive player
-     */
-    private fun nextAlivePlayer(cursor: Int, players: Array<Player>): Int {
-        //check for alive players:
-        val livingPlayers = livingPlayersCount(players)
-        if (livingPlayers == 0) throw Error("There is no alive players in the game")
-        if (livingPlayers == 1) throw Error("There is only 1 alive person in the game")
-
-        //if reached the end
-        if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1, players)
-
-        //if next player is alive
-        if (players[cursor + 1].alive) return cursor + 1
-
-        //if next player is dead
-        return nextAlivePlayer(cursor + 1, players)
-    }
 }

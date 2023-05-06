@@ -1,6 +1,8 @@
 package com.idutvuk.go_maf.model.gamedata
 
+import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
+import java.lang.Error
 
 /**
  * The state of a game.
@@ -94,6 +96,46 @@ class MafiaGameState(
      */
     var isTimerActive: Boolean = false,
     ) {
+
+    fun livingPlayersCount(): Int {
+        var livingPlayers = 0
+        for (i in 0 until Game.numPlayers) {
+            if (players[i].alive) {
+                livingPlayers++
+            }
+        }
+        return livingPlayers
+    }
+
+    /**
+     * Returns closest alive player to selected player
+     * _Example:_
+     * 0-1-2-3-4-5-[6]-7-8-9
+     * Returns 6 if 6 is alive
+     * Returns 7 if 6 is dead and 7 is alive
+     */
+    fun closestAlivePlayer(cursor: Int): Int {
+        if (players[cursor].alive) return cursor
+        return nextAlivePlayer(cursor)
+    }
+
+    /**
+     * returns next alive player
+     */
+    fun nextAlivePlayer(cursor: Int): Int {
+        //check for alive players:
+        val livingPlayers = livingPlayersCount()
+        assert(livingPlayers>1)
+        //if reached the end
+        if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1)
+
+        //if next player is alive
+        if (players[cursor + 1].alive) return cursor + 1
+
+        //if next player is dead
+        return nextAlivePlayer(cursor + 1)
+    }
+
 
     //TODO: implement double, triple and more kill
     fun kill(index: Int){
