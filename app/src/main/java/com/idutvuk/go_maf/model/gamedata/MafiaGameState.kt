@@ -31,9 +31,9 @@ class MafiaGameState(
     var time: GameTime = GameTime.NIGHT,
 
 
-    var mainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
-    var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
-    var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.DEBUG,
+    var mainButtonActionState: MainButtonActionState = MainButtonActionState.START_GAME,
+    var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.CRASH,
+    var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.CRASH,
 
     /**
      * if not empty, overwrites the main button text
@@ -153,21 +153,25 @@ class MafiaGameState(
     }
 
     override fun toString(): String {
-        return "MafiaGameState(\n" +
-                "numPlayers=$numPlayers, \n" +
-                "players=${players.contentToString()}, \n" +
-                "voteList=$voteList, \n" +
-                "isOver=$gameOver, \n" +
-                "time=$time, \n" +
-                "is timer active = $isTimerActive, \n" +
-                "mainButtonActionState=$mainButtonActionState, \n" +
-                "previous mainButtonActionState=$delayedMainButtonActionState, \n" +
-                "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
-                "selected=$selectedPlayers, \n" +
-                "headingText='$headingText, \n" +
-                "descriptionText='$descriptionText\n" +
-                ")"
+        return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainButtonActionState=$mainButtonActionState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedMainButtonActionState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
     }
+
+//    override fun toString(): String {
+//        return "MafiaGameState(\n" +
+//                "numPlayers=$numPlayers, \n" +
+//                "players=${players.contentToString()}, \n" +
+//                "voteList=$voteList, \n" +
+//                "isOver=$gameOver, \n" +
+//                "time=$time, \n" +
+//                "is timer active = $isTimerActive, \n" +
+//                "mainButtonActionState=$mainButtonActionState, \n" +
+//                "previous mainButtonActionState=$delayedMainButtonActionState, \n" +
+//                "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
+//                "selected=$selectedPlayers, \n" +
+//                "headingText='$headingText, \n" +
+//                "descriptionText='$descriptionText\n" +
+//                ")"
+//    }
 }
 
 

@@ -3,6 +3,7 @@ package com.idutvuk.go_maf.ui.game
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.idutvuk.go_maf.model.CmdCommitType
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
@@ -42,7 +43,8 @@ class GameViewModel : ViewModel() {
      * TODO: implement 2-click logic & foul logic
      */
     fun onClickBtnMain() {
-        gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
+//        gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
+        gameState = CmdManager.commit(CmdCommitType.PRESS_MAIN_BTN)
         updateUiParams()
     }
     private fun updateUiParams() {
@@ -67,7 +69,7 @@ class GameViewModel : ViewModel() {
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
         if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
             gameState.selectedPlayers.add(clickedIndex)
-            gameState = CmdManager.pressPlayerNumber(gameState.previousMainButtonActionState)
+            gameState = CmdManager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
             updateUiParams()
             return
         }
@@ -88,12 +90,12 @@ class GameViewModel : ViewModel() {
     }
 
     fun skipNight() {
-        gameState = CmdManager.skipNight()
+        gameState = CmdManager.commit(CmdCommitType.SKIP_NIGHT)
         updateUiParams()
     }
 
     fun skipDay() {
-        gameState = CmdManager.skipDay()
+        gameState = CmdManager.commit(CmdCommitType.SKIP_DAY)
         updateUiParams()
     }
 

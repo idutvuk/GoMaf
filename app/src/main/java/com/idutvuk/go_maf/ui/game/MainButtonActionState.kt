@@ -10,6 +10,13 @@ enum class MainButtonActionState(
     val icon: Int = R.drawable.ic_debug,
     val requireNumber: PlayerSelectionMode //TODO: check for necessity
 ) {
+    /**
+     * Crashes the app lol
+     */
+    CRASH(
+        text = "It should crash the app",
+        requireNumber = PlayerSelectionMode.NONE
+    ),
     //Misc/debug states
     /**
      * Default state

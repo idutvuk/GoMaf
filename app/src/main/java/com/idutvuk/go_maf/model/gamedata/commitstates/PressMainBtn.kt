@@ -1,5 +1,4 @@
-package com.idutvuk.go_maf.model
-
+package com.idutvuk.go_maf.model.gamedata.commitstates
 
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.Game
@@ -8,127 +7,12 @@ import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import com.idutvuk.go_maf.model.gamedata.Role
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
-import java.lang.Error
+import java.lang.RuntimeException
 
-
-object CmdManager {
-    val stateHistory = arrayListOf(MafiaGameState())
-    var currentHistoryIndex = 0
-
-
-    fun commit(cmdCommitType: CmdCommitType) : MafiaGameState {
-        var gameState = stateHistory.last()
-        Log.d("GameLog"," before: "+ gameState.gameOver + " " + gameState.toString())
-        gameState = cmdCommitType.cmdCommitState.changeGameState(gameState)
-        Log.d("GameLog"," after: "+ gameState.gameOver + " " + gameState.toString())
-        stateHistory.add(gameState)
-        return gameState
-    }
-
-    fun skipNight() : MafiaGameState{
-        val gameState: MafiaGameState = stateHistory.last()
+class PressMainBtn:CmdCommitState {
+    override fun changeGameState(gameState: MafiaGameState): MafiaGameState {
         with(gameState) {
-            if (!isMafiaMissedToday) mafiaMissStreak++
-            if (mafiaMissStreak >= 3) { //if 3 nights passed
-                mainButtonActionState = MainButtonActionState.END_GAME
-            } else {
-                isTimerActive = false
-                currentPhaseNumber++
-                descriptionText = currentPhaseNumber.toString()
-                time = GameTime.DAY
-                firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
-                cursor = firstSpokedPlayer
-                mainButtonActionState = MainButtonActionState.START_SPEECH
-            }
-        }
-        stateHistory.add(gameState)
-        return gameState
-    }
-
-    fun skipDay() : MafiaGameState{
-        //TODO: auto-kill single-voted person
-        val gameState: MafiaGameState = stateHistory.last()
-
-        with(gameState) {
-            time = GameTime.NIGHT
-            voteList.clear()
-            isTimerActive = false
-
-            currentPhaseNumber++
-            descriptionText = currentPhaseNumber.toString()
-
-            if (currentPhaseNumber == 1) {
-                mainButtonActionState = MainButtonActionState.START_MAFIA_SPEECH
-            } else {
-                selectionMode = PlayerSelectionMode.SINGLE
-                mainButtonActionState = MainButtonActionState.KILL
-            }
-
-        }
-        stateHistory.add(gameState)
-        return gameState
-    }
-
-    fun pressPlayerNumber(prevState: MainButtonActionState): MafiaGameState {
-        //clone old game state, when modify it
-        val gameState: MafiaGameState = stateHistory.last()
-
-        with(gameState) {
-
-            /**
-             * Use for:
-             * CHECK_DON
-             * CHECK_SHR
-             * ADD_TO_VOTE
-             * KILL
-             * TODO: FOUL (?)
-             */
-            when (prevState) {
-                MainButtonActionState.ADD_TO_VOTE -> {
-                    Log.d("GameLog", "(CmdM) Added to vote")
-                    voteList.add(players[selectedPlayers[0]])
-                }
-
-                MainButtonActionState.KILL -> {
-                    mafiaMissStreak = 0
-                    kill(selectedPlayers[0])
-                    delayedMainButtonActionState =
-                        if (gameOver) MainButtonActionState.END_GAME
-                    else MainButtonActionState.CHECK_DON
-                }
-
-                MainButtonActionState.CHECK_DON -> {
-                   headingText = if (players[selectedPlayers[0]].role == Role.SHR) "shr" else "not shr"
-                    //TODO: change it to GUI response
-                }
-
-                MainButtonActionState.CHECK_SHR -> {
-                    headingText = if (players[selectedPlayers[0]].role.isRed) "RED" else "BLACK"
-                    //TODO: change it to GUI response
-                }
-                else -> throw Error(
-                    "VM: clicked on a player button when number is requested\n" +
-                            "but from undescrbed state"
-                )
-                //TODO: add to vote on click
-            }
-            selectedPlayers = ArrayList()
-            mainButtonActionState = delayedMainButtonActionState
-        }
-
-        stateHistory.add(gameState)
-        return gameState
-    }
-//todo uncomment or delete
-    /*
-    fun pressMainBtn(currentState: MainButtonActionState): MafiaGameState {
-        //clone old game state, when modify it
-        val gameState: MafiaGameState = stateHistory.last()
-
-        with(gameState) {
-
-            when (currentState) {
-
+            when (mainButtonActionState) {
                 MainButtonActionState.START_NIGHT -> {
                     currentPhaseNumber++
                     descriptionText = currentPhaseNumber.toString()
@@ -249,7 +133,7 @@ object CmdManager {
                             isMafiaMissedToday = true
                             descriptionText += " missStreak $mafiaMissStreak"
                             if (mafiaMissStreak >= 3) { //if 3 nights passed
-                               delayedMainButtonActionState = MainButtonActionState.END_GAME
+                                delayedMainButtonActionState = MainButtonActionState.END_GAME
                             } else {
                                 delayedMainButtonActionState = MainButtonActionState.CHECK_DON
                             }
@@ -283,6 +167,7 @@ object CmdManager {
 
 
                 MainButtonActionState.START_SPEECH -> {
+
                     if (voteList.isNotEmpty()) {
                         selectionMode =
                             PlayerSelectionMode.SINGLE //so you can select player before the vote
@@ -341,10 +226,10 @@ object CmdManager {
                             } else {
                                 cursor = voteList.first().number
                                 kill(cursor)
-                                delayedMainButtonActionState = if(!gameOver) {
-                                    MainButtonActionState.START_NIGHT
-                                } else {
+                                delayedMainButtonActionState = if(gameOver) {
                                     MainButtonActionState.END_GAME
+                                } else {
+                                    MainButtonActionState.START_NIGHT
                                 }
                                 mainButtonActionState = MainButtonActionState.START_SPEECH
                             }
@@ -388,7 +273,7 @@ object CmdManager {
                     }
                     if (leaderVoteList.size == 1) {
                         kill(leaderVoteList.first().number)
-                        if (gameOver) mainButtonActionState=MainButtonActionState.END_GAME
+                        if (gameOver) mainButtonActionState= MainButtonActionState.END_GAME
                     } else {
                         mainButtonActionState = MainButtonActionState.AUTOCATASTROPHE
                     }
@@ -414,36 +299,17 @@ object CmdManager {
                 }
 
                 MainButtonActionState.END_GAME -> {
+                    Log.d("PressMainBtn", "end_game pressed")
                     gameOver = true //TODO: remove if it is unnecessary
                 }
 
+                MainButtonActionState.CRASH -> {
+                    throw RuntimeException("Crash state should not be accessible")
+                }
             }
             selectedPlayers = ArrayList()
             selectionMode = mainButtonActionState.requireNumber
         }
-        stateHistory.add(gameState)
         return gameState
     }
-     */
-
-
-
-//    fun undo(): IntArray { //TODO: rewrite it to the modern logic
-//        val result =  IntArray(2)
-//        if (currentHistoryIndex ==0) {
-//            Log.e("GameLog", "Attempt to redo null aborted")
-//            result[0] = -1
-//            return result
-//        }
-//        history[currentHistoryIndex -1].undo()
-//        currentHistoryIndex--
-//        result[1] = 1
-//        Log.d("GameLog","Undo completed. size: ${history.size}, index:$currentHistoryIndex")
-//        if (currentHistoryIndex <=0) {
-//            result[0] = -1
-//        }
-//        return result
-//    }
-
-
 }
