@@ -13,16 +13,19 @@ import java.lang.Error
 
 
 object CmdManager {
-    val stateHistory = ArrayDeque<MafiaGameState>()
+    val stateHistory = arrayListOf(MafiaGameState())
     var currentHistoryIndex = 0
 
-    fun skipNight() : MafiaGameState{
-        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
-            MafiaGameState() //TODO: extract it to the game start. History should not be empty
-        } else {
-            stateHistory.last()
-        }
 
+    fun commit() : MafiaGameState {
+        val gameState: MafiaGameState = stateHistory.last()
+        with(gameState) {}
+        stateHistory.add(gameState)
+        return gameState
+    }
+
+    fun skipNight() : MafiaGameState{
+        val gameState: MafiaGameState = stateHistory.last()
         with(gameState) {
             if (!isMafiaMissedToday) mafiaMissStreak++
             if (mafiaMissStreak >= 3) { //if 3 nights passed
@@ -43,11 +46,7 @@ object CmdManager {
 
     fun skipDay() : MafiaGameState{
         //TODO: auto-kill single-voted person
-        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
-            MafiaGameState() //TODO: extract it to the game start. History should not be empty
-        } else {
-            stateHistory.last()
-        }
+        val gameState: MafiaGameState = stateHistory.last()
 
         with(gameState) {
             time = GameTime.NIGHT
@@ -90,8 +89,9 @@ object CmdManager {
 
                 MainButtonActionState.KILL -> {
                     mafiaMissStreak = 0
-                    delayedMainButtonActionState = if (!kill(players, selectedPlayers[0]))
-                        MainButtonActionState.END_GAME
+                    kill(selectedPlayers[0])
+                    delayedMainButtonActionState =
+                        if (gameOver) MainButtonActionState.END_GAME
                     else MainButtonActionState.CHECK_DON
                 }
 
@@ -120,11 +120,7 @@ object CmdManager {
 
     fun pressMainBtn(currentState: MainButtonActionState): MafiaGameState {
         //clone old game state, when modify it
-        val gameState: MafiaGameState = if (stateHistory.isEmpty()) {
-            MafiaGameState() //TODO: extract it to the game start. History should not be empty
-        } else {
-            stateHistory.last()
-        }
+        val gameState: MafiaGameState = stateHistory.last()
 
         with(gameState) {
 
@@ -153,7 +149,8 @@ object CmdManager {
                 MainButtonActionState.KILL -> {
                     if (selectedPlayers.isNotEmpty()) {
                         mafiaMissStreak = 0
-                        mainButtonActionState = if (!kill(players, selectedPlayers[0])) {
+                        kill(selectedPlayers[0])
+                        mainButtonActionState = if (gameOver) {
                             MainButtonActionState.END_GAME
                         } else {
                             MainButtonActionState.CHECK_DON
@@ -223,7 +220,7 @@ object CmdManager {
 
                 MainButtonActionState.START_GAME -> {
                     cursor = 0
-                    isOver = false
+                    gameOver = false
                     mainButtonActionState = MainButtonActionState.START_NIGHT
                 }
 
@@ -343,7 +340,8 @@ object CmdManager {
                                 mainButtonActionState = MainButtonActionState.START_NIGHT
                             } else {
                                 cursor = voteList.first().number
-                                delayedMainButtonActionState = if(kill(players,cursor)) {
+                                kill(cursor)
+                                delayedMainButtonActionState = if(!gameOver) {
                                     MainButtonActionState.START_NIGHT
                                 } else {
                                     MainButtonActionState.END_GAME
@@ -389,14 +387,16 @@ object CmdManager {
                         }
                     }
                     if (leaderVoteList.size == 1) {
-                        if (!kill(players,leaderVoteList.first().number)) mainButtonActionState=MainButtonActionState.END_GAME
+                        kill(leaderVoteList.first().number)
+                        if (gameOver) mainButtonActionState=MainButtonActionState.END_GAME
                     } else {
                         mainButtonActionState = MainButtonActionState.AUTOCATASTROPHE
                     }
                 }
 
                 MainButtonActionState.KILL_IN_VOTE -> {
-                    mainButtonActionState = if (kill(players, cursor))
+                    kill(cursor)
+                    mainButtonActionState = if (gameOver)
                         MainButtonActionState.END_GAME
                     else {
                         Log.i("GameLog", "Player $cursor was killed in the vote")
@@ -414,7 +414,7 @@ object CmdManager {
                 }
 
                 MainButtonActionState.END_GAME -> {
-                    isOver = true //TODO: remove if it is unnecessary
+                    gameOver = true //TODO: remove if it is unnecessary
                 }
 
             }
@@ -426,20 +426,7 @@ object CmdManager {
         return gameState
     }
 
-    //Added this comment to track changes on the git. This is the new logic change
-    //TODO: implement double, triple and more kill
-    private fun kill(players: Array<Player>, index: Int): Boolean { //false if game over
-        players[index].alive = false
-        return true //TODO: remove (early return only for the debug purposes!)
-        var redCounter = 0
-        var blackCounter = 0
-        for (i in 0 until Game.numPlayers) {
-            if (players[i].role.isRed) redCounter++ else blackCounter++
-        }
-        if (redCounter <= blackCounter) return false //black wins
-        if (blackCounter <= 0) return false //red wins
-        return true //game continues
-    }
+
 
 //    fun undo(): IntArray { //TODO: rewrite it to the modern logic
 //        val result =  IntArray(2)

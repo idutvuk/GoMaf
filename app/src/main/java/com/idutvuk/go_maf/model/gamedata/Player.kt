@@ -24,23 +24,14 @@ class Player(
 ) {
     var alive = true
         set(value) {
+            assert(value != field)
             if (value) { //if want to revive
-                if (field) { //if already alive
-                    Log.e("GameLog","Attempt to revive living player $number")
-                } else { //if dead, but player is reviving
-                    Log.i("GameLog","Player $number revived")
-                    isEnabled = true
-                    field = true
-                }
+                Log.i("GameLog","Player $number revived")
             } else { //if want to make player dead
-                if (field) { //if already alive
-                    Log.i("GameLog","Player $number killed")
-                    isEnabled = false
-                    field = false
-                } else { //if dead, but player is reviving
-                    Log.e("GameLog","Attempt to kill player $number who is already dead")
-                }
+                Log.i("GameLog","Player $number killed")
             }
+            isEnabled = value
+            field = value
         }
 
     var fouls = 0

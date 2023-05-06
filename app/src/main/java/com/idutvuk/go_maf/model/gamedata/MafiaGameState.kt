@@ -11,7 +11,7 @@ class MafiaGameState(
     var players: Array<Player> = Array(numPlayers) { Player(it) },
     var voteList: MutableSet<Player> = mutableSetOf(),
     var leaderVoteList: MutableSet<Player> = mutableSetOf(),
-    var isOver: Boolean = false,
+    var gameOver: Boolean = false,
 
     /**
      * ## passed nights + passed days + current phase.
@@ -94,12 +94,28 @@ class MafiaGameState(
      */
     var isTimerActive: Boolean = false,
     ) {
+
+    //TODO: implement double, triple and more kill
+    fun kill(index: Int){
+        players[index].alive = false
+        gameOver = false
+        return //TODO: remove (early return only for the debug purposes!)
+        var redCounter = 0
+        var blackCounter = 0
+        for (i in 0 until Game.numPlayers) {
+            if (players[i].role.isRed) redCounter++ else blackCounter++
+        }
+        if (redCounter <= blackCounter) gameOver = true //black wins
+        if (blackCounter <= 0) gameOver = true //red wins
+        gameOver = false //game continues
+    }
+
     override fun toString(): String {
         return "MafiaGameState(\n" +
                 "numPlayers=$numPlayers, \n" +
                 "players=${players.contentToString()}, \n" +
                 "voteList=$voteList, \n" +
-                "isOver=$isOver, \n" +
+                "isOver=$gameOver, \n" +
                 "time=$time, \n" +
                 "is timer active = $isTimerActive, \n" +
                 "mainButtonActionState=$mainButtonActionState, \n" +
