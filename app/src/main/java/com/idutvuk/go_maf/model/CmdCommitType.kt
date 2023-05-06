@@ -11,5 +11,4 @@ enum class CmdCommitType(val cmdCommitState: CmdCommitState) { //TODO: rename @A
     SKIP_DAY(SkipDay()),
     PRESS_PLAYER_NUMBER(PressPlayerNumber()),
     PRESS_MAIN_BTN(PressMainBtn());
-
 }

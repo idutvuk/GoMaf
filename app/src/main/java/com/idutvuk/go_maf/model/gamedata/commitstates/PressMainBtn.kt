@@ -168,20 +168,20 @@ class PressMainBtn:CmdCommitState {
 
                 MainButtonActionState.START_SPEECH -> {
 
-                    if (voteList.isNotEmpty()) {
-                        selectionMode =
-                            PlayerSelectionMode.SINGLE //so you can select player before the vote
+
+                        selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
                         isTimerActive = true
                         Log.d("GameLog", "Speech started. Cursor: $cursor")
                         mainButtonActionState = MainButtonActionState.ADD_TO_VOTE
-                    } else {
-                        //last speech or autocatastrophe
-                        if (leaderVoteList.isNotEmpty()) {
 
-                        } else { //last speech
-                            mainButtonActionState = MainButtonActionState.NEXT
-                        }
-                    }
+                    //todo figure out what is it
+//                        //last speech or autocatastrophe
+//                        if (leaderVoteList.isNotEmpty()) {
+//
+//                        } else { //last speech
+//                            mainButtonActionState = MainButtonActionState.NEXT
+//                        }
+
                 }
 
                 MainButtonActionState.ADD_TO_VOTE -> {
