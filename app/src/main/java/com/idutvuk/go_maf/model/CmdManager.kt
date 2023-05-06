@@ -2,7 +2,6 @@ package com.idutvuk.go_maf.model
 
 
 import android.util.Log
-import android.widget.Toast
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
@@ -38,6 +37,7 @@ object CmdManager {
                 mainButtonActionState = MainButtonActionState.START_SPEECH
             }
         }
+        stateHistory.add(gameState)
         return gameState
     }
 
@@ -65,7 +65,7 @@ object CmdManager {
             }
 
         }
-
+        stateHistory.add(gameState)
         return gameState
     }
 
@@ -85,7 +85,7 @@ object CmdManager {
             when (prevState) {
                 MainButtonActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog", "(CmdM) Added to vote")
-                    voteList.add(selectedPlayers[0])
+                    voteList.add(players[selectedPlayers[0]])
                 }
 
                 MainButtonActionState.KILL -> {
@@ -283,16 +283,26 @@ object CmdManager {
 
 
                 MainButtonActionState.START_SPEECH -> {
-                    selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
-                    isTimerActive = true
-                    Log.d("GameLog", "Speech started. Cursor: $cursor")
-                    mainButtonActionState = MainButtonActionState.ADD_TO_VOTE
+                    if (voteList.isNotEmpty()) {
+                        selectionMode =
+                            PlayerSelectionMode.SINGLE //so you can select player before the vote
+                        isTimerActive = true
+                        Log.d("GameLog", "Speech started. Cursor: $cursor")
+                        mainButtonActionState = MainButtonActionState.ADD_TO_VOTE
+                    } else {
+                        //last speech or autocatastrophe
+                        if (leaderVoteList.isNotEmpty()) {
+
+                        } else { //last speech
+                            mainButtonActionState = MainButtonActionState.NEXT
+                        }
+                    }
                 }
 
                 MainButtonActionState.ADD_TO_VOTE -> {
                     if (selectedPlayers.size == 1) { //if player already selected
                         Log.d("GameLog", "(CmdM) Added to vote")
-                        voteList.add(selectedPlayers[0])
+                        voteList.add(players[selectedPlayers[0]])
                         mainButtonActionState = MainButtonActionState.END_SPEECH
                     } else {
                         previousMainButtonActionState = MainButtonActionState.ADD_TO_VOTE
@@ -319,18 +329,70 @@ object CmdManager {
                 }
 
                 MainButtonActionState.START_VOTE -> {
-                    //check for empty votelist
-                    mainButtonActionState = if (voteList.isEmpty()) {
-                        Log.i("GameLog", "Skip vote phase (nobody was elected)")
-                        //TODO: Visual indication for it
-                        MainButtonActionState.START_NIGHT
-                    } else {
-                        MainButtonActionState.KILL_IN_VOTE
+
+                    when(voteList.size) {
+                        0 -> {
+                            Log.i("GameLog", "Skip vote phase (nobody was elected)")
+                            //TODO: Visual indication for it
+                            mainButtonActionState = MainButtonActionState.START_NIGHT
+                        }
+                        1 -> {
+                            if (currentPhaseNumber == 2) {//if today is first day
+                                Log.i("GameLog", "Skip vote phase (only 1 nominated for a first day)")
+                                //TODO: Visual indication for it
+                                mainButtonActionState = MainButtonActionState.START_NIGHT
+                            } else {
+                                cursor = voteList.first().number
+                                delayedMainButtonActionState = if(kill(players,cursor)) {
+                                    MainButtonActionState.START_NIGHT
+                                } else {
+                                    MainButtonActionState.END_GAME
+                                }
+                                mainButtonActionState = MainButtonActionState.START_SPEECH
+                            }
+                        }
+                        else -> {
+                            mainButtonActionState = MainButtonActionState.VOTE_FOR
+                            mainButtonOverwriteString = "vote for #${voteList.first()}"
+                            selectionMode = PlayerSelectionMode.MULTIPLE
+                        }
                     }
                 }
 
                 MainButtonActionState.VOTE_FOR -> {
-                    TODO()
+                    mainButtonOverwriteString = "vote for #${voteList.first()}"
+                    for (i in 0 until voteList.size) {
+                        if (i == voteList.size - 1) { //last player remaining
+                            for (player in players) {
+                                if (player.alive && !player.voted) {
+                                    voteList.last().votedPlayers!!.add(player)
+                                }
+                            }
+                        } else if (voteList.elementAt(i).votedPlayers == null) { //player was not voted
+                            voteList.elementAt(i).votedPlayers = mutableSetOf()
+                            for (voter in selectedPlayers) { //TODO: add selection
+                                voteList.elementAt(i).votedPlayers!!.add(players[voter])
+                                players[voter].voted = true
+                            }
+                            break
+                        }
+                    }  //all players voted
+                    var maxVotes = 0
+                    for (candidate in voteList) {
+                        val popularity = candidate.votedPlayers!!.size
+                        leaderVoteList = mutableSetOf(candidate)
+                        if (popularity > maxVotes) {
+                            maxVotes = popularity
+                            leaderVoteList = mutableSetOf(candidate)
+                        } else if(popularity == maxVotes) {
+                            leaderVoteList.add(candidate)
+                        }
+                    }
+                    if (leaderVoteList.size == 1) {
+                        if (!kill(players,leaderVoteList.first().number)) mainButtonActionState=MainButtonActionState.END_GAME
+                    } else {
+                        mainButtonActionState = MainButtonActionState.AUTOCATASTROPHE
+                    }
                 }
 
                 MainButtonActionState.KILL_IN_VOTE -> {
@@ -342,7 +404,7 @@ object CmdManager {
                     }
                 }
 
-                MainButtonActionState.RE_VOTE -> {
+                MainButtonActionState.AUTOCATASTROPHE -> {
                     TODO()
                 }
 

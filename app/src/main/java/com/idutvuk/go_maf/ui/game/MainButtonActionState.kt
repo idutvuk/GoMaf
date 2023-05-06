@@ -57,7 +57,7 @@ enum class MainButtonActionState(
      */
     START_VOTE(
         text = "Start vote",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
     /**
@@ -127,7 +127,7 @@ enum class MainButtonActionState(
     /**
      * Rerun the elections lap after auto-catastrophe
      */
-    RE_VOTE(
+    AUTOCATASTROPHE(
         text = "Re-vote",
         requireNumber = PlayerSelectionMode.MULTIPLE
     ),
