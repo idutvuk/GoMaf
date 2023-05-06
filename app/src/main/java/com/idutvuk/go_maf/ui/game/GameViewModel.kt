@@ -64,10 +64,6 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun getEmoji(i: Int): CharSequence {
-        return gameState.players[i].emoji
-    }
-
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
         if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
             gameState.selectedPlayers.add(clickedIndex)
@@ -91,6 +87,19 @@ class GameViewModel : ViewModel() {
         updateUiParams()
     }
 
+    fun skipNight() {
+        gameState = CmdManager.skipNight()
+        updateUiParams()
+    }
+
+    fun skipDay() {
+        gameState = CmdManager.skipDay()
+        updateUiParams()
+    }
+
+    fun getEmoji(i: Int): CharSequence {
+        return gameState.players[i].emoji
+    }
 
 }
 
