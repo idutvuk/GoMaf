@@ -56,7 +56,7 @@ class GameViewModel : ViewModel() {
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
-            ldVoteList.value = voteList
+            ldVoteList.value = voteListCopy
             ldHeading.value = headingText
             ldDescription.value = descriptionText
             ldTimerActive.value = isTimerActive

@@ -21,7 +21,7 @@ class PressPlayerNumber:CmdCommitState {
             when (previousMainButtonActionState) {
                 MainButtonActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog", "(CmdM) Added to vote")
-                    voteList.add(players[selectedPlayers[0]])
+                    addToVoteList(selectedPlayers[0])
                 }
 
                 MainButtonActionState.KILL -> {

@@ -1,8 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
-import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
-import java.lang.Error
 
 /**
  * The state of a game.
@@ -11,7 +9,7 @@ import java.lang.Error
 class MafiaGameState(
     var numPlayers: Int = 10,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-    var voteList: MutableSet<Player> = mutableSetOf(),
+
     var leaderVoteList: MutableSet<Player> = mutableSetOf(),
     var gameOver: Boolean = false,
 
@@ -97,9 +95,24 @@ class MafiaGameState(
     var isTimerActive: Boolean = false,
     ) {
 
+
+    private var voteList: MutableSet<Player> = mutableSetOf()
+
+    val voteListCopy: Set<Player>
+        get() = voteList.toSet()
+
+    fun addToVoteList(index: Int): Boolean {
+        return voteList.add(players[index])
+    }
+
+    fun clearVoteList() {
+        voteList.clear()
+    }
+
+
     fun livingPlayersCount(): Int {
         var livingPlayers = 0
-        for (i in 0 until Game.numPlayers) {
+        for (i in 0 until numPlayers) {
             if (players[i].alive) {
                 livingPlayers++
             }
@@ -127,7 +140,7 @@ class MafiaGameState(
         val livingPlayers = livingPlayersCount()
         assert(livingPlayers>1)
         //if reached the end
-        if (cursor >= Game.numPlayers - 1) return nextAlivePlayer(-1)
+        if (cursor >= numPlayers - 1) return nextAlivePlayer(-1)
 
         //if next player is alive
         if (players[cursor + 1].alive) return cursor + 1
@@ -136,21 +149,40 @@ class MafiaGameState(
         return nextAlivePlayer(cursor + 1)
     }
 
+    fun failedKill() {
+        isMafiaMissedToday = true
+        if (++mafiaMissStreak>=3) gameOver = true
+    }
 
     //TODO: implement double, triple and more kill
     fun kill(index: Int){
         players[index].alive = false
         gameOver = false
         return //TODO: remove (early return only for the debug purposes!)
+        updateGameOverState()
+    }
+
+    fun updateGameOverState() {
         var redCounter = 0
         var blackCounter = 0
-        for (i in 0 until Game.numPlayers) {
+        for (i in 0 until numPlayers) {
             if (players[i].role.isRed) redCounter++ else blackCounter++
         }
         if (redCounter <= blackCounter) gameOver = true //black wins
         if (blackCounter <= 0) gameOver = true //red wins
         gameOver = false //game continues
     }
+
+    fun checkDon(index: Int): Boolean {
+        return players[index].role == Role.SHR
+    }
+
+    fun checkShr(index: Int): Boolean {
+        return players[index].role.isRed
+    }
+
+
+
 
     override fun toString(): String {
         return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainButtonActionState=$mainButtonActionState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedMainButtonActionState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"

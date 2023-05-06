@@ -187,7 +187,7 @@ class PressMainBtn:CmdCommitState {
                 MainButtonActionState.ADD_TO_VOTE -> {
                     if (selectedPlayers.size == 1) { //if player already selected
                         Log.d("GameLog", "(CmdM) Added to vote")
-                        voteList.add(players[selectedPlayers[0]])
+                        addToVoteList(selectedPlayers[0])
                         mainButtonActionState = MainButtonActionState.END_SPEECH
                     } else {
                         previousMainButtonActionState = MainButtonActionState.ADD_TO_VOTE
@@ -212,7 +212,7 @@ class PressMainBtn:CmdCommitState {
 
                 MainButtonActionState.START_VOTE -> {
 
-                    when(voteList.size) {
+                    when(voteListCopy.size) {
                         0 -> {
                             Log.i("GameLog", "Skip vote phase (nobody was elected)")
                             //TODO: Visual indication for it
@@ -224,7 +224,7 @@ class PressMainBtn:CmdCommitState {
                                 //TODO: Visual indication for it
                                 mainButtonActionState = MainButtonActionState.START_NIGHT
                             } else {
-                                cursor = voteList.first().number
+                                cursor = voteListCopy.first().number
                                 kill(cursor)
                                 delayedMainButtonActionState = if(gameOver) {
                                     MainButtonActionState.END_GAME
@@ -236,32 +236,32 @@ class PressMainBtn:CmdCommitState {
                         }
                         else -> {
                             mainButtonActionState = MainButtonActionState.VOTE_FOR
-                            mainButtonOverwriteString = "vote for #${voteList.first()}"
+                            mainButtonOverwriteString = "vote for #${voteListCopy.first()}"
                             selectionMode = PlayerSelectionMode.MULTIPLE
                         }
                     }
                 }
 
                 MainButtonActionState.VOTE_FOR -> {
-                    mainButtonOverwriteString = "vote for #${voteList.first()}"
-                    for (i in 0 until voteList.size) {
-                        if (i == voteList.size - 1) { //last player remaining
+                    mainButtonOverwriteString = "vote for #${voteListCopy.first()}"
+                    for (i in 0 until voteListCopy.size) {
+                        if (i == voteListCopy.size - 1) { //last player remaining
                             for (player in players) {
                                 if (player.alive && !player.voted) {
-                                    voteList.last().votedPlayers!!.add(player)
+                                    voteListCopy.last().votedPlayers!!.add(player)
                                 }
                             }
-                        } else if (voteList.elementAt(i).votedPlayers == null) { //player was not voted
-                            voteList.elementAt(i).votedPlayers = mutableSetOf()
+                        } else if (voteListCopy.elementAt(i).votedPlayers == null) { //player was not voted
+                            voteListCopy.elementAt(i).votedPlayers = mutableSetOf()
                             for (voter in selectedPlayers) { //TODO: add selection
-                                voteList.elementAt(i).votedPlayers!!.add(players[voter])
+                                voteListCopy.elementAt(i).votedPlayers!!.add(players[voter])
                                 players[voter].voted = true
                             }
                             break
                         }
                     }  //all players voted
                     var maxVotes = 0
-                    for (candidate in voteList) {
+                    for (candidate in voteListCopy) {
                         val popularity = candidate.votedPlayers!!.size
                         leaderVoteList = mutableSetOf(candidate)
                         if (popularity > maxVotes) {

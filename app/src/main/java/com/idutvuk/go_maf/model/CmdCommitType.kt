@@ -7,6 +7,7 @@ import com.idutvuk.go_maf.model.gamedata.commitstates.SkipDay
 import com.idutvuk.go_maf.model.gamedata.commitstates.SkipNight
 
 enum class CmdCommitType(val cmdCommitState: CmdCommitState) { //TODO: rename @ALL
+    //TODO: maybe remove
     SKIP_NIGHT(SkipNight()),
     SKIP_DAY(SkipDay()),
     PRESS_PLAYER_NUMBER(PressPlayerNumber()),

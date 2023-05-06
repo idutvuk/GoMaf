@@ -9,7 +9,7 @@ class SkipDay: CmdCommitState{
     override fun changeGameState(gameState: MafiaGameState): MafiaGameState {
         with(gameState) {
             time = GameTime.NIGHT
-            voteList.clear()
+            clearVoteList()
             isTimerActive = false
 
             currentPhaseNumber++
