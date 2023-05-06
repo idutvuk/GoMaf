@@ -115,7 +115,7 @@ enum class MainButtonActionState(
 
     //vote actions
     /**
-     * Vote for kill someone nominated to the elections
+     * Vote for killByMafia someone nominated to the elections
      */
     @Deprecated("Currently under development")
     VOTE_FOR(
@@ -159,7 +159,7 @@ enum class MainButtonActionState(
 
     /**
      * Kill a player by mafia after start of the night
-     * TODO: add hint: to not kill press 'skip'
+     * TODO: add hint: to not killByMafia press 'skip'
      */
     KILL(
         text = "Kill",
@@ -168,7 +168,7 @@ enum class MainButtonActionState(
     ),
 
     /**
-     * Check by don after mafia kill at night
+     * Check by don after mafia killByMafia at night
      */
     CHECK_DON(
         text = "Don check",

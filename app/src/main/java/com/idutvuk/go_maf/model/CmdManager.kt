@@ -17,6 +17,7 @@ object CmdManager {
     //TODO: Make ghost games possible
     fun commit(cmdCommitType: CmdCommitType) : MafiaGameState {
         var gameState = stateHistory.last()
+        gameState.snackbarMessage = null
         gameState = cmdCommitType.cmdCommitState.changeGameState(gameState)
         stateHistory.add(gameState)
         currentHistoryIndex++

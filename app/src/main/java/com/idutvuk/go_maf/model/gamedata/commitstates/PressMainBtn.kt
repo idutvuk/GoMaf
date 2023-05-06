@@ -5,7 +5,6 @@ import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
-import com.idutvuk.go_maf.model.gamedata.Role
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
 import java.lang.RuntimeException
 
@@ -34,14 +33,10 @@ class PressMainBtn:CmdCommitState {
 
 
                 MainButtonActionState.KILL -> {
-                    if (selectedPlayers.isNotEmpty()) {
+                    if (selectedPlayersCopy.isNotEmpty()) {
+                        MainButtonActionState.CHECK_DON
                         mafiaMissStreak = 0
-                        kill(selectedPlayers[0])
-                        mainButtonActionState = if (gameOver) {
-                            MainButtonActionState.END_GAME
-                        } else {
-                            MainButtonActionState.CHECK_DON
-                        }
+                        killByMafia()
                     } else {
                         previousMainButtonActionState = MainButtonActionState.KILL
                         mainButtonActionState = MainButtonActionState.WAITING_FOR_CLICK
@@ -52,11 +47,9 @@ class PressMainBtn:CmdCommitState {
 
                 MainButtonActionState.CHECK_DON -> {
                     if (currentPhaseNumber != 0) {
-                        if (selectedPlayers.isNotEmpty()) {
+                        if (selectedPlayersCopy.isNotEmpty()) {
                             mainButtonActionState = MainButtonActionState.CHECK_SHR
-                            headingText =
-                                if (players[selectedPlayers[0]].role == Role.SHR)
-                                    "shr" else "not shr"
+                            headingText = if (checkDon()) "shr" else "not shr"
                         } else {
                             previousMainButtonActionState = MainButtonActionState.CHECK_DON
                             delayedMainButtonActionState = MainButtonActionState.CHECK_SHR
@@ -81,11 +74,9 @@ class PressMainBtn:CmdCommitState {
                             MainButtonActionState.BEST_MOVE else MainButtonActionState.START_DAY
 
 
-                        if (selectedPlayers.isNotEmpty()) {
+                        if (selectedPlayersCopy.isNotEmpty()) {
                             mainButtonActionState = nextPhase
-                            headingText =
-                                if (players[selectedPlayers[0]].role.isRed)
-                                    "red" else "black"
+                            headingText = if (checkShr()) "red" else "black"
                         } else {
                             previousMainButtonActionState = MainButtonActionState.CHECK_SHR
 
@@ -107,7 +98,6 @@ class PressMainBtn:CmdCommitState {
 
                 MainButtonActionState.START_GAME -> {
                     cursor = 0
-                    gameOver = false
                     mainButtonActionState = MainButtonActionState.START_NIGHT
                 }
 
@@ -129,14 +119,8 @@ class PressMainBtn:CmdCommitState {
                      */
                     when(previousMainButtonActionState) {
                         MainButtonActionState.KILL -> {
-                            mafiaMissStreak++
-                            isMafiaMissedToday = true
-                            descriptionText += " missStreak $mafiaMissStreak"
-                            if (mafiaMissStreak >= 3) { //if 3 nights passed
-                                delayedMainButtonActionState = MainButtonActionState.END_GAME
-                            } else {
-                                delayedMainButtonActionState = MainButtonActionState.CHECK_DON
-                            }
+                            delayedMainButtonActionState = MainButtonActionState.CHECK_DON
+                            failedMafiaKill()
                         }
                         MainButtonActionState.CHECK_DON -> {}
                         MainButtonActionState.CHECK_SHR -> {}
@@ -156,7 +140,6 @@ class PressMainBtn:CmdCommitState {
 
 
                 MainButtonActionState.START_DAY -> {
-                    isMafiaMissedToday = false
                     currentPhaseNumber++
                     descriptionText = currentPhaseNumber.toString()
                     time = GameTime.DAY
@@ -185,9 +168,9 @@ class PressMainBtn:CmdCommitState {
                 }
 
                 MainButtonActionState.ADD_TO_VOTE -> {
-                    if (selectedPlayers.size == 1) { //if player already selected
+                    if (selectedPlayersCopy.size == 1) { //if player already selected
                         Log.d("GameLog", "(CmdM) Added to vote")
-                        addToVoteList(selectedPlayers[0])
+                        addToVoteList()
                         mainButtonActionState = MainButtonActionState.END_SPEECH
                     } else {
                         previousMainButtonActionState = MainButtonActionState.ADD_TO_VOTE
@@ -225,12 +208,8 @@ class PressMainBtn:CmdCommitState {
                                 mainButtonActionState = MainButtonActionState.START_NIGHT
                             } else {
                                 cursor = voteListCopy.first().number
-                                kill(cursor)
-                                delayedMainButtonActionState = if(gameOver) {
-                                    MainButtonActionState.END_GAME
-                                } else {
-                                    MainButtonActionState.START_NIGHT
-                                }
+                                delayedMainButtonActionState = MainButtonActionState.START_NIGHT
+                                killInVote(cursor)
                                 mainButtonActionState = MainButtonActionState.START_SPEECH
                             }
                         }
@@ -253,7 +232,7 @@ class PressMainBtn:CmdCommitState {
                             }
                         } else if (voteListCopy.elementAt(i).votedPlayers == null) { //player was not voted
                             voteListCopy.elementAt(i).votedPlayers = mutableSetOf()
-                            for (voter in selectedPlayers) { //TODO: add selection
+                            for (voter in selectedPlayersCopy) { //TODO: add selection
                                 voteListCopy.elementAt(i).votedPlayers!!.add(players[voter])
                                 players[voter].voted = true
                             }
@@ -271,22 +250,15 @@ class PressMainBtn:CmdCommitState {
                             leaderVoteList.add(candidate)
                         }
                     }
-                    if (leaderVoteList.size == 1) {
-                        kill(leaderVoteList.first().number)
-                        if (gameOver) mainButtonActionState= MainButtonActionState.END_GAME
-                    } else {
-                        mainButtonActionState = MainButtonActionState.AUTOCATASTROPHE
-                    }
+                    mainButtonActionState = MainButtonActionState.AUTOCATASTROPHE
+                    if (leaderVoteList.size == 1) {}
+                        killInVote(leaderVoteList.first().number)
                 }
 
                 MainButtonActionState.KILL_IN_VOTE -> {
-                    kill(cursor)
-                    mainButtonActionState = if (gameOver)
-                        MainButtonActionState.END_GAME
-                    else {
-                        Log.i("GameLog", "Player $cursor was killed in the vote")
-                        MainButtonActionState.START_NIGHT
-                    }
+                    mainButtonActionState = MainButtonActionState.START_NIGHT
+                    killInVote(cursor)
+                    Log.i("GameLog", "Player $cursor was killed in the vote")
                 }
 
                 MainButtonActionState.AUTOCATASTROPHE -> {
@@ -300,14 +272,13 @@ class PressMainBtn:CmdCommitState {
 
                 MainButtonActionState.END_GAME -> {
                     Log.d("PressMainBtn", "end_game pressed")
-                    gameOver = true //TODO: remove if it is unnecessary
                 }
 
                 MainButtonActionState.CRASH -> {
                     throw RuntimeException("Crash state should not be accessible")
                 }
             }
-            selectedPlayers = ArrayList()
+            clearSelection()
             selectionMode = mainButtonActionState.requireNumber
         }
         return gameState

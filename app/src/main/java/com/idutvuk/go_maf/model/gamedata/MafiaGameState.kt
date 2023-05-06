@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
+import com.google.android.material.snackbar.Snackbar
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
 
 /**
@@ -7,11 +8,10 @@ import com.idutvuk.go_maf.ui.game.MainButtonActionState
  * It should contain all the information about game right now.
  */
 class MafiaGameState(
-    var numPlayers: Int = 10,
+    val numPlayers: Int = 10,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-
     var leaderVoteList: MutableSet<Player> = mutableSetOf(),
-    var gameOver: Boolean = false,
+    private var gameOver: Boolean = false,
 
     /**
      * ## passed nights + passed days + current phase.
@@ -51,12 +51,6 @@ class MafiaGameState(
     var cursor: Int = 0,
 
     /**
-     * Selected players is a selector of the voted players
-     * like cursor, but used when multiple players selected
-     */
-    var selectedPlayers: ArrayList<Int> = arrayListOf(),
-
-    /**
      * NONE - you can't select anyone
      * SINGLE - you can select someone, but only one person
      * MULTIPLE - you can select anyone you want
@@ -68,6 +62,7 @@ class MafiaGameState(
      */
     var selectionRequested: Boolean = false,
 
+    var snackbarMessage: String? = null,
     /**
      * changes heading on the top of the fragment
      */
@@ -85,10 +80,10 @@ class MafiaGameState(
     var mafiaMissStreak: Int = 0,
 
     /**
-     * true only at night if mafia kill was cancelled
+     * true only at night if mafia killByMafia was cancelled
      * used in skip night
      */
-    var isMafiaMissedToday: Boolean = false,
+    private var isMafiaMissedToday: Boolean = false,
     /**
      * toggles the timer (via LiveData)
      */
@@ -105,11 +100,35 @@ class MafiaGameState(
         return voteList.add(players[index])
     }
 
+    fun addToVoteList(): Boolean {
+        assert(selectedPlayers.size == 1)
+        return addToVoteList(selectedPlayers[0])
+    }
+
     fun clearVoteList() {
         voteList.clear()
     }
 
+    /**
+     * Selected players is a selector of the voted players
+     * like cursor, but used when multiple players selected
+     */
+    private val selectedPlayers: ArrayList<Int> = arrayListOf()
 
+    val selectedPlayersCopy: Set<Int>
+        get() = selectedPlayers.toSet()
+
+    fun togglePlayerSelection(index: Int) {
+        if (!selectedPlayers.contains(index)) {
+            selectedPlayers.add(index)
+        } else {
+            selectedPlayers.remove(index)
+        }
+    }
+
+    fun clearSelection() {
+        selectedPlayers.clear()
+    }
     fun livingPlayersCount(): Int {
         var livingPlayers = 0
         for (i in 0 until numPlayers) {
@@ -149,17 +168,32 @@ class MafiaGameState(
         return nextAlivePlayer(cursor + 1)
     }
 
-    fun failedKill() {
+    fun failedMafiaKill() {
         isMafiaMissedToday = true
-        if (++mafiaMissStreak>=3) gameOver = true
+        if (++mafiaMissStreak>=3) gameOver()
     }
 
-    //TODO: implement double, triple and more kill
-    fun kill(index: Int){
+    private fun gameOver() {
+        gameOver = true
+        mainButtonActionState = MainButtonActionState.END_GAME
+        delayedMainButtonActionState = MainButtonActionState.END_GAME //todo get rid of this stroke
+    }
+
+
+    private fun kill(index: Int) {
         players[index].alive = false
-        gameOver = false
         return //TODO: remove (early return only for the debug purposes!)
         updateGameOverState()
+    }
+
+    fun killByMafia(){
+        isMafiaMissedToday = false
+        mafiaMissStreak = 0
+        kill(selectedPlayers[0])
+    }
+
+    fun killInVote(index: Int) {
+        kill(index)
     }
 
     fun updateGameOverState() {
@@ -168,42 +202,39 @@ class MafiaGameState(
         for (i in 0 until numPlayers) {
             if (players[i].role.isRed) redCounter++ else blackCounter++
         }
-        if (redCounter <= blackCounter) gameOver = true //black wins
-        if (blackCounter <= 0) gameOver = true //red wins
-        gameOver = false //game continues
+        if (redCounter <= blackCounter) gameOver() //black wins
+        if (blackCounter <= 0) gameOver() //red wins
     }
 
-    fun checkDon(index: Int): Boolean {
-        return players[index].role == Role.SHR
+    fun checkDon(): Boolean {
+        assert(selectedPlayers.size == 1)
+        return players[selectedPlayers[0]].role == Role.SHR
     }
 
-    fun checkShr(index: Int): Boolean {
-        return players[index].role.isRed
+    fun checkShr(): Boolean {
+        assert(selectedPlayers.size == 1)
+        return players[selectedPlayers[0]].role.isRed
     }
 
-
+    fun skipNight() {
+        if (!isMafiaMissedToday) failedMafiaKill()
+        if (gameOver)
+            mainButtonActionState = MainButtonActionState.END_GAME
+        else {
+            isTimerActive = false
+            currentPhaseNumber++
+            descriptionText = currentPhaseNumber.toString()
+            time = GameTime.DAY
+            firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
+            cursor = firstSpokedPlayer
+            mainButtonActionState = MainButtonActionState.START_SPEECH
+        }
+    }
 
 
     override fun toString(): String {
         return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainButtonActionState=$mainButtonActionState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedMainButtonActionState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
     }
-
-//    override fun toString(): String {
-//        return "MafiaGameState(\n" +
-//                "numPlayers=$numPlayers, \n" +
-//                "players=${players.contentToString()}, \n" +
-//                "voteList=$voteList, \n" +
-//                "isOver=$gameOver, \n" +
-//                "time=$time, \n" +
-//                "is timer active = $isTimerActive, \n" +
-//                "mainButtonActionState=$mainButtonActionState, \n" +
-//                "previous mainButtonActionState=$delayedMainButtonActionState, \n" +
-//                "delayed mainButtonActionState=$delayedMainButtonActionState, \n" +
-//                "selected=$selectedPlayers, \n" +
-//                "headingText='$headingText, \n" +
-//                "descriptionText='$descriptionText\n" +
-//                ")"
-//    }
 }
 
 

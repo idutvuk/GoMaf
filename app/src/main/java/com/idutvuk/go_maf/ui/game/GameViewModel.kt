@@ -21,7 +21,7 @@ class GameViewModel : ViewModel() {
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
     private var gameState: MafiaGameState = MafiaGameState()
 
-    var nldSelectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
+    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
 
     val ldTime = MutableLiveData(GameTime.NIGHT)
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
@@ -35,6 +35,7 @@ class GameViewModel : ViewModel() {
     val ldDescription = MutableLiveData("Def text")
     val ldTimerActive = MutableLiveData(false)
     val ldCursor = MutableLiveData(0)
+    val ldSnackbarMessage: MutableLiveData<String> = MutableLiveData(null)
 
 
 
@@ -51,7 +52,7 @@ class GameViewModel : ViewModel() {
         with(gameState) {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
-            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayers.contains(it)})
+            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
             ldMainButtonState.value = mainButtonActionState
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
@@ -61,29 +62,27 @@ class GameViewModel : ViewModel() {
             ldDescription.value = descriptionText
             ldTimerActive.value = isTimerActive
             ldCursor.value = cursor
+            snackbarMessage?.let { ldSnackbarMessage.value = it }
 
-            nldSelectionMode = selectionMode
+            this@GameViewModel.selectionMode = selectionMode
         }
     }
 
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
         if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
-            gameState.selectedPlayers.add(clickedIndex)
+            gameState.togglePlayerSelection(clickedIndex)
             gameState = CmdManager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
             updateUiParams()
             return
         }
 
-        if (nldSelectionMode == PlayerSelectionMode.NONE) return
+        if (selectionMode == PlayerSelectionMode.NONE) return
 
         if (selectionState) {
-            gameState.selectedPlayers.remove(clickedIndex)
+            gameState.togglePlayerSelection(clickedIndex)
         } else {
-            if (nldSelectionMode == PlayerSelectionMode.SINGLE) {
-                gameState.selectedPlayers = arrayListOf(clickedIndex)
-            } else {
-                gameState.selectedPlayers.add(clickedIndex)
-            }
+            if (selectionMode == PlayerSelectionMode.SINGLE) gameState.clearSelection()
+            gameState.togglePlayerSelection(clickedIndex)
         }
 
         updateUiParams()

@@ -2,7 +2,6 @@ package com.idutvuk.go_maf.model.gamedata.commitstates
 
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.model.gamedata.Role
 import com.idutvuk.go_maf.ui.game.MainButtonActionState
 import java.lang.Error
 
@@ -21,25 +20,21 @@ class PressPlayerNumber:CmdCommitState {
             when (previousMainButtonActionState) {
                 MainButtonActionState.ADD_TO_VOTE -> {
                     Log.d("GameLog", "(CmdM) Added to vote")
-                    addToVoteList(selectedPlayers[0])
+                    addToVoteList()
                 }
 
                 MainButtonActionState.KILL -> {
+                    delayedMainButtonActionState = MainButtonActionState.CHECK_DON
                     mafiaMissStreak = 0
-                    kill(selectedPlayers[0])
-                    delayedMainButtonActionState =
-                        if (gameOver) MainButtonActionState.END_GAME
-                        else MainButtonActionState.CHECK_DON
+                    killByMafia()
                 }
 
                 MainButtonActionState.CHECK_DON -> {
-                    headingText = if (players[selectedPlayers[0]].role == Role.SHR) "shr" else "not shr"
-                    //TODO: change it to GUI response
+                    snackbarMessage =  if (checkDon()) "shr" else "not shr"
                 }
 
                 MainButtonActionState.CHECK_SHR -> {
-                    headingText = if (players[selectedPlayers[0]].role.isRed) "RED" else "BLACK"
-                    //TODO: change it to GUI response
+                    snackbarMessage = if (checkShr()) "RED" else "BLACK"
                 }
                 else -> throw Error(
                     "VM: clicked on a player button when number is requested\n" +
@@ -47,7 +42,7 @@ class PressPlayerNumber:CmdCommitState {
                 )
                 //TODO: add to vote on click
             }
-            selectedPlayers = ArrayList()
+            clearSelection()
             mainButtonActionState = delayedMainButtonActionState
         }
         return gameState
