@@ -195,7 +195,7 @@ class GameFragment : Fragment() {
             } else { //if pressed on night
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Are you really want to skip night?")
-                    .setMessage("This will skip:\nMafia killByMafia\nDon check\nSheriff check\nBest move")
+                    .setMessage("This will skip:\nMafia mafiaKill\nDon check\nSheriff check\nBest move")
                     .setPositiveButton("Skip") { _, which ->
                         viewModel.skipNight()
                     }

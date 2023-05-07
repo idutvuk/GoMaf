@@ -26,7 +26,7 @@ class GameViewModel : ViewModel() {
     val ldTime = MutableLiveData(GameTime.NIGHT)
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
     val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
-    val ldMainButtonState = MutableLiveData(MainButtonActionState.DEBUG)
+    val ldMainButtonState = MutableLiveData(MainBtnState.DEBUG)
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
@@ -44,7 +44,7 @@ class GameViewModel : ViewModel() {
      * TODO: implement 2-click logic & foul logic
      */
     fun onClickBtnMain() {
-//        gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
+//        gameState = CmdManager.pressMainBtn(gameState.mainBtnState)
         gameState = CmdManager.commit(CmdCommitType.PRESS_MAIN_BTN)
         updateUiParams()
     }
@@ -53,7 +53,7 @@ class GameViewModel : ViewModel() {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
             ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
-            ldMainButtonState.value = mainButtonActionState
+            ldMainButtonState.value = mainBtnState
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
@@ -69,7 +69,7 @@ class GameViewModel : ViewModel() {
     }
 
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
-        if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
+        if (gameState.mainBtnState == MainBtnState.WAITING_FOR_CLICK) {
             gameState.togglePlayerSelection(clickedIndex)
             gameState = CmdManager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
             updateUiParams()

@@ -1,7 +1,8 @@
 package com.idutvuk.go_maf.model.gamedata
 
-import com.google.android.material.snackbar.Snackbar
-import com.idutvuk.go_maf.ui.game.MainButtonActionState
+import android.util.Log
+import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.ui.game.MainBtnState.*
 
 /**
  * The state of a game.
@@ -29,9 +30,9 @@ class MafiaGameState(
     var time: GameTime = GameTime.NIGHT,
 
 
-    var mainButtonActionState: MainButtonActionState = MainButtonActionState.START_GAME,
-    var previousMainButtonActionState: MainButtonActionState = MainButtonActionState.CRASH,
-    var delayedMainButtonActionState: MainButtonActionState = MainButtonActionState.CRASH,
+    var mainBtnState: MainBtnState = START_GAME,
+    var previousMainButtonActionState: MainBtnState = CRASH,
+    var delayedBtnState: MainBtnState = CRASH,
 
     /**
      * if not empty, overwrites the main button text
@@ -80,7 +81,7 @@ class MafiaGameState(
     var mafiaMissStreak: Int = 0,
 
     /**
-     * true only at night if mafia killByMafia was cancelled
+     * true only at night if mafia mafiaKill was cancelled
      * used in skip night
      */
     private var isMafiaMissedToday: Boolean = false,
@@ -173,10 +174,16 @@ class MafiaGameState(
         if (++mafiaMissStreak>=3) gameOver()
     }
 
+    fun mafiaKill(){
+        isMafiaMissedToday = false
+        mafiaMissStreak = 0
+        kill(selectedPlayers[0])
+    }
+
     private fun gameOver() {
         gameOver = true
-        mainButtonActionState = MainButtonActionState.END_GAME
-        delayedMainButtonActionState = MainButtonActionState.END_GAME //todo get rid of this stroke
+        mainBtnState = END_GAME
+        delayedBtnState = END_GAME //todo get rid of this stroke
     }
 
 
@@ -186,13 +193,9 @@ class MafiaGameState(
         updateGameOverState()
     }
 
-    fun killByMafia(){
-        isMafiaMissedToday = false
-        mafiaMissStreak = 0
-        kill(selectedPlayers[0])
-    }
 
-    fun killInVote(index: Int) {
+
+    fun voteKill(index: Int) {
         kill(index)
     }
 
@@ -219,7 +222,7 @@ class MafiaGameState(
     fun skipNight() {
         if (!isMafiaMissedToday) failedMafiaKill()
         if (gameOver)
-            mainButtonActionState = MainButtonActionState.END_GAME
+            mainBtnState = END_GAME
         else {
             isTimerActive = false
             currentPhaseNumber++
@@ -227,13 +230,107 @@ class MafiaGameState(
             time = GameTime.DAY
             firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
             cursor = firstSpokedPlayer
-            mainButtonActionState = MainButtonActionState.START_SPEECH
+            mainBtnState = START_SPEECH
         }
     }
 
+    fun canDoBestMove() : Boolean {
+        if (isMafiaMissedToday) return false
+        if (currentPhaseNumber != 2) return false
+        return  livingPlayersCount() + 2 >= numPlayers
+    }
+
+    fun allPlayersSpoked() : Boolean {
+        assert(time == GameTime.DAY)
+        return nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer)
+    }
+
+    fun nextMainBtnState() {
+        if (mainBtnState != END_GAME) mainBtnState =
+             when (mainBtnState) {
+            NEXT -> delayedBtnState
+
+            DEBUG -> {
+                Log.d("GameLog","s")
+                START_GAME
+            }
+
+            START_GAME -> START_NIGHT
+
+            END_GAME -> END_GAME //todo something on the game end
+
+            START_VOTE -> if (voteListCopy.size == 1) START_SPEECH //last speech
+            else VOTE_FOR
+
+            START_DAY -> START_SPEECH
+
+            START_NIGHT -> if (currentPhaseNumber <= 1) START_MAFIA_SPEECH else MAFIA_KILL
+
+            START_SPEECH -> {
+                delayedBtnState = END_SPEECH
+                ADD_TO_VOTE
+            }
+
+            START_MAFIA_DEAD_SPEECH -> {
+                delayedBtnState = START_SPEECH
+                END_SPEECH
+            }
+
+            START_VOTE_DEAD_SPEECH -> END_SPEECH
+
+
+            END_SPEECH -> {
+                if (allPlayersSpoked()) START_SPEECH else START_VOTE
+            }
+
+            ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
+
+            VOTE_FOR -> TODO()
+
+            KILL_IN_VOTE -> START_VOTE_DEAD_SPEECH
+
+            AUTOCATASTROPHE -> TODO()
+
+            FINAL_VOTE -> TODO()
+
+            START_MAFIA_SPEECH -> {
+                delayedBtnState = CHECK_DON
+                NEXT
+            }
+
+            MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
+
+            CHECK_DON -> nextStateSingleClick(CHECK_SHR)
+
+            CHECK_SHR -> nextStateSingleClick(if(canDoBestMove()) BEST_MOVE else START_DAY)
+
+            BEST_MOVE -> START_DAY //todo waiting for click
+
+            WAITING_FOR_CLICK -> delayedBtnState
+
+            else -> CRASH
+        }
+
+
+    }
+
+
+    /**
+     * возвращает следующую фазу, если выделение игрока уже произошло.
+     * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
+     */
+    fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
+        assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
+        if(selectedPlayersCopy.size == 1) return nextPhase
+        delayedBtnState = nextPhase
+        previousMainButtonActionState = mainBtnState
+        return WAITING_FOR_CLICK
+    }
+
+
 
     override fun toString(): String {
-        return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainButtonActionState=$mainButtonActionState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedMainButtonActionState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
+        return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainBtnState=$mainBtnState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedBtnState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
     }
 }
 

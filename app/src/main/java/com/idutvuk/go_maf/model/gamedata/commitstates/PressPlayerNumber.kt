@@ -2,7 +2,7 @@ package com.idutvuk.go_maf.model.gamedata.commitstates
 
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.ui.game.MainButtonActionState
+import com.idutvuk.go_maf.ui.game.MainBtnState
 import java.lang.Error
 
 class PressPlayerNumber:CmdCommitState {
@@ -14,26 +14,26 @@ class PressPlayerNumber:CmdCommitState {
              * CHECK_DON
              * CHECK_SHR
              * ADD_TO_VOTE
-             * KILL
+             * MAFIA_KILL
              * TODO: FOUL (?)
              */
             when (previousMainButtonActionState) {
-                MainButtonActionState.ADD_TO_VOTE -> {
+                MainBtnState.ADD_TO_VOTE -> {
                     Log.d("GameLog", "(CmdM) Added to vote")
                     addToVoteList()
                 }
 
-                MainButtonActionState.KILL -> {
-                    delayedMainButtonActionState = MainButtonActionState.CHECK_DON
+                MainBtnState.MAFIA_KILL -> {
+                    delayedBtnState = MainBtnState.CHECK_DON
                     mafiaMissStreak = 0
-                    killByMafia()
+                    mafiaKill()
                 }
 
-                MainButtonActionState.CHECK_DON -> {
+                MainBtnState.CHECK_DON -> {
                     snackbarMessage =  if (checkDon()) "shr" else "not shr"
                 }
 
-                MainButtonActionState.CHECK_SHR -> {
+                MainBtnState.CHECK_SHR -> {
                     snackbarMessage = if (checkShr()) "RED" else "BLACK"
                 }
                 else -> throw Error(
@@ -43,7 +43,7 @@ class PressPlayerNumber:CmdCommitState {
                 //TODO: add to vote on click
             }
             clearSelection()
-            mainButtonActionState = delayedMainButtonActionState
+            mainBtnState = delayedBtnState
         }
         return gameState
     }

@@ -5,7 +5,7 @@ import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
 
 //TODO: add possibility to make any action in any time via holding the main button
-enum class MainButtonActionState(
+enum class MainBtnState(
     val text: String,
     val icon: Int = R.drawable.ic_debug,
     val requireNumber: PlayerSelectionMode //TODO: check for necessity
@@ -96,6 +96,22 @@ enum class MainButtonActionState(
     ),
 
     /**
+     * Player woke up and found himself dead
+     */
+    START_MAFIA_DEAD_SPEECH(
+        text = "Start last minute",
+        requireNumber = PlayerSelectionMode.NONE
+    ),
+
+    /**
+     * Killed in vote, last speech
+     */
+    START_VOTE_DEAD_SPEECH(
+        text = "Start last minute",
+        requireNumber = PlayerSelectionMode.NONE
+    ),
+
+    /**
      * Same as "next"
      * TODO: am I really need this?
      */
@@ -115,7 +131,7 @@ enum class MainButtonActionState(
 
     //vote actions
     /**
-     * Vote for killByMafia someone nominated to the elections
+     * Vote for mafiaKill someone nominated to the elections
      */
     @Deprecated("Currently under development")
     VOTE_FOR(
@@ -126,6 +142,7 @@ enum class MainButtonActionState(
     /**
      * Temporary state for killing exactly one person on the elections
      */
+    @Deprecated("it's debug and temporary state")
     KILL_IN_VOTE( //TODO: replace with @VOTE_FOR
         text = "Kill by vote",
         requireNumber = PlayerSelectionMode.SINGLE
@@ -159,16 +176,16 @@ enum class MainButtonActionState(
 
     /**
      * Kill a player by mafia after start of the night
-     * TODO: add hint: to not killByMafia press 'skip'
+     * TODO: add hint: to not mafiaKill press 'skip'
      */
-    KILL(
+    MAFIA_KILL(
         text = "Kill",
         icon = R.drawable.ic_gun_target,
         requireNumber = PlayerSelectionMode.SINGLE
     ),
 
     /**
-     * Check by don after mafia killByMafia at night
+     * Check by don after mafia mafiaKill at night
      */
     CHECK_DON(
         text = "Don check",
