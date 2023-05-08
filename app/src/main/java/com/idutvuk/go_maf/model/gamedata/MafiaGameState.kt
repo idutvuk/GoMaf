@@ -9,7 +9,7 @@ import com.idutvuk.go_maf.ui.game.MainBtnState.*
  * It should contain all the information about game right now.
  */
 class MafiaGameState(
-    val numPlayers: Int = 10,
+    val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
     var leaderVoteList: MutableSet<Player> = mutableSetOf(),
     private var gameOver: Boolean = false,
@@ -171,7 +171,7 @@ class MafiaGameState(
 
     fun failedMafiaKill() {
         isMafiaMissedToday = true
-        if (++mafiaMissStreak>=3) gameOver()
+        isGameOver()
     }
 
     fun mafiaKill(){
@@ -180,17 +180,11 @@ class MafiaGameState(
         kill(selectedPlayers[0])
     }
 
-    private fun gameOver() {
-        gameOver = true
-        mainBtnState = END_GAME
-        delayedBtnState = END_GAME //todo get rid of this stroke
-    }
-
 
     private fun kill(index: Int) {
         players[index].alive = false
         return //TODO: remove (early return only for the debug purposes!)
-        updateGameOverState()
+        gameOver = isGameOver()
     }
 
 
@@ -199,14 +193,23 @@ class MafiaGameState(
         kill(index)
     }
 
-    fun updateGameOverState() {
+    /**
+     * returns false if...
+     * ...there is no alive black players
+     * ...amount of alive black players is not less than amount of red players
+     * ...if mafia missed three times
+     */
+    fun isGameOver(): Boolean {
+        if (mafiaMissStreak >= 3) return true
         var redCounter = 0
         var blackCounter = 0
         for (i in 0 until numPlayers) {
-            if (players[i].role.isRed) redCounter++ else blackCounter++
+            if (players[i].alive)
+                if (players[i].role.isRed) redCounter++ else blackCounter++
         }
-        if (redCounter <= blackCounter) gameOver() //black wins
-        if (blackCounter <= 0) gameOver() //red wins
+        if (redCounter <= blackCounter) return true //black wins
+        if (blackCounter <= 0) return true //red wins
+        return false
     }
 
     fun checkDon(): Boolean {
@@ -246,7 +249,7 @@ class MafiaGameState(
     }
 
     fun nextMainBtnState() {
-        if (mainBtnState != END_GAME) mainBtnState =
+        if (!gameOver) mainBtnState =
              when (mainBtnState) {
             NEXT -> delayedBtnState
 
@@ -309,9 +312,7 @@ class MafiaGameState(
             WAITING_FOR_CLICK -> delayedBtnState
 
             else -> CRASH
-        }
-
-
+        } else END_GAME
     }
 
 

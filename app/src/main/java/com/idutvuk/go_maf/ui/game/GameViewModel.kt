@@ -19,7 +19,7 @@ class GameViewModel : ViewModel() {
     val gameMessages = MutableLiveData<List<GameMessage>>()
 
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
-    private var gameState: MafiaGameState = MafiaGameState()
+    private lateinit var gameState: MafiaGameState
 
     var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
 
