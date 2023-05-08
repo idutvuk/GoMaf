@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
 import com.idutvuk.go_maf.model.GameMessage
@@ -194,7 +195,7 @@ class GameFragment : Fragment() {
             } else { //if pressed on night
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Are you really want to skip night?")
-                    .setMessage("This will skip:\nMafia kill\nDon check\nSheriff check\nBest move")
+                    .setMessage("This will skip:\nMafia mafiaKill\nDon check\nSheriff check\nBest move")
                     .setPositiveButton("Skip") { _, which ->
                         viewModel.skipNight()
                     }
@@ -202,6 +203,10 @@ class GameFragment : Fragment() {
                     }
                     .show()
             }
+        }
+
+        viewModel.ldSnackbarMessage.observe(viewLifecycleOwner) {
+            Snackbar.make(b.topAppBar,it,Snackbar.LENGTH_SHORT).show()
         }
 
         b.bottomSheetLayout.btnPause.setOnClickListener {

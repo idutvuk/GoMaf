@@ -8,6 +8,7 @@ import android.util.Log
  */
 @Deprecated("Use the GameState")
 object Game {
+    @Deprecated("Use CmdManager")
     var numPlayers = -1
         set(value) {
             if (numPlayers ==-1) {
@@ -17,5 +18,5 @@ object Game {
                 Log.e("GameLog","Attempt to overwrite numPlayers aborted")
             }
         }
-    //TODO: Make ghost games possible
+
 }

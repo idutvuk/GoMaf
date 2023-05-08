@@ -3,6 +3,7 @@ package com.idutvuk.go_maf.ui.game
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.idutvuk.go_maf.model.CmdCommitType
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.GameMessage
@@ -18,14 +19,14 @@ class GameViewModel : ViewModel() {
     val gameMessages = MutableLiveData<List<GameMessage>>()
 
     //Объявляю LiveData, содержащую в себе Int внутри ViewModel
-    private var gameState: MafiaGameState = MafiaGameState()
+    private lateinit var gameState: MafiaGameState
 
-    var nldSelectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
+    var selectionMode: PlayerSelectionMode = PlayerSelectionMode.NONE //TODO: name it good but not "notLiveData..."
 
     val ldTime = MutableLiveData(GameTime.NIGHT)
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
     val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
-    val ldMainButtonState = MutableLiveData(MainButtonActionState.DEBUG)
+    val ldMainButtonState = MutableLiveData(MainBtnState.DEBUG)
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
@@ -34,6 +35,7 @@ class GameViewModel : ViewModel() {
     val ldDescription = MutableLiveData("Def text")
     val ldTimerActive = MutableLiveData(false)
     val ldCursor = MutableLiveData(0)
+    val ldSnackbarMessage: MutableLiveData<String> = MutableLiveData(null)
 
 
 
@@ -42,58 +44,57 @@ class GameViewModel : ViewModel() {
      * TODO: implement 2-click logic & foul logic
      */
     fun onClickBtnMain() {
-        gameState = CmdManager.pressMainBtn(gameState.mainButtonActionState)
+//        gameState = CmdManager.pressMainBtn(gameState.mainBtnState)
+        gameState = CmdManager.commit(CmdCommitType.PRESS_MAIN_BTN)
         updateUiParams()
     }
     private fun updateUiParams() {
         with(gameState) {
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
-            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayers.contains(it)})
-            ldMainButtonState.value = mainButtonActionState
+            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
+            ldMainButtonState.value = mainBtnState
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
-            ldVoteList.value = voteList
+            ldVoteList.value = voteListCopy
             ldHeading.value = headingText
             ldDescription.value = descriptionText
             ldTimerActive.value = isTimerActive
             ldCursor.value = cursor
+            snackbarMessage?.let { ldSnackbarMessage.value = it }
 
-            nldSelectionMode = selectionMode
+            this@GameViewModel.selectionMode = selectionMode
         }
     }
 
     fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
-        if (gameState.mainButtonActionState == MainButtonActionState.WAITING_FOR_CLICK) {
-            gameState.selectedPlayers.add(clickedIndex)
-            gameState = CmdManager.pressPlayerNumber(gameState.previousMainButtonActionState)
+        if (gameState.mainBtnState == MainBtnState.WAITING_FOR_CLICK) {
+            gameState.togglePlayerSelection(clickedIndex)
+            gameState = CmdManager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
             updateUiParams()
             return
         }
 
-        if (nldSelectionMode == PlayerSelectionMode.NONE) return
+        if (selectionMode == PlayerSelectionMode.NONE) return
 
         if (selectionState) {
-            gameState.selectedPlayers.remove(clickedIndex)
+            gameState.togglePlayerSelection(clickedIndex)
         } else {
-            if (nldSelectionMode == PlayerSelectionMode.SINGLE) {
-                gameState.selectedPlayers = arrayListOf(clickedIndex)
-            } else {
-                gameState.selectedPlayers.add(clickedIndex)
-            }
+            if (selectionMode == PlayerSelectionMode.SINGLE) gameState.clearSelection()
+            gameState.togglePlayerSelection(clickedIndex)
         }
 
         updateUiParams()
     }
 
     fun skipNight() {
-        gameState = CmdManager.skipNight()
+        gameState = CmdManager.commit(CmdCommitType.SKIP_NIGHT)
         updateUiParams()
     }
 
     fun skipDay() {
-        gameState = CmdManager.skipDay()
+        gameState = CmdManager.commit(CmdCommitType.SKIP_DAY)
         updateUiParams()
     }
 
