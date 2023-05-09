@@ -11,7 +11,13 @@ import com.idutvuk.go_maf.ui.game.MainBtnState.*
 class MafiaGameState(
     val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-    var leaderVoteList: MutableSet<Player> = mutableSetOf(),
+//    var leaderVoteList: MutableSet<Int> = mutableSetOf(),
+    /**
+     * Queue of players wanting to speak
+     * used in vote dead speeches
+     * ...or vote before-dead speeches
+     */
+    var speakQueue: MutableSet<Int>? = null,
     private var gameOver: Boolean = false,
 
     /**
@@ -67,12 +73,12 @@ class MafiaGameState(
     /**
      * changes heading on the top of the fragment
      */
-    var headingText: String = "Default heading",
+    var primaryMessage: String = "Default heading",
 
     /**
      * changes description on the top of the fragment
      */
-    var descriptionText: String = "Default description",
+    var secondaryMessage: String = "Default description",
 
     /**
      * if mafia missed three times, game ends
@@ -89,16 +95,15 @@ class MafiaGameState(
      * toggles the timer (via LiveData)
      */
     var isTimerActive: Boolean = false,
-    ) {
+) {
 
+    private var voteList: MutableSet<Int> = mutableSetOf()
 
-    private var voteList: MutableSet<Player> = mutableSetOf()
-
-    val voteListCopy: Set<Player>
+    val voteListCopy: Set<Int>
         get() = voteList.toSet()
 
     fun addToVoteList(index: Int): Boolean {
-        return voteList.add(players[index])
+        return voteList.add(index)
     }
 
     fun addToVoteList(): Boolean {
@@ -130,6 +135,7 @@ class MafiaGameState(
     fun clearSelection() {
         selectedPlayers.clear()
     }
+
     fun livingPlayersCount(): Int {
         var livingPlayers = 0
         for (i in 0 until numPlayers) {
@@ -158,7 +164,7 @@ class MafiaGameState(
     fun nextAlivePlayer(cursor: Int): Int {
         //check for alive players:
         val livingPlayers = livingPlayersCount()
-        assert(livingPlayers>1)
+        assert(livingPlayers > 1)
         //if reached the end
         if (cursor >= numPlayers - 1) return nextAlivePlayer(-1)
 
@@ -174,19 +180,17 @@ class MafiaGameState(
         isGameOver()
     }
 
-    fun mafiaKill(){
+    fun mafiaKill() {
         isMafiaMissedToday = false
         mafiaMissStreak = 0
         kill(selectedPlayers[0])
     }
 
 
-    private fun kill(index: Int) {
-        players[index].alive = false
-        return //TODO: remove (early return only for the debug purposes!)
+    private fun kill(i: Int) {
+        players[i].alive = false
         gameOver = isGameOver()
     }
-
 
 
     fun voteKill(index: Int) {
@@ -229,7 +233,7 @@ class MafiaGameState(
         else {
             isTimerActive = false
             currentPhaseNumber++
-            descriptionText = currentPhaseNumber.toString()
+            secondaryMessage = currentPhaseNumber.toString()
             time = GameTime.DAY
             firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
             cursor = firstSpokedPlayer
@@ -237,24 +241,103 @@ class MafiaGameState(
         }
     }
 
-    fun canDoBestMove() : Boolean {
+    fun canDoBestMove(): Boolean {
         if (isMafiaMissedToday) return false
         if (currentPhaseNumber != 2) return false
-        return  livingPlayersCount() + 2 >= numPlayers
+        return livingPlayersCount() + 2 >= numPlayers
     }
 
-    fun allPlayersSpoked() : Boolean {
+    fun allPlayersSpoked(): Boolean {
         assert(time == GameTime.DAY)
         return nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer)
     }
 
-    fun nextMainBtnState() {
-        if (!gameOver) mainBtnState =
-             when (mainBtnState) {
+    /**
+     *
+     * adds selected players to the vote
+     * disables the selected players
+     *
+     */
+//    fun voteFor() {
+//        for (i in 0 until voteList.size) {
+//            if (i != voteList.size - 1) { //last player remaining
+//                for (voter in players) {
+//                    if (!voter.alive) continue
+//                    if (!voter.voted) players[voteList.last()].votedPlayers!!.add(voter) //add non-voted players
+//
+//                    //back enabling all the players
+//                    voter.isEnabled = true
+//                    voter.voted = false
+//                                }
+//            } else if (players[voteList.elementAt(i)].votedPlayers == null) { //player was not voted
+//                players[voteList.elementAt(i)].votedPlayers = mutableSetOf()
+//                for (voter in selectedPlayers) {
+//                    players[voteListCopy.elementAt(i)].votedPlayers!!.add(players[voter])
+//                    players[voter].voted = true
+//                    players[voter].isEnabled = false
+//                }
+//                break
+//            }
+//        }  //all players voted
+//    }
+
+    fun voteForActive() {
+        Log.d("GameLog", "cursor: $cursor, vote list: $voteList")
+        assert(cursor in voteListCopy)
+        players[cursor].votedPlayers = selectedPlayers.toMutableSet()
+    }
+
+    /**
+     * calculates new leader voteList and can auto-catastrophe happen or not
+     */
+    fun checkAutoCatastrophe(): Boolean {
+        assert(voteList.isNotEmpty())
+        val newVoteList = mutableSetOf<Int>()
+        var leaderScore = 0
+        var canAutoCatastropheHappen = false
+        for (i in voteList) {
+            val count = players[i].votedPlayers!!.size
+            if (count < leaderScore) {
+
+            } else if (count == leaderScore) {
+                newVoteList.add(i)
+                canAutoCatastropheHappen = true
+            } else {
+                canAutoCatastropheHappen = false
+                leaderScore = count
+                newVoteList.clear()
+                newVoteList.add(i)
+            }
+    }
+    voteList = newVoteList
+    return canAutoCatastropheHappen
+}
+
+
+/**
+ * marks selected players as voters
+ * for killing all the people
+ *
+ * if voted for killing all the people...
+ * ...adds players to the final speech
+ *
+ * returns...
+ * ...TRUE if all killed
+ * ...FALSE if all alive
+ */
+fun finalVote(): Boolean =
+    if (selectedPlayers.size > numPlayers / 2) { //all vote leaders leaving
+        speakQueue = selectedPlayers.toMutableSet()
+        true
+    } else false //all vote leaders remaining
+
+fun nextMainBtnState() {
+    if (!gameOver) mainBtnState =
+        when (mainBtnState) {
             NEXT -> delayedBtnState
 
             DEBUG -> {
-                Log.d("GameLog","s")
+                Log.d("GameLog", "s")
                 START_GAME
             }
 
@@ -270,31 +353,34 @@ class MafiaGameState(
             START_NIGHT -> if (currentPhaseNumber <= 1) START_MAFIA_SPEECH else MAFIA_KILL
 
             START_SPEECH -> {
-                delayedBtnState = END_SPEECH
-                ADD_TO_VOTE
+                if (speakQueue != null) END_SPEECH
+                else {
+                    delayedBtnState = END_SPEECH
+                    ADD_TO_VOTE
+                }
             }
 
-            START_MAFIA_DEAD_SPEECH -> {
-                delayedBtnState = START_SPEECH
-                END_SPEECH
-            }
-
-            START_VOTE_DEAD_SPEECH -> END_SPEECH
-
-
-            END_SPEECH -> {
-                if (allPlayersSpoked()) START_SPEECH else START_VOTE
-            }
+            END_SPEECH -> if (allPlayersSpoked()) START_SPEECH else START_VOTE
 
             ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
 
-            VOTE_FOR -> TODO()
+            VOTE_FOR -> {
+                if (voteList.indexOf(cursor) == voteList.size - 1) { // if last
+                    START_SPEECH
+                }
+                    VOTE_FOR
+            }
 
-            KILL_IN_VOTE -> START_VOTE_DEAD_SPEECH
+            KILL_IN_VOTE -> TODO()
 
-            AUTOCATASTROPHE -> TODO()
-
-            FINAL_VOTE -> TODO()
+            FINAL_VOTE -> {
+                if (speakQueue!!.size != 0) {
+                    cursor = speakQueue!!.first()
+                    START_SPEECH
+                } else {
+                    START_NIGHT
+                }
+            }
 
             START_MAFIA_SPEECH -> {
                 delayedBtnState = CHECK_DON
@@ -305,7 +391,7 @@ class MafiaGameState(
 
             CHECK_DON -> nextStateSingleClick(CHECK_SHR)
 
-            CHECK_SHR -> nextStateSingleClick(if(canDoBestMove()) BEST_MOVE else START_DAY)
+            CHECK_SHR -> nextStateSingleClick(if (canDoBestMove()) BEST_MOVE else START_DAY)
 
             BEST_MOVE -> START_DAY //todo waiting for click
 
@@ -313,26 +399,25 @@ class MafiaGameState(
 
             else -> CRASH
         } else END_GAME
-    }
+}
 
 
-    /**
-     * возвращает следующую фазу, если выделение игрока уже произошло.
-     * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
-     */
-    fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
-        assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
-        if(selectedPlayersCopy.size == 1) return nextPhase
-        delayedBtnState = nextPhase
-        previousMainButtonActionState = mainBtnState
-        return WAITING_FOR_CLICK
-    }
+/**
+ * возвращает следующую фазу, если выделение игрока уже произошло.
+ * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
+ */
+fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
+    assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
+    if (selectedPlayersCopy.size == 1) return nextPhase
+    delayedBtnState = nextPhase
+    previousMainButtonActionState = mainBtnState
+    return WAITING_FOR_CLICK
+}
 
 
-
-    override fun toString(): String {
-        return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, leaderVoteList=$leaderVoteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainBtnState=$mainBtnState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedBtnState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, headingText='$headingText', descriptionText='$descriptionText', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
-    }
+override fun toString(): String {
+    return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainBtnState=$mainBtnState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedBtnState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, primaryMessage='$primaryMessage', secondaryMessage='$secondaryMessage', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
+}
 }
 
 

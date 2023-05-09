@@ -162,18 +162,16 @@ class GameFragment : Fragment() {
         b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
 
-        b.fabPeep.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                for (i in 0 until Game.numPlayers)
-                    buttons[i].text = viewModel.getEmoji(i)
-                view.performClick()
-            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+        b.fabPeep.setOnClickListener {
+            if (buttons[0].text != "  0  ") {
                 for (i in 0 until Game.numPlayers)
                     buttons[i].text = "  $i  " //TODO: replace to (i + 1)
-                view.performClick()
+            } else {
+                for (i in 0 until Game.numPlayers)
+                    buttons[i].text = " ${viewModel.getEmoji(i)} "
             }
-            false
         }
+
 
 
         //TODO: uncomment

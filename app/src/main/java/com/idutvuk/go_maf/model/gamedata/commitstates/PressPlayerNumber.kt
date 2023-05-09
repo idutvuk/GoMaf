@@ -43,7 +43,7 @@ class PressPlayerNumber:CmdCommitState {
                 //TODO: add to vote on click
             }
             clearSelection()
-            mainBtnState = delayedBtnState
+//            mainBtnState = delayedBtnState
         }
         return gameState
     }

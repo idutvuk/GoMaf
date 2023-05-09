@@ -30,7 +30,7 @@ class GameViewModel : ViewModel() {
     val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
-    val ldVoteList = MutableLiveData<Set<Player>>()
+    val ldVoteList = MutableLiveData<String>()
     val ldHeading = MutableLiveData("Def heading")
     val ldDescription = MutableLiveData("Def text")
     val ldTimerActive = MutableLiveData(false)
@@ -49,7 +49,13 @@ class GameViewModel : ViewModel() {
         updateUiParams()
     }
     private fun updateUiParams() {
+
         with(gameState) {
+            var votelistString = ""
+            for (i in voteListCopy)
+                votelistString += i.toString()
+            ldVoteList.value = votelistString
+
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
             ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
@@ -57,9 +63,8 @@ class GameViewModel : ViewModel() {
             ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
-            ldVoteList.value = voteListCopy
-            ldHeading.value = headingText
-            ldDescription.value = descriptionText
+            ldHeading.value = primaryMessage
+            ldDescription.value = secondaryMessage
             ldTimerActive.value = isTimerActive
             ldCursor.value = cursor
             snackbarMessage?.let { ldSnackbarMessage.value = it }

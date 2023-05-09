@@ -95,21 +95,21 @@ enum class MainBtnState(
         requireNumber = PlayerSelectionMode.NONE
     ),
 
-    /**
-     * Player woke up and found himself dead
-     */
-    START_MAFIA_DEAD_SPEECH(
-        text = "Start last minute",
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+//    /**
+//     * Player woke up and found himself dead
+//     */
+//    START_MAFIA_DEAD_SPEECH(
+//        text = "Start last minute",
+//        requireNumber = PlayerSelectionMode.NONE
+//    ),
 
-    /**
-     * Killed in vote, last speech
-     */
-    START_VOTE_DEAD_SPEECH(
-        text = "Start last minute",
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+//    /**
+//     * Killed in vote, last speech
+//     */
+//    START_VOTE_DEAD_SPEECH(
+//        text = "Start last minute",
+//        requireNumber = PlayerSelectionMode.NONE
+//    ),
 
     /**
      * Same as "next"
@@ -146,14 +146,6 @@ enum class MainBtnState(
     KILL_IN_VOTE( //TODO: replace with @VOTE_FOR
         text = "Kill by vote",
         requireNumber = PlayerSelectionMode.SINGLE
-    ),
-
-    /**
-     * Rerun the elections lap after auto-catastrophe
-     */
-    AUTOCATASTROPHE(
-        text = "Re-vote",
-        requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
     /**

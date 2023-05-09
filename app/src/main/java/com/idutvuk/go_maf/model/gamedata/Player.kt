@@ -19,7 +19,7 @@ class Player(
      * Null - Player was not voted
      * Empty set - Player was voted with 0 popularity
      */
-    var votedPlayers: MutableSet<Player>? = null
+    var votedPlayers: MutableSet<Int>? = null
 //    val isGhost: Boolean = false //TODO: add ghost logic
 ) {
     var alive = true

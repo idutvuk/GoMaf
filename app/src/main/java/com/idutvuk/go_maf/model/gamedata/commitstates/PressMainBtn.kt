@@ -5,7 +5,6 @@ import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
-import com.idutvuk.go_maf.ui.game.MainBtnState
 import com.idutvuk.go_maf.ui.game.MainBtnState.*
 import java.lang.RuntimeException
 
@@ -18,8 +17,9 @@ class PressMainBtn:CmdCommitState {
         with(gameState) {
             when (mainBtnState) {
                 START_NIGHT -> {
+                    speakQueue = null
                     currentPhaseNumber++
-                    descriptionText = "phase: $currentPhaseNumber"
+                    secondaryMessage = "phase: $currentPhaseNumber"
                     time = GameTime.NIGHT
                 }
 
@@ -34,16 +34,14 @@ class PressMainBtn:CmdCommitState {
                     }
                 }
 
-
                 CHECK_DON -> {
                     if (currentPhaseNumber != 0) {
                         if (selectedPlayersCopy.isNotEmpty()) {
                             mainBtnState = CHECK_SHR
-                            headingText = if (checkDon()) "shr" else "not shr"
+                            primaryMessage = if (checkDon()) "shr" else "not shr"
                         }
                     }
                 }
-
 
                 CHECK_SHR -> {
 
@@ -59,7 +57,7 @@ class PressMainBtn:CmdCommitState {
 
 
                         if (selectedPlayersCopy.isNotEmpty()) {
-                            headingText = if (checkShr()) "red" else "black"
+                            primaryMessage = if (checkShr()) "red" else "black"
                         }
                     }
                 }
@@ -105,7 +103,7 @@ class PressMainBtn:CmdCommitState {
 
                 START_DAY -> {
                     currentPhaseNumber++
-                    descriptionText = currentPhaseNumber.toString()
+                    secondaryMessage = currentPhaseNumber.toString()
                     time = GameTime.DAY
                     firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
                     cursor = firstSpokedPlayer
@@ -113,9 +111,9 @@ class PressMainBtn:CmdCommitState {
 
 
                 START_SPEECH -> {
-                        selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
-                        isTimerActive = true
-                        Log.d("GameLog", "Speech started. Cursor: $cursor")
+                    selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
+                    isTimerActive = true
+                    Log.d("GameLog", "Speech started. Cursor: $cursor")
                 }
 
                 ADD_TO_VOTE -> {
@@ -127,15 +125,19 @@ class PressMainBtn:CmdCommitState {
 
                 END_SPEECH -> {
                     isTimerActive = false
-                    if (nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer))
-                        cursor = nextAlivePlayer(cursor)
-                    else
-                        Log.i("GameLog", "(CmdM) all players spoke")
-
+                    if (speakQueue == null) {
+                        if (nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer))
+                            cursor = nextAlivePlayer(cursor)
+                        else
+                            Log.i("GameLog", "(CmdM) all players spoke")
+                    } else {
+                        voteKill(cursor)
+                        speakQueue!!.remove(0)
+                        cursor = speakQueue!!.first()
+                    }
                 }
 
                 START_VOTE -> {
-
                     when(voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
                         0 -> {
                             snackbarMessage = "Vote skipped (nobody was elected)"
@@ -144,12 +146,13 @@ class PressMainBtn:CmdCommitState {
                             if (currentPhaseNumber == 2) {//if today is first day
                                 snackbarMessage = "Vote skipped (only one was elected at the first day)"
                             } else {
-                                cursor = voteListCopy.first().number
+                                cursor = voteListCopy.first()
                                 delayedBtnState= START_NIGHT
                                 voteKill(cursor)
                             }
                         }
                         else -> {
+                            cursor = voteListCopy.first()
                             mainButtonOverwriteString = "vote for #${voteListCopy.first()}"
                             selectionMode = PlayerSelectionMode.MULTIPLE
                         }
@@ -157,48 +160,20 @@ class PressMainBtn:CmdCommitState {
                 }
 
                 VOTE_FOR -> {
-                    mainButtonOverwriteString = "vote for #${voteListCopy.first()}"
-                    for (i in 0 until voteListCopy.size) {
-                        if (i == voteListCopy.size - 1) { //last player remaining
-                            for (player in players) {
-                                if (player.alive && !player.voted) {
-                                    voteListCopy.last().votedPlayers!!.add(player)
-                                }
-                            }
-                        } else if (voteListCopy.elementAt(i).votedPlayers == null) { //player was not voted
-                            voteListCopy.elementAt(i).votedPlayers = mutableSetOf()
-                            for (voter in selectedPlayersCopy) { //TODO: add selection
-                                voteListCopy.elementAt(i).votedPlayers!!.add(players[voter])
-                                players[voter].voted = true
-                            }
-                            break
-                        }
-                    }  //all players voted
-                    var maxVotes = 0
-                    for (candidate in voteListCopy) {
-                        val popularity = candidate.votedPlayers!!.size
-                        leaderVoteList = mutableSetOf(candidate)
-                        if (popularity > maxVotes) {
-                            maxVotes = popularity
-                            leaderVoteList = mutableSetOf(candidate)
-                        } else if(popularity == maxVotes) {
-                            leaderVoteList.add(candidate)
-                        }
-                    }
-                    mainBtnState = AUTOCATASTROPHE
-                    if (leaderVoteList.size == 1) {}
-                        voteKill(leaderVoteList.first().number)
+                    voteForActive()
+                    if (voteListCopy.indexOf(cursor) != voteListCopy.size - 1)
+                        cursor = voteListCopy.elementAt(voteListCopy.indexOf(cursor) + 1) // going to the next value
+
                 }
 
                 KILL_IN_VOTE -> {
-                    mainBtnState = START_NIGHT
                     voteKill(cursor)
                     Log.i("GameLog", "Player $cursor was killed in the vote")
                 }
 
-                AUTOCATASTROPHE -> TODO()
-
-                FINAL_VOTE -> TODO()
+                FINAL_VOTE ->  {
+                    finalVote()
+                }
 
 
                 END_GAME -> {}
@@ -206,9 +181,6 @@ class PressMainBtn:CmdCommitState {
                 CRASH -> {
                     throw RuntimeException("Crash state should not be accessible")
                 }
-
-                START_MAFIA_DEAD_SPEECH -> TODO()
-                START_VOTE_DEAD_SPEECH -> TODO()
             }
             clearSelection()
             selectionMode = mainBtnState.requireNumber
