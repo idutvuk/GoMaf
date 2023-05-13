@@ -53,7 +53,7 @@ class GameViewModel : ViewModel() {
         with(gameState) {
             var votelistString = ""
             for (i in voteListCopy)
-                votelistString += i.toString()
+                votelistString += "$i, "
             ldVoteList.value = votelistString
 
             ldTime.value = time
@@ -105,6 +105,15 @@ class GameViewModel : ViewModel() {
 
     fun getEmoji(i: Int): CharSequence {
         return gameState.players[i].emoji
+    }
+
+    fun printExtendedVoteList() {
+        var msg = ""
+        for (i in gameState.voteListCopy) {
+            msg += "$i -> voted: ${gameState.players[i].voted}, ${gameState.players[i].votedPlayers}\n"
+        }
+        gameState.snackbarMessage = msg
+        updateUiParams()
     }
 
 }

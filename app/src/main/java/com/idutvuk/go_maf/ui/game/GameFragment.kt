@@ -129,7 +129,7 @@ class GameFragment : Fragment() {
             Log.d("GameLog", "(GameFragment) main button changed in the UI to the $it")
             with(b.bottomSheetLayout.btnMain) {
                 val tmp = viewModel.ldMainButtonOverwriteString.value
-                text = if (!tmp.isNullOrEmpty()) it.text + tmp else it.text
+                text = if (!tmp.isNullOrEmpty()) tmp else it.text
                 viewModel.ldMainButtonOverwriteString.value = ""
                 setCompoundDrawablesWithIntrinsicBounds(it.icon, 0, 0, 0)
             }
@@ -226,7 +226,7 @@ class GameFragment : Fragment() {
         }
 
         b.fabDebug.setOnClickListener {
-            pointArrowOnPlayer(7)
+            viewModel.printExtendedVoteList()
         }
 
         //TODO: make GameFragment readable
