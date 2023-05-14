@@ -112,12 +112,6 @@
         android:layout_gravity="center"
         android:src="@drawable/ic_debug"
         android:contentDescription="@string/debug_test"/>
-    <ImageButton
-        android:id="@+id/ibDayTime"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_moon"/>
     <Button
         style="@style/bottom_icon_button"
         android:id="@+id/iconButton"

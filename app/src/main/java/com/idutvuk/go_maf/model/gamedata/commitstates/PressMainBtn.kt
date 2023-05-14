@@ -17,6 +17,7 @@ class PressMainBtn:CmdCommitState {
         with(gameState) {
             when (mainBtnState) {
                 START_NIGHT -> {
+                    clearVoteList()
                     speakQueue = null
                     currentPhaseNumber++
                     secondaryMessage = "phase: $currentPhaseNumber"
@@ -126,14 +127,12 @@ class PressMainBtn:CmdCommitState {
                 END_SPEECH -> {
                     isTimerActive = false
                     if (speakQueue == null) {
-                        if (nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer))
-                            cursor = nextAlivePlayer(cursor)
-                        else
-                            Log.i("GameLog", "(CmdM) all players spoke")
+                        cursor = nextAlivePlayer(cursor)
                     } else {
+                        assert(!speakQueue.isNullOrEmpty()) //its not empty
                         voteKill(cursor)
-                        speakQueue!!.remove(0)
-                        cursor = speakQueue!!.first()
+                        cursor = speakQueue!!.last()
+                        speakQueue!!.removeLast()
                     }
                 }
 
@@ -144,37 +143,24 @@ class PressMainBtn:CmdCommitState {
                         }
                         1 -> {
                             if (currentPhaseNumber == 2) {//if today is first day
-                                snackbarMessage = "Vote skipped (only one was elected at the first day)"
+                                snackbarMessage = "Vote skipped (only one player was elected at the first day)"
                             } else {
                                 cursor = voteListCopy.first()
                                 delayedBtnState= START_NIGHT
+                                speakQueue = arrayListOf(cursor)
                                 voteKill(cursor)
                             }
                         }
-                        else -> {
-                            cursor = voteListCopy.first()
-                            mainButtonOverwriteString = "vote for #${voteListCopy.first()}"
-                            selectionMode = PlayerSelectionMode.MULTIPLE
-                        }
+                        else -> {}
                     }
                 }
 
-                VOTE_FOR -> {
-                    voteForActive()
-                    if (voteListCopy.indexOf(cursor) != voteListCopy.size - 1)
-                        cursor = voteListCopy.elementAt(voteListCopy.indexOf(cursor) + 1) // going to the next value
-
+                KILL_IN_VOTE -> for (preyIndex in selectedPlayersCopy) {
+//                    voteKill(preyIndex)
+                    if (speakQueue.isNullOrEmpty()) speakQueue = arrayListOf(preyIndex)
+                    else speakQueue!!.add(preyIndex)
+                    cursor = selectedPlayersCopy.elementAt(0)
                 }
-
-                KILL_IN_VOTE -> {
-                    voteKill(cursor)
-                    Log.i("GameLog", "Player $cursor was killed in the vote")
-                }
-
-                FINAL_VOTE ->  {
-                    finalVote()
-                }
-
 
                 END_GAME -> {}
 

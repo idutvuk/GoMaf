@@ -95,22 +95,6 @@ enum class MainBtnState(
         requireNumber = PlayerSelectionMode.NONE
     ),
 
-//    /**
-//     * Player woke up and found himself dead
-//     */
-//    START_MAFIA_DEAD_SPEECH(
-//        text = "Start last minute",
-//        requireNumber = PlayerSelectionMode.NONE
-//    ),
-
-//    /**
-//     * Killed in vote, last speech
-//     */
-//    START_VOTE_DEAD_SPEECH(
-//        text = "Start last minute",
-//        requireNumber = PlayerSelectionMode.NONE
-//    ),
-
     /**
      * Same as "next"
      * TODO: am I really need this?
@@ -129,30 +113,11 @@ enum class MainBtnState(
         requireNumber = PlayerSelectionMode.SINGLE
     ),
 
-    //vote actions
-    /**
-     * Vote for mafiaKill someone nominated to the elections
-     */
-    @Deprecated("Currently under development")
-    VOTE_FOR(
-        text = "THIS NOT SHOULD BE READABLE",
-        requireNumber = PlayerSelectionMode.MULTIPLE
-    ),
-
     /**
      * Temporary state for killing exactly one person on the elections
      */
-    @Deprecated("it's debug and temporary state")
-    KILL_IN_VOTE( //TODO: replace with @VOTE_FOR
+    KILL_IN_VOTE(
         text = "Kill by vote",
-        requireNumber = PlayerSelectionMode.SINGLE
-    ),
-
-    /**
-     * Rerun the elections to the final time
-     */
-    FINAL_VOTE( //TODO: change the @text
-        text = "Final vote",
         requireNumber = PlayerSelectionMode.MULTIPLE
     ),
 
@@ -208,10 +173,5 @@ enum class MainBtnState(
     WAITING_FOR_CLICK(
         text = "Cancel",
         requireNumber = PlayerSelectionMode.NONE
-    );
-
-    constructor(nominee: String) : this(
-        text = "Vote for $nominee",
-        requireNumber = PlayerSelectionMode.SINGLE
     )
 }

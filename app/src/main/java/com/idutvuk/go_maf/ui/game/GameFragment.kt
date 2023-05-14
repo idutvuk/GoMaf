@@ -128,9 +128,7 @@ class GameFragment : Fragment() {
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
             Log.d("GameLog", "(GameFragment) main button changed in the UI to the $it")
             with(b.bottomSheetLayout.btnMain) {
-                val tmp = viewModel.ldMainButtonOverwriteString.value
-                text = if (!tmp.isNullOrEmpty()) tmp else it.text
-                viewModel.ldMainButtonOverwriteString.value = ""
+                text = it.text
                 setCompoundDrawablesWithIntrinsicBounds(it.icon, 0, 0, 0)
             }
         }
@@ -224,12 +222,6 @@ class GameFragment : Fragment() {
         b.bottomSheetLayout.btnMain.setOnClickListener {
             viewModel.onClickBtnMain()
         }
-
-        b.fabDebug.setOnClickListener {
-            viewModel.printExtendedVoteList()
-        }
-
-        //TODO: make GameFragment readable
 
         return b.root
     }

@@ -27,7 +27,6 @@ class GameViewModel : ViewModel() {
     val ldButtonsSelected = MutableLiveData(Array(Game.numPlayers) {false})
     val ldPlayersVis = MutableLiveData(Array(Game.numPlayers) { true })
     val ldMainButtonState = MutableLiveData(MainBtnState.DEBUG)
-    val ldMainButtonOverwriteString: MutableLiveData<String> = MutableLiveData(null)
     val ldBackButton = MutableLiveData(false)
     val ldSkipButton = MutableLiveData(false)
     val ldVoteList = MutableLiveData<String>()
@@ -60,7 +59,6 @@ class GameViewModel : ViewModel() {
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
             ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
             ldMainButtonState.value = mainBtnState
-            ldMainButtonOverwriteString.value = mainButtonOverwriteString
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement
             ldHeading.value = primaryMessage
@@ -106,16 +104,6 @@ class GameViewModel : ViewModel() {
     fun getEmoji(i: Int): CharSequence {
         return gameState.players[i].emoji
     }
-
-    fun printExtendedVoteList() {
-        var msg = ""
-        for (i in gameState.voteListCopy) {
-            msg += "$i -> voted: ${gameState.players[i].voted}, ${gameState.players[i].votedPlayers}\n"
-        }
-        gameState.snackbarMessage = msg
-        updateUiParams()
-    }
-
 }
 
 

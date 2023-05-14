@@ -11,13 +11,12 @@ import com.idutvuk.go_maf.ui.game.MainBtnState.*
 class MafiaGameState(
     val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-//    var leaderVoteList: MutableSet<Int> = mutableSetOf(),
     /**
      * Queue of players wanting to speak
      * used in vote dead speeches
      * ...or vote before-dead speeches
      */
-    var speakQueue: MutableSet<Int>? = null,
+    var speakQueue: ArrayList<Int>? = null,
     private var gameOver: Boolean = false,
 
     /**
@@ -39,11 +38,6 @@ class MafiaGameState(
     var mainBtnState: MainBtnState = START_GAME,
     var previousMainButtonActionState: MainBtnState = CRASH,
     var delayedBtnState: MainBtnState = CRASH,
-
-    /**
-     * if not empty, overwrites the main button text
-     */
-    var mainButtonOverwriteString: String = "",
 
     /**
      * used for prevent infinite-speech loop
@@ -249,87 +243,9 @@ class MafiaGameState(
 
     fun allPlayersSpoked(): Boolean {
         assert(time == GameTime.DAY)
-        return nextAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer)
+        return closestAlivePlayer(cursor) != closestAlivePlayer(firstSpokedPlayer)
     }
 
-    /**
-     *
-     * adds selected players to the vote
-     * disables the selected players
-     *
-     */
-//    fun voteFor() {
-//        for (i in 0 until voteList.size) {
-//            if (i != voteList.size - 1) { //last player remaining
-//                for (voter in players) {
-//                    if (!voter.alive) continue
-//                    if (!voter.voted) players[voteList.last()].votedPlayers!!.add(voter) //add non-voted players
-//
-//                    //back enabling all the players
-//                    voter.isEnabled = true
-//                    voter.voted = false
-//                                }
-//            } else if (players[voteList.elementAt(i)].votedPlayers == null) { //player was not voted
-//                players[voteList.elementAt(i)].votedPlayers = mutableSetOf()
-//                for (voter in selectedPlayers) {
-//                    players[voteListCopy.elementAt(i)].votedPlayers!!.add(players[voter])
-//                    players[voter].voted = true
-//                    players[voter].isEnabled = false
-//                }
-//                break
-//            }
-//        }  //all players voted
-//    }
-
-    fun voteForActive() {
-        Log.d("GameLog", "cursor: $cursor, vote list: $voteList")
-        assert(cursor in voteListCopy)
-        players[cursor].votedPlayers = selectedPlayers.toMutableSet()
-    }
-
-    /**
-     * calculates new leader voteList and can auto-catastrophe happen or not
-     */
-    fun checkAutoCatastrophe(): Boolean {
-        assert(voteList.isNotEmpty())
-        val newVoteList = mutableSetOf<Int>()
-        var leaderScore = 0
-        var canAutoCatastropheHappen = false
-        for (i in voteList) {
-            val count = players[i].votedPlayers!!.size
-            if (count < leaderScore) {
-
-            } else if (count == leaderScore) {
-                newVoteList.add(i)
-                canAutoCatastropheHappen = true
-            } else {
-                canAutoCatastropheHappen = false
-                leaderScore = count
-                newVoteList.clear()
-                newVoteList.add(i)
-            }
-    }
-    voteList = newVoteList
-    return canAutoCatastropheHappen
-}
-
-
-/**
- * marks selected players as voters
- * for killing all the people
- *
- * if voted for killing all the people...
- * ...adds players to the final speech
- *
- * returns...
- * ...TRUE if all killed
- * ...FALSE if all alive
- */
-fun finalVote(): Boolean =
-    if (selectedPlayers.size > numPlayers / 2) { //all vote leaders leaving
-        speakQueue = selectedPlayers.toMutableSet()
-        true
-    } else false //all vote leaders remaining
 
 fun nextMainBtnState() {
     if (!gameOver) mainBtnState =
@@ -345,42 +261,39 @@ fun nextMainBtnState() {
 
             END_GAME -> END_GAME //todo something on the game end
 
-            START_VOTE -> if (voteListCopy.size == 1) START_SPEECH //last speech
-            else VOTE_FOR
+            START_VOTE -> {
+                when(voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
+                    0 -> START_NIGHT
+                    1 -> if (currentPhaseNumber == 2) START_NIGHT else START_SPEECH
+                    else -> KILL_IN_VOTE
+                }
+            }
 
             START_DAY -> START_SPEECH
 
             START_NIGHT -> if (currentPhaseNumber <= 1) START_MAFIA_SPEECH else MAFIA_KILL
 
             START_SPEECH -> {
-                if (speakQueue != null) END_SPEECH
+                if (speakQueue != null) {
+                    if (speakQueue!!.isNotEmpty()) END_SPEECH
+                    else CRASH
+                }
                 else {
                     delayedBtnState = END_SPEECH
                     ADD_TO_VOTE
                 }
             }
 
-            END_SPEECH -> if (allPlayersSpoked()) START_SPEECH else START_VOTE
+            END_SPEECH -> if (speakQueue == null) {
+                if (allPlayersSpoked()) START_SPEECH else START_VOTE
+            } else if (speakQueue!!.isEmpty()) START_NIGHT else START_SPEECH
 
             ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
 
-            VOTE_FOR -> {
-                if (voteList.indexOf(cursor) == voteList.size - 1) { // if last
-                    START_SPEECH
-                }
-                    VOTE_FOR
-            }
 
-            KILL_IN_VOTE -> TODO()
 
-            FINAL_VOTE -> {
-                if (speakQueue!!.size != 0) {
-                    cursor = speakQueue!!.first()
-                    START_SPEECH
-                } else {
-                    START_NIGHT
-                }
-            }
+            KILL_IN_VOTE -> if (speakQueue == null) START_NIGHT else START_SPEECH
+
 
             START_MAFIA_SPEECH -> {
                 delayedBtnState = CHECK_DON
@@ -416,7 +329,27 @@ fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
 
 
 override fun toString(): String {
-    return "MafiaGameState(numPlayers=$numPlayers, players=${players.contentToString()}, voteList=$voteList, gameOver=$gameOver, currentPhaseNumber=$currentPhaseNumber, time=$time, mainBtnState=$mainBtnState, previousMainButtonActionState=$previousMainButtonActionState, delayedMainButtonActionState=$delayedBtnState, mainButtonOverwriteString='$mainButtonOverwriteString', firstSpokedPlayer=$firstSpokedPlayer, cursor=$cursor, selectedPlayers=$selectedPlayers, selectionMode=$selectionMode, selectionRequested=$selectionRequested, primaryMessage='$primaryMessage', secondaryMessage='$secondaryMessage', mafiaMissStreak=$mafiaMissStreak, isMafiaMissedToday=$isMafiaMissedToday, isTimerActive=$isTimerActive)"
+    return "MafiaGameState(" +
+            "numPlayers=$numPlayers, " +
+            "players=${players.contentToString()}, " +
+            "voteList=$voteList, " +
+            "gameOver=$gameOver, " +
+            "currentPhaseNumber=$currentPhaseNumber, " +
+            "time=$time, " +
+            "mainBtnState=$mainBtnState, " +
+            "previousMainButtonActionState=$previousMainButtonActionState, " +
+            "delayedMainButtonActionState=$delayedBtnState, " +
+            "firstSpokedPlayer=$firstSpokedPlayer, " +
+            "cursor=$cursor, " +
+            "selectedPlayers=$selectedPlayers, " +
+            "selectionMode=$selectionMode, " +
+            "selectionRequested=$selectionRequested, " +
+            "primaryMessage='$primaryMessage', " +
+            "secondaryMessage='$secondaryMessage', " +
+            "mafiaMissStreak=$mafiaMissStreak, " +
+            "isMafiaMissedToday=$isMafiaMissedToday, " +
+            "isTimerActive=$isTimerActive" +
+            ")"
 }
 }
 
