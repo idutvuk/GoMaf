@@ -1,30 +1,21 @@
 package com.idutvuk.go_maf.model.gamedata
 
 import android.util.Log
+import java.lang.Error
 
 class Player(
     val number: Int,
     val role: Role = Role.CIV,
     val nickname: String = "Debugger",
     var isEnabled: Boolean = true,
-
-    /**
-     * is player voted
-     */
-    var voted: Boolean = false,
-
-    /**
-     * set of players that voted in current player
-     *
-     * Null - Player was not voted
-     * Empty set - Player was voted with 0 popularity
-     */
-    var votedPlayers: MutableSet<Player>? = null
-//    val isGhost: Boolean = false //TODO: add ghost logic
 ) {
     var alive = true
         set(value) {
-            assert(value != field)
+            if (value == field)
+                throw Error("Player already ${if(value) "alive" else "dead"}")
+
+            assert(value != field) //todo remove unnecessary
+
             if (value) { //if want to revive
                 Log.i("GameLog","Player $number revived")
             } else { //if want to make player dead

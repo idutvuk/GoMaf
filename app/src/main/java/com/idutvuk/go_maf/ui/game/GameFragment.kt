@@ -128,9 +128,7 @@ class GameFragment : Fragment() {
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
             Log.d("GameLog", "(GameFragment) main button changed in the UI to the $it")
             with(b.bottomSheetLayout.btnMain) {
-                val tmp = viewModel.ldMainButtonOverwriteString.value
-                text = if (!tmp.isNullOrEmpty()) it.text + tmp else it.text
-                viewModel.ldMainButtonOverwriteString.value = ""
+                text = it.text
                 setCompoundDrawablesWithIntrinsicBounds(it.icon, 0, 0, 0)
             }
         }
@@ -162,18 +160,16 @@ class GameFragment : Fragment() {
         b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
 
-        b.fabPeep.setOnTouchListener { view, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                for (i in 0 until Game.numPlayers)
-                    buttons[i].text = viewModel.getEmoji(i)
-                view.performClick()
-            } else if (motionEvent.action == MotionEvent.ACTION_UP) {
+        b.fabPeep.setOnClickListener {
+            if (buttons[0].text != "  0  ") {
                 for (i in 0 until Game.numPlayers)
                     buttons[i].text = "  $i  " //TODO: replace to (i + 1)
-                view.performClick()
+            } else {
+                for (i in 0 until Game.numPlayers)
+                    buttons[i].text = " ${viewModel.getEmoji(i)} "
             }
-            false
         }
+
 
 
         //TODO: uncomment
@@ -226,12 +222,6 @@ class GameFragment : Fragment() {
         b.bottomSheetLayout.btnMain.setOnClickListener {
             viewModel.onClickBtnMain()
         }
-
-        b.fabDebug.setOnClickListener {
-            pointArrowOnPlayer(7)
-        }
-
-        //TODO: make GameFragment readable
 
         return b.root
     }

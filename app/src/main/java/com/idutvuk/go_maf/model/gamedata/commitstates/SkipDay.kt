@@ -12,8 +12,10 @@ class SkipDay: CmdCommitState{
             clearVoteList()
             isTimerActive = false
 
+            speakQueue = null
+
             currentPhaseNumber++
-            descriptionText = currentPhaseNumber.toString()
+            secondaryMessage = currentPhaseNumber.toString()
 
             if (currentPhaseNumber == 1) {
                 mainBtnState = MainBtnState.START_MAFIA_SPEECH

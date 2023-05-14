@@ -50,6 +50,7 @@
                         android:id="@+id/pbTimer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="40dp"
                         android:max="60"
                         style="?android:progressBarStyleHorizontal"
                         android:progressDrawable="@drawable/circular_progress_bar"
