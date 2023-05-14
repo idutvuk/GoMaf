@@ -89,9 +89,12 @@ class MafiaGameState(
      * toggles the timer (via LiveData)
      */
     var isTimerActive: Boolean = false,
+
+    val initVoteList:ArrayList<Int> = arrayListOf(),
+    val initSelectedPlayers: ArrayList<Int> = arrayListOf()
 ) {
 
-    private var voteList: MutableSet<Int> = mutableSetOf()
+    private var voteList: ArrayList<Int> = initVoteList
 
     val voteListCopy: Set<Int>
         get() = voteList.toSet()
@@ -114,7 +117,7 @@ class MafiaGameState(
      * Selected players is a selector of the voted players
      * like cursor, but used when multiple players selected
      */
-    private val selectedPlayers: ArrayList<Int> = arrayListOf()
+    private val selectedPlayers: ArrayList<Int> = initSelectedPlayers
 
     val selectedPlayersCopy: Set<Int>
         get() = selectedPlayers.toSet()
@@ -348,28 +351,29 @@ class MafiaGameState(
 
     fun copy(): MafiaGameState {
         return MafiaGameState(
-            this.numPlayers,
-            this.players.copyOf(),
-            this.speakQueue,
-            this.gameOver,
-            this.currentPhaseNumber,
-            this.time,
-            this.mainBtnState,
-            this.previousMainButtonActionState,
-            this.delayedBtnState,
-            this.firstSpokedPlayer,
-            this.cursor,
-            this.selectionMode,
-            this.selectionRequested,
-            this.snackbarMessage,
-            this.primaryMessage,
-            this.secondaryMessage,
-            this.mafiaMissStreak,
-            this.isMafiaMissedToday,
-            this.isTimerActive
+            numPlayers =                        this.numPlayers,
+            players =                           this.players.copyOf(),
+            speakQueue =                        this.speakQueue?.clone() as? ArrayList<Int>,
+            gameOver =                          this.gameOver,
+            currentPhaseNumber =                this.currentPhaseNumber,
+            time =                              this.time,
+            mainBtnState =                      this.mainBtnState,
+            previousMainButtonActionState =     this.previousMainButtonActionState,
+            delayedBtnState =                   this.delayedBtnState,
+            firstSpokedPlayer =                 this.firstSpokedPlayer,
+            cursor =                            this.cursor,
+            selectionMode =                     this.selectionMode,
+            selectionRequested =                this.selectionRequested,
+            snackbarMessage =                   this.snackbarMessage,
+            primaryMessage =                    this.primaryMessage,
+            secondaryMessage =                  this.secondaryMessage,
+            mafiaMissStreak =                   this.mafiaMissStreak,
+            isMafiaMissedToday =                this.isMafiaMissedToday,
+            isTimerActive =                     this.isTimerActive,
+            initVoteList =                      this.voteList,
+            initSelectedPlayers =               this.initSelectedPlayers
         )
     }
-
 }
 
 

@@ -120,11 +120,8 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
-            var shortVoteList = ""
-            for (element in it) {
-                shortVoteList += "$element, "
-            }
-            b.table.tvContextInfo.text = shortVoteList
+
+            b.table.tvContextInfo.text = it
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
