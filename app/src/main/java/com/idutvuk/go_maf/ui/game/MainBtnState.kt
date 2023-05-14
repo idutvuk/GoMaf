@@ -3,19 +3,40 @@ package com.idutvuk.go_maf.ui.game
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
-
-//TODO: add possibility to make any action in any time via holding the main button
 enum class MainBtnState(
+    /**
+     * Text that will be shown on the main button
+     */
     val text: String,
+
+    /**
+     * Icon that will be shown on the main button
+     */
     val icon: Int = R.drawable.ic_debug,
-    val requireNumber: PlayerSelectionMode //TODO: check for necessity
+
+    /**
+     * Does the action require one or many player numbers to input
+     */
+    val requireNumber: PlayerSelectionMode,
+
+//    /**
+//     * Does the action require additional information
+//     * If true -
+//     */
+//    val requireAdditionalInformation: Boolean = false,
+//
+    /**
+     * Desccription that should describe game state change inside recycler
+     */
+    val description: String = text
 ) {
     /**
      * Crashes the app lol
      */
     CRASH(
         text = "It should crash the app",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "CRASH BUTTON STATE"
     ),
     //Misc/debug states
     /**
@@ -24,7 +45,8 @@ enum class MainBtnState(
     NEXT(
         text = "Skip",
         icon = R.drawable.ic_arrow_right,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "Skipped"
     ),
 
     /**
@@ -33,7 +55,8 @@ enum class MainBtnState(
     DEBUG(
         text = "Debug mainBtn state",
         icon = R.drawable.ic_debug,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "Debug state passed"
     ),
 
 
@@ -45,7 +68,7 @@ enum class MainBtnState(
     START_GAME(
         text = "Start game",
         icon = R.drawable.ic_play,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
     ),
 
     /**

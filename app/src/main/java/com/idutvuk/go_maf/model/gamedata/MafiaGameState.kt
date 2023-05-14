@@ -247,105 +247,129 @@ class MafiaGameState(
     }
 
 
-fun nextMainBtnState() {
-    if (!gameOver) mainBtnState =
-        when (mainBtnState) {
-            NEXT -> delayedBtnState
+    fun nextMainBtnState() {
+        if (!gameOver) mainBtnState =
+            when (mainBtnState) {
+                NEXT -> delayedBtnState
 
-            DEBUG -> {
-                Log.d("GameLog", "s")
-                START_GAME
-            }
-
-            START_GAME -> START_NIGHT
-
-            END_GAME -> END_GAME //todo something on the game end
-
-            START_VOTE -> {
-                when(voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
-                    0 -> START_NIGHT
-                    1 -> if (currentPhaseNumber == 2) START_NIGHT else START_SPEECH
-                    else -> KILL_IN_VOTE
+                DEBUG -> {
+                    Log.d("GameLog", "s")
+                    START_GAME
                 }
-            }
 
-            START_DAY -> START_SPEECH
+                START_GAME -> START_NIGHT
 
-            START_NIGHT -> if (currentPhaseNumber <= 1) START_MAFIA_SPEECH else MAFIA_KILL
+                END_GAME -> END_GAME //todo something on the game end
 
-            START_SPEECH -> {
-                if (speakQueue != null) {
-                    if (speakQueue!!.isNotEmpty()) END_SPEECH
-                    else CRASH
+                START_VOTE -> {
+                    when (voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
+                        0 -> START_NIGHT
+                        1 -> if (currentPhaseNumber == 2) START_NIGHT else START_SPEECH
+                        else -> KILL_IN_VOTE
+                    }
                 }
-                else {
-                    delayedBtnState = END_SPEECH
-                    ADD_TO_VOTE
+
+                START_DAY -> START_SPEECH
+
+                START_NIGHT -> if (currentPhaseNumber <= 1) START_MAFIA_SPEECH else MAFIA_KILL
+
+                START_SPEECH -> {
+                    if (speakQueue != null) {
+                        if (speakQueue!!.isNotEmpty()) END_SPEECH
+                        else CRASH
+                    } else {
+                        delayedBtnState = END_SPEECH
+                        ADD_TO_VOTE
+                    }
                 }
-            }
 
-            END_SPEECH -> if (speakQueue == null) {
-                if (allPlayersSpoked()) START_SPEECH else START_VOTE
-            } else if (speakQueue!!.isEmpty()) START_NIGHT else START_SPEECH
+                END_SPEECH -> if (speakQueue == null) {
+                    if (allPlayersSpoked()) START_SPEECH else START_VOTE
+                } else if (speakQueue!!.isEmpty()) START_NIGHT else START_SPEECH
 
-            ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
-
+                ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
 
 
-            KILL_IN_VOTE -> if (speakQueue == null) START_NIGHT else START_SPEECH
+                KILL_IN_VOTE -> if (speakQueue == null) START_NIGHT else START_SPEECH
 
 
-            START_MAFIA_SPEECH -> {
-                delayedBtnState = CHECK_DON
-                NEXT
-            }
+                START_MAFIA_SPEECH -> {
+                    delayedBtnState = CHECK_DON
+                    NEXT
+                }
 
-            MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
+                MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
 
-            CHECK_DON -> nextStateSingleClick(CHECK_SHR)
+                CHECK_DON -> nextStateSingleClick(CHECK_SHR)
 
-            CHECK_SHR -> nextStateSingleClick(if (canDoBestMove()) BEST_MOVE else START_DAY)
+                CHECK_SHR -> nextStateSingleClick(if (canDoBestMove()) BEST_MOVE else START_DAY)
 
-            BEST_MOVE -> START_DAY //todo waiting for click
+                BEST_MOVE -> START_DAY //todo waiting for click
 
-            WAITING_FOR_CLICK -> delayedBtnState
+                WAITING_FOR_CLICK -> delayedBtnState
 
-            else -> CRASH
-        } else END_GAME
+                else -> CRASH
+            } else END_GAME
+    }
+
+
+    /**
+     * возвращает следующую фазу, если выделение игрока уже произошло.
+     * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
+     */
+    fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
+        assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
+        if (selectedPlayersCopy.size == 1) return nextPhase
+        delayedBtnState = nextPhase
+        previousMainButtonActionState = mainBtnState
+        return WAITING_FOR_CLICK
+    }
+
+
+    fun toGameLogString(): String {
+        return "voteList=$voteList, \n" +
+                "phase number = $currentPhaseNumber, " +
+                "time=$time, \n" +
+                "mainBtnState=$mainBtnState, " +
+                "previousMainButtonActionState=$previousMainButtonActionState, " +
+                "delayedMainButtonActionState=$delayedBtnState, " +
+                "firstSpokedPlayer=$firstSpokedPlayer, " +
+                "cursor=$cursor, " +
+                "selectedPlayers=$selectedPlayers, " +
+                "selectionMode=$selectionMode, " +
+                "selectionRequested=$selectionRequested, " +
+                "primaryMessage='$primaryMessage', " +
+                "mafiaMissStreak=$mafiaMissStreak, " +
+                "isMafiaMissedToday=$isMafiaMissedToday, " +
+                "isTimerActive=$isTimerActive" +
+                ")"
+    }
+
+    fun copy(): MafiaGameState {
+        return MafiaGameState(
+            this.numPlayers,
+            this.players.copyOf(),
+            this.speakQueue,
+            this.gameOver,
+            this.currentPhaseNumber,
+            this.time,
+            this.mainBtnState,
+            this.previousMainButtonActionState,
+            this.delayedBtnState,
+            this.firstSpokedPlayer,
+            this.cursor,
+            this.selectionMode,
+            this.selectionRequested,
+            this.snackbarMessage,
+            this.primaryMessage,
+            this.secondaryMessage,
+            this.mafiaMissStreak,
+            this.isMafiaMissedToday,
+            this.isTimerActive
+        )
+    }
+
 }
 
-
-/**
- * возвращает следующую фазу, если выделение игрока уже произошло.
- * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
- */
-fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
-    assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
-    if (selectedPlayersCopy.size == 1) return nextPhase
-    delayedBtnState = nextPhase
-    previousMainButtonActionState = mainBtnState
-    return WAITING_FOR_CLICK
-}
-
-
-fun toGameLogString(): String {
-    return "voteList=$voteList, \n" +
-            "phase number = $currentPhaseNumber, " +
-            "time=$time, \n" +
-            "mainBtnState=$mainBtnState, " +
-            "previousMainButtonActionState=$previousMainButtonActionState, " +
-            "delayedMainButtonActionState=$delayedBtnState, " +
-            "firstSpokedPlayer=$firstSpokedPlayer, " +
-            "cursor=$cursor, " +
-            "selectedPlayers=$selectedPlayers, " +
-            "selectionMode=$selectionMode, " +
-            "selectionRequested=$selectionRequested, " +
-            "primaryMessage='$primaryMessage', " +
-            "mafiaMissStreak=$mafiaMissStreak, " +
-            "isMafiaMissedToday=$isMafiaMissedToday, " +
-            "isTimerActive=$isTimerActive" +
-            ")"
-}
-}
 
 

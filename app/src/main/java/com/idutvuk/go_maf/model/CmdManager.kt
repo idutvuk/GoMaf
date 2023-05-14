@@ -19,7 +19,7 @@ object CmdManager {
 
     //TODO: Make ghost games possible
     fun commit(cmdCommitType: CmdCommitType): MafiaGameState {
-        var gameState = stateHistory.last()
+        var gameState = stateHistory.last().copy()
 
         gameState.snackbarMessage = null
 

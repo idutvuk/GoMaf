@@ -22,7 +22,7 @@ class GameMessage (
         fun getGameActionsList(): ArrayList<GameMessage> {
             val gameMessages = ArrayList<GameMessage>()
             for (i in 0 until CmdManager.stateHistory.size) {
-                gameMessages.add(GameMessage(CmdManager.stateHistory[i].toGameLogString()))
+                gameMessages.add(GameMessage(CmdManager.stateHistory[i].mainBtnState.description))
             }
             return gameMessages
         }
