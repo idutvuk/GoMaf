@@ -328,14 +328,10 @@ fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
 }
 
 
-override fun toString(): String {
-    return "MafiaGameState(" +
-            "numPlayers=$numPlayers, " +
-            "players=${players.contentToString()}, " +
-            "voteList=$voteList, " +
-            "gameOver=$gameOver, " +
-            "currentPhaseNumber=$currentPhaseNumber, " +
-            "time=$time, " +
+fun toGameLogString(): String {
+    return "voteList=$voteList, \n" +
+            "phase number = $currentPhaseNumber, " +
+            "time=$time, \n" +
             "mainBtnState=$mainBtnState, " +
             "previousMainButtonActionState=$previousMainButtonActionState, " +
             "delayedMainButtonActionState=$delayedBtnState, " +
@@ -345,7 +341,6 @@ override fun toString(): String {
             "selectionMode=$selectionMode, " +
             "selectionRequested=$selectionRequested, " +
             "primaryMessage='$primaryMessage', " +
-            "secondaryMessage='$secondaryMessage', " +
             "mafiaMissStreak=$mafiaMissStreak, " +
             "isMafiaMissedToday=$isMafiaMissedToday, " +
             "isTimerActive=$isTimerActive" +

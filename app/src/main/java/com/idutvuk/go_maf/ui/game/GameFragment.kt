@@ -79,8 +79,8 @@ class GameFragment : Fragment() {
         }
 
 
-//        val messages = GameMessage.getGameActionsList()
-        val messages = GameMessage.createGameMessagesList(10)
+        val messages = GameMessage.getGameActionsList()
+//        val messages = GameMessage.createGameMessagesList(10)
         val adapter = RecyclerViewLogAdapter(messages)
 
 
@@ -223,8 +223,13 @@ class GameFragment : Fragment() {
             viewModel.onClickBtnMain()
         }
 
+        b.fabDebug.setOnClickListener {
+            adapter.updateMessagesList()
+        }
+
         return b.root
     }
+
 
     /**
      * just give this method a number of player to point at

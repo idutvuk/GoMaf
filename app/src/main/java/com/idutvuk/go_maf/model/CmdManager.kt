@@ -9,19 +9,16 @@ import com.idutvuk.go_maf.ui.game.MainBtnState
 
 object CmdManager {
     val roles = generateRoles(Game.numPlayers)
-    val stateHistory = arrayListOf(MafiaGameState(
-        Game.numPlayers,
-        players = Array(Game.numPlayers,
-            init = {
-                Player(
-                    it,
-                    role = roles[it])
-            }
+    val stateHistory = arrayListOf(
+        MafiaGameState(
+            Game.numPlayers,
+            players = Array(Game.numPlayers, init = { Player(it, role = roles[it]) })
         )
-    ))
+    )
     var currentHistoryIndex = 0
+
     //TODO: Make ghost games possible
-    fun commit(cmdCommitType: CmdCommitType) : MafiaGameState {
+    fun commit(cmdCommitType: CmdCommitType): MafiaGameState {
         var gameState = stateHistory.last()
 
         gameState.snackbarMessage = null
@@ -30,7 +27,7 @@ object CmdManager {
 
         if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN ||
             cmdCommitType == CmdCommitType.PRESS_PLAYER_NUMBER
-            ) gameState.nextMainBtnState()
+        ) gameState.nextMainBtnState()
 
         stateHistory.add(gameState)
         currentHistoryIndex++
