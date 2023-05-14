@@ -101,6 +101,7 @@ class MafiaGameState(
     }
 
     fun addToVoteList(): Boolean {
+        Log.d("GameLog",selectedPlayers.toString())
         assert(selectedPlayers.size == 1)
         return addToVoteList(selectedPlayers[0])
     }

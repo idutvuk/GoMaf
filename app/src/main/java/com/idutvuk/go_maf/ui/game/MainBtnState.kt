@@ -28,7 +28,14 @@ enum class MainBtnState(
     /**
      * Desccription that should describe game state change inside recycler
      */
-    val description: String = text
+    val description: String = text,
+
+    /**
+     * if false - not shows up in RV
+     * if true - shows up in RV
+     * TODO: make it able to mute neighbour action states
+     */
+    val isSilent: Int = 0
 ) {
     /**
      * Crashes the app lol

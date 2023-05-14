@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
@@ -224,7 +226,7 @@ class GameFragment : Fragment() {
         }
 
         b.fabDebug.setOnClickListener {
-            adapter.updateMessagesList()
+            Snackbar.make(b.topAppBar,"sel: " + CmdManager.stateHistory.last().selectedPlayersCopy.toString(),Snackbar.LENGTH_SHORT).show()
         }
 
         return b.root
