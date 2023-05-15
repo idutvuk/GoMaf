@@ -15,24 +15,21 @@ import com.idutvuk.go_maf.model.GameMessage
 class RecyclerViewLogAdapter(private var mMessages: List<GameMessage>) :
     RecyclerView.Adapter<RecyclerViewLogAdapter.ViewHolder>() {
 
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val headingTextView: TextView = itemView.findViewById(R.id.tv_heading)
         val cardView: MaterialCardView = itemView.findViewById(R.id.card_view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
-        val inflater = LayoutInflater.from(context)
-        // Inflate the custom layout
-        val contactView = inflater.inflate(R.layout.game_action_message, parent, false)
-        // Return a new holder instance
-        return ViewHolder(contactView)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder = ViewHolder(
+            LayoutInflater.from(parent.context)
+            .inflate(R.layout.game_action_message, parent, false)
+        )
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         val message = mMessages[position]
+
         holder.headingTextView.text = message.heading
 //      holder.descriptionTextView.text = message.description
 
@@ -47,10 +44,10 @@ class RecyclerViewLogAdapter(private var mMessages: List<GameMessage>) :
 
     fun updateMessagesList() {
         mMessages = GameMessage.getGameActionsList()
-        this.notifyDataSetChanged()
+        this.notifyItemInserted(mMessages.size - 1)
     }
 
     override fun getItemCount(): Int {
-        return mMessages.size
+        return mMessages.size - 1
     }
 }

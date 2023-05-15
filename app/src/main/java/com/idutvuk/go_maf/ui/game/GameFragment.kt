@@ -142,6 +142,7 @@ class GameFragment : Fragment() {
             for(i in 0 until Game.numPlayers) {
                 buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
+            adapter.updateMessagesList() //todo move it to other part of the code (combine all the livedata?)
         }
 
         viewModel.ldCursor.observe(viewLifecycleOwner) {
@@ -223,7 +224,7 @@ class GameFragment : Fragment() {
         }
 
         b.fabDebug.setOnClickListener {
-            Snackbar.make(b.topAppBar,"sel: " + CmdManager.stateHistory.last().selectedPlayersCopy.toString(),Snackbar.LENGTH_SHORT).show()
+
         }
 
         return b.root
