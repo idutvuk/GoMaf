@@ -25,7 +25,7 @@ object CmdManager {
 
         gameState = cmdCommitType.cmdCommitState.changeGameState(gameState)
 
-        if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN ||
+        if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN || //if not SKIP_DAY or SKIP_NIGHT
             cmdCommitType == CmdCommitType.PRESS_PLAYER_NUMBER
         ) gameState.nextMainBtnState()
 

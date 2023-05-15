@@ -81,9 +81,8 @@ class GameFragment : Fragment() {
         }
 
 
-        val messages = GameMessage.getGameActionsList()
-//        val messages = GameMessage.createGameMessagesList(10)
-        val adapter = RecyclerViewLogAdapter(messages)
+
+        val adapter = RecyclerViewLogAdapter(ArrayList())
 
 
 //subscribers
@@ -102,12 +101,12 @@ class GameFragment : Fragment() {
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
             b.bottomSheetLayout.btnPrevPhase.icon = ContextCompat.getDrawable(requireContext(),
-                if (it == GameTime.DAY) R.drawable.ic_sun
-                else R.drawable.ic_moon
+                if (it == GameTime.DAY) GameTime.DAY.icon
+                else GameTime.NIGHT.icon
             )
             b.bottomSheetLayout.btnNextPhase.icon = ContextCompat.getDrawable(requireContext(),
-                if (it == GameTime.DAY) R.drawable.ic_moon
-            else R.drawable.ic_sun
+                if (it == GameTime.DAY) GameTime.NIGHT.icon
+            else GameTime.DAY.icon
             )
         }
 

@@ -330,7 +330,7 @@ class MafiaGameState(
     }
 
 
-    fun toGameLogString(): String {
+    override fun toString(): String {
         return "voteList=$voteList, \n" +
                 "phase number = $currentPhaseNumber, " +
                 "time=$time, \n" +

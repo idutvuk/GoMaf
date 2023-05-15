@@ -27,15 +27,10 @@ class Player(
 
     var fouls = 0
     internal val strNum = String.format("%02d", number + 1)
-    internal val emoji = when (role) {
-        Role.CIV -> "🙂"
-        Role.SHR -> "🥸"
-        Role.MAF -> "🔫"
-        Role.DON -> "💍"
-    }
+
 
     override fun toString(): String {
-        return strNum + emoji + role +(if (alive) "✅alive" else "💀 dead") +
+        return strNum + role.emoji + role +(if (alive) "✅alive" else "💀 dead") +
                 ", fouls: $fouls. Aka $nickname"
     }
 }
