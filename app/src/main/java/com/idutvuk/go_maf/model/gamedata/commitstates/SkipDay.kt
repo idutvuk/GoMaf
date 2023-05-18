@@ -12,6 +12,8 @@ class SkipDay: CmdCommitState{
             clearVoteList()
             isTimerActive = false
 
+            isVoteCancelled = false
+
             speakQueue = null
 
             currentPhaseNumber++

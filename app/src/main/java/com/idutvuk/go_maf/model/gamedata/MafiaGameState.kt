@@ -3,6 +3,7 @@ package com.idutvuk.go_maf.model.gamedata
 import android.util.Log
 import com.idutvuk.go_maf.ui.game.MainBtnState
 import com.idutvuk.go_maf.ui.game.MainBtnState.*
+import java.lang.IllegalStateException
 
 /**
  * The state of a game.
@@ -91,6 +92,7 @@ class MafiaGameState(
     var isTimerActive: Boolean = false,
 
     val initVoteList:ArrayList<Int> = arrayListOf(),
+    var isVoteCancelled: Boolean = false,
     val initSelectedPlayers: ArrayList<Int> = arrayListOf()
 ) {
 
@@ -288,7 +290,7 @@ class MafiaGameState(
                 }
 
                 END_SPEECH -> if (speakQueue == null) {
-                    if (allPlayersSpoked()) START_SPEECH else START_VOTE
+                    if (allPlayersSpoked()) START_SPEECH else if (!isVoteCancelled) START_VOTE else START_NIGHT
                 } else if (speakQueue!!.isEmpty()) START_NIGHT else START_SPEECH
 
                 ADD_TO_VOTE -> nextStateSingleClick(END_SPEECH)
@@ -329,6 +331,19 @@ class MafiaGameState(
         return WAITING_FOR_CLICK
     }
 
+    fun foul(i: Int) {
+        when(players[i].fouls) {
+            0,1,2 -> players[i].fouls++
+            2 -> {
+                players[i].mute()
+            }
+            3 -> {
+                kill(i)
+                isVoteCancelled = true
+            }
+            else -> throw IllegalStateException("Incorrect value of fouls")
+        }
+    }
 
     override fun toString(): String {
         return "voteList=$voteList, \n" +
@@ -371,7 +386,8 @@ class MafiaGameState(
             isMafiaMissedToday =                this.isMafiaMissedToday,
             isTimerActive =                     this.isTimerActive,
             initVoteList =                      this.voteList,
-            initSelectedPlayers =               this.initSelectedPlayers
+            initSelectedPlayers =               this.initSelectedPlayers,
+            isVoteCancelled =                   this.isVoteCancelled,
         )
     }
 }

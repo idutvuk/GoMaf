@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,6 +40,8 @@ class GameFragment : Fragment() {
 
     private val buttons = mutableListOf<MaterialButton>()
     private var lastAngle: Float = -1F
+
+    private var isFabFoulPressed: MutableLiveData<Boolean> = MutableLiveData(false) // if pressed, next click on the player add foul to him
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,8 +80,14 @@ class GameFragment : Fragment() {
             buttons[i].layoutParams = layoutParams
 
             buttons[i].setOnClickListener {
-                viewModel.performPlayerBtnClick(i,viewModel.ldButtonsSelected.value!![i])
-                Log.d("GraphLog", "Clicked $i")
+                if (isFabFoulPressed.value!!) {
+                    viewModel.performFoul(i)
+                    isFabFoulPressed.value = false
+                } else {
+                    viewModel.performPlayerBtnClick(i)
+                    Log.d("GraphLog", "Clicked $i")
+                }
+
             }
 
             // add the button to the layout
@@ -158,6 +167,18 @@ class GameFragment : Fragment() {
         }
 
 
+        isFabFoulPressed.observe(viewLifecycleOwner) {
+            if(it) {
+                b.fabFoul.setImageResource(R.drawable.ic_close)
+            }
+            else {
+                b.fabFoul.setImageResource(R.drawable.ic_foul)
+            }
+        }
+
+        b.fabFoul.setOnClickListener {
+            isFabFoulPressed.value = !isFabFoulPressed.value!!
+        }
 
         b.fabPeep.setOnClickListener {
             if (buttons[0].text != "  0  ") {
@@ -219,6 +240,7 @@ class GameFragment : Fragment() {
         }
 
         b.bottomSheetLayout.btnMain.setOnClickListener {
+            isFabFoulPressed.value = false
             viewModel.onClickBtnMain()
         }
 

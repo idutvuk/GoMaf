@@ -8,6 +8,7 @@ class Player(
     val role: Role = Role.CIV,
     val nickname: String = "Debugger",
     var isEnabled: Boolean = true,
+    var canSpeak: Boolean = true
 ) {
     var alive = true
         set(value) {
@@ -21,6 +22,7 @@ class Player(
             } else { //if want to make player dead
                 Log.i("GameLog","Player $number killed")
             }
+            canSpeak = canSpeak && value
             isEnabled = value
             field = value
         }
@@ -32,5 +34,13 @@ class Player(
     override fun toString(): String {
         return strNum + role.emoji + role +(if (alive) "✅alive" else "💀 dead") +
                 ", fouls: $fouls. Aka $nickname"
+    }
+
+    fun mute() {
+        canSpeak = false
+    }
+
+    fun unmute() {
+        canSpeak = true
     }
 }
