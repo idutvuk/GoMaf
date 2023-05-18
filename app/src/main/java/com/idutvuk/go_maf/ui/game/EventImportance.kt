@@ -7,5 +7,5 @@ package com.idutvuk.go_maf.ui.game
 enum class EventImportance {
     SILENT,
     REGULAR,
-    GLOBAL
+    IMPORTANT
 }
