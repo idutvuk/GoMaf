@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -14,29 +15,19 @@ import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 
 class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
-    RecyclerView.Adapter<RecyclerViewLogAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        lateinit var materialDialog: MaterialAlertDialogBuilder
-        lateinit var textView: TextView
-        lateinit var cardView: MaterialCardView
-        fun bind(eventImportance: EventImportance) {
-            when (eventImportance) {
-                EventImportance.SILENT -> TODO()
-                EventImportance.REGULAR -> bindCard()
-                EventImportance.IMPORTANT -> bindDivider()
-            }
-        }
-
-        private fun bindDivider() {
-            textView = itemView.findViewById(R.id.tvDivider)
-        }
-
-        private fun bindCard() {
-            textView = itemView.findViewById(R.id.tv_heading)
-            cardView = itemView.findViewById(R.id.card_view)
-        }
+    class RegularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.tvHeading)
+        val cardView: CardView = itemView.findViewById(R.id.cardView)
+        val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(itemView.context)
     }
+
+    class ImportantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.tvDivider)
+        val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(itemView.context)
+    }
+
 
 
     override fun getItemViewType(position: Int): Int {
@@ -50,48 +41,70 @@ class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolder {
-        val layout = when(viewType) {
+    ): RecyclerView.ViewHolder {
+        val holder = when(viewType) {
             TYPE_SILENT -> throw IllegalArgumentException("Silent actions must not show up")
-            TYPE_REGULAR -> R.layout.game_action_message
-            TYPE_IMPORTANT -> R.layout.game_action_important_message
+
+            TYPE_REGULAR -> {
+                RegularViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.game_action_message, parent, false)
+                )
+            }
+
+            TYPE_IMPORTANT -> {
+                ImportantViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.game_action_important_message, parent, false)
+                )
+            }
+
             else -> throw IllegalArgumentException("Invalid type")
         }
-
-        val viewHolder = ViewHolder(LayoutInflater.from(parent.context)
-            .inflate(layout, parent, false))
-
-        if (viewType == TYPE_REGULAR) {
-            viewHolder.materialDialog = MaterialAlertDialogBuilder(parent.context)
-            viewHolder.cardView.setOnClickListener {
-                viewHolder.materialDialog.show()
-            }
-        }
-
-        return viewHolder
+        return holder
     }
 
 
     override fun onBindViewHolder(
-        holder: ViewHolder,
+        holder: RecyclerView.ViewHolder,
         position: Int
     ) {
         val message = dataList[position]
+        when(holder.itemViewType) {
+            TYPE_REGULAR -> {
+                val regularHolder = holder as RegularViewHolder
+                regularHolder.textView.text = message.heading
+                regularHolder.cardView.setOnClickListener{
+                    regularHolder.dialog.show()
+                }
+                regularHolder.dialog
+                    .setTitle(message.heading)
+                    .setMessage(message.description)
+                    .setPositiveButton("OK") {_,_ -> }
+            }
 
-        holder.textView.text = message.heading
+            TYPE_IMPORTANT -> {
+                val importantHolder = holder as ImportantViewHolder
+                importantHolder.textView.text = message.heading
+                importantHolder.itemView.setOnClickListener{
+                    importantHolder.dialog.show()
+                }
+                importantHolder.dialog
+                    .setTitle(message.heading)
+                    .setMessage(message.description)
+                    .setPositiveButton("OK") {_,_ -> }
+            }
 
-        holder.materialDialog
-            .setTitle(message.heading)
-            .setMessage(message.description)
-            .setPositiveButton("OK") {_,_ -> }
-//            .setNeutralButton("More") {_,_ -> }
-
+            TYPE_SILENT -> {}
+        }
     }
 
     fun updateMessagesList() {
         dataList = ArrayList()
+
         for (i in CmdManager.stateHistory.size-2 downTo 0) {
             val state = CmdManager.stateHistory[i]
+            if (state.mainBtnState.importance == EventImportance.SILENT) continue
             when (state.mainBtnState.importance) {
                 EventImportance.SILENT -> {}
                 EventImportance.REGULAR -> {}
