@@ -37,8 +37,9 @@
                     android:layout_height="match_parent">
                     <ImageView
                         android:id="@+id/ivArrow"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="70dp"
                         android:src="@drawable/ic_arrow"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"

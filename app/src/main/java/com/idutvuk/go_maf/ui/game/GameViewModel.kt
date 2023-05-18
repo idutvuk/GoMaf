@@ -71,7 +71,8 @@ class GameViewModel : ViewModel() {
         }
     }
 
-    fun performPlayerBtnClick(clickedIndex: Int, selectionState: Boolean) {
+    fun performPlayerBtnClick(clickedIndex: Int) {
+
         if (gameState.mainBtnState == MainBtnState.WAITING_FOR_CLICK) {
             gameState.togglePlayerSelection(clickedIndex)
             gameState = CmdManager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
@@ -81,13 +82,17 @@ class GameViewModel : ViewModel() {
 
         if (selectionMode == PlayerSelectionMode.NONE) return
 
-        if (selectionState) {
+        if (ldButtonsSelected.value!![clickedIndex]) {
             gameState.togglePlayerSelection(clickedIndex)
         } else {
             if (selectionMode == PlayerSelectionMode.SINGLE) gameState.clearSelection()
             gameState.togglePlayerSelection(clickedIndex)
         }
 
+        updateUiParams()
+    }
+    fun performFoul(i: Int) {
+        gameState.foul(i)
         updateUiParams()
     }
 
@@ -104,6 +109,8 @@ class GameViewModel : ViewModel() {
     fun getEmoji(i: Int): CharSequence {
         return gameState.players[i].role.emoji
     }
+
+
 }
 
 

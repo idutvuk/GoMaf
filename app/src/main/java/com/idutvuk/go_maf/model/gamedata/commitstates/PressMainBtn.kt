@@ -103,6 +103,7 @@ class PressMainBtn:CmdCommitState {
 
 
                 START_DAY -> {
+                    isVoteCancelled = false
                     currentPhaseNumber++
                     secondaryMessage = currentPhaseNumber.toString()
                     time = GameTime.DAY
