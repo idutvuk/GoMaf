@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf.ui.game
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,27 +101,17 @@ class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
     }
 
     fun updateMessagesList() {
-        dataList = ArrayList()
+        val state = CmdManager.stateHistory[CmdManager.stateHistory.size - 1]
+        if (state.mainBtnState.importance == EventImportance.SILENT) return
 
-        for (i in CmdManager.stateHistory.size-2 downTo 0) {
-            val state = CmdManager.stateHistory[i]
-            if (state.mainBtnState.importance == EventImportance.SILENT) continue
-            when (state.mainBtnState.importance) {
-                EventImportance.SILENT -> {}
-                EventImportance.REGULAR -> {}
-                EventImportance.IMPORTANT -> {}
-                else -> {}
-            }
-            dataList.add(
-                GameMessage(
-                    state.mainBtnState.description,
-                    state.toString(),
-                    state.mainBtnState.importance
-                )
+        dataList.add(0,
+            GameMessage(
+                state.mainBtnState.description,
+                state.toString(),
+                state.mainBtnState.importance
             )
-        }
-//        this.notifyItemInserted(0)
-        this.notifyDataSetChanged()
+        )
+        this.notifyItemInserted(0)
     }
 
     override fun getItemCount() = dataList.size-1

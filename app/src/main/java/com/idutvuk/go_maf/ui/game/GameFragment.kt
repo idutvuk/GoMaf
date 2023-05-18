@@ -49,13 +49,20 @@ class GameFragment : Fragment() {
         b = FragmentGameBinding.inflate(inflater, container, false)
 
 
+        //setup RecyclerView adapter
+        val adapter = RecyclerViewLogAdapter(ArrayList())
+        b.bottomSheetLayout.rvLog.adapter = adapter
+        val layoutManager = LinearLayoutManager(context)
+        b.bottomSheetLayout.rvLog.layoutManager = layoutManager
+
+
+
         // create a layout params object for the buttons
         val layoutParams = ConstraintLayout.LayoutParams(
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
 
-        //TODO: fix oval shadow
         for (i in 0 until Game.numPlayers) {
             buttons.add(MaterialButton(requireContext(), null, R.attr.playerButtonStyle))
             buttons[i].text = "  $i  " //TODO: replace to (i + 1)
@@ -79,11 +86,6 @@ class GameFragment : Fragment() {
             buttons[i].x += pivotPoints[i][0]
             buttons[i].y += pivotPoints[i][1]
         }
-
-
-
-        val adapter = RecyclerViewLogAdapter(ArrayList())
-
 
 //subscribers
 
@@ -142,6 +144,7 @@ class GameFragment : Fragment() {
                 buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
             adapter.updateMessagesList() //todo move it to other part of the code (combine all the livedata?)
+            b.bottomSheetLayout.rvLog.scrollToPosition(0)
         }
 
         viewModel.ldCursor.observe(viewLifecycleOwner) {
@@ -154,9 +157,6 @@ class GameFragment : Fragment() {
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        //setup RecyclerView adapter
-        b.bottomSheetLayout.rvLog.adapter = adapter
-        b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
 
         b.fabPeep.setOnClickListener {
