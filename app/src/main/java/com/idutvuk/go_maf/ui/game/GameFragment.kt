@@ -153,7 +153,7 @@ class GameFragment : Fragment() {
 
         //setup bottom sheet behavior
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
-            peekHeight = 400
+            peekHeight = 380
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 

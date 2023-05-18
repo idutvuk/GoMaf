@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.createSavedStateHandle
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
+import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import org.w3c.dom.Text
 import java.lang.IllegalArgumentException
 
@@ -101,17 +103,40 @@ class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
     }
 
     fun updateMessagesList() {
-        val state = CmdManager.stateHistory[CmdManager.stateHistory.size - 1]
+        if (CmdManager.stateHistory.size < 2) return
+        val state = CmdManager.stateHistory[CmdManager.stateHistory.size - 2]
         if (state.mainBtnState.importance == EventImportance.SILENT) return
 
-        dataList.add(0,
+        dataList.add(
+            0,
             GameMessage(
-                state.mainBtnState.description,
+                gameActionFormatter(state.mainBtnState.overwriteText ?: state.mainBtnState.description, state),
                 state.toString(),
                 state.mainBtnState.importance
             )
         )
         this.notifyItemInserted(0)
+    }
+
+    private fun gameActionFormatter(string: String, state: MafiaGameState): String {
+        var s = string
+        when(state.mainBtnState) {
+            MainBtnState.START_DAY -> s += " ${(state.currentPhaseNumber)/2 + 1}"
+            MainBtnState.START_NIGHT -> s += " ${(state.currentPhaseNumber)/2}"
+
+            MainBtnState.START_SPEECH -> s = s.replace("#", state.cursor.toString())
+
+            MainBtnState.MAFIA_KILL -> s =
+                if (state.mafiaMissStreak == 0) s+ " ${(state.cursor)}"
+                else "Misfire ( ${state.mafiaMissStreak}/3)"
+
+            MainBtnState.CHECK_DON -> {}//TODO
+            MainBtnState.CHECK_SHR -> {}//TODO
+
+            MainBtnState.BEST_MOVE -> {}//TODO
+            else -> {}
+        }
+        return s
     }
 
     override fun getItemCount() = dataList.size-1
