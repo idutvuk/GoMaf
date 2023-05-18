@@ -15,7 +15,7 @@ class DebugViewModel : ViewModel() {
     ) {
 
         // Initialize contacts
-        messages = GameMessage.getGameActionsList()
+//        messages = GameMessage.getGameActionsList()
         // Create adapter passing in the sample user data
         val adapter = RecyclerViewLogAdapter(messages)
         // Attach the adapter to the recyclerview to populate items

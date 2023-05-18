@@ -1,64 +1,149 @@
 package com.idutvuk.go_maf.ui.game
 
-import android.app.Dialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.lifecycle.createSavedStateHandle
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
+import com.idutvuk.go_maf.model.gamedata.MafiaGameState
+import org.w3c.dom.Text
+import java.lang.IllegalArgumentException
 
-class RecyclerViewLogAdapter(private var mMessages: List<GameMessage>) : RecyclerView.Adapter<RecyclerViewLogAdapter.ViewHolder>(){
+class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    //TODO: Pin recycler to the bottom
-            // Provide a direct reference to each of the views within a data item
-            // Used to cache the views within the item layout for fast access
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val headingTextView: TextView = itemView.findViewById(R.id.tv_heading)
-        val importanceTextView: TextView = itemView.findViewById(R.id.tv_d_importance)
-
-//            val descriptionTextView: TextView = itemView.findViewById(R.id.tv_description)
-            val cardView: MaterialCardView = itemView.findViewById(R.id.card_view)
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val context = parent.context
-        val inflater = LayoutInflater.from(context)
-        // Inflate the custom layout
-        val contactView = inflater.inflate(R.layout.game_action_message, parent, false)
-        // Return a new holder instance
-        return ViewHolder(contactView)
+    class RegularViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.tvHeading)
+        val cardView: CardView = itemView.findViewById(R.id.cardView)
+        val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(itemView.context)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val message = mMessages[position]
-        holder.headingTextView.text = message.heading
-        holder.importanceTextView.text = message.importance.toString()
-//        holder.descriptionTextView.text = message.description
-        if(position >= CmdManager.currentHistoryIndex) {
-            Log.d("GraphLog","card with action $position disabled")
-//            holder.cardView.background =
-        //TODO: disable all the cards after $position
-        } else {
-            holder.cardView.setOnClickListener {
-                // Launch dialog displaying message description
-                val dialog = Dialog(holder.itemView.context)
-                dialog.setContentView(R.layout.dialog_message_description)
-                dialog.findViewById<TextView>(R.id.tv_description).text = message.description
-                dialog.show()
+    class ImportantViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.tvDivider)
+        val dialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(itemView.context)
+    }
+
+
+
+    override fun getItemViewType(position: Int): Int {
+        return when(dataList[position].importance) {
+            EventImportance.SILENT -> TYPE_SILENT
+            EventImportance.REGULAR -> TYPE_REGULAR
+            EventImportance.IMPORTANT -> TYPE_IMPORTANT
+        }
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerView.ViewHolder {
+        val holder = when(viewType) {
+            TYPE_SILENT -> throw IllegalArgumentException("Silent actions must not show up")
+
+            TYPE_REGULAR -> {
+                RegularViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.game_action_message, parent, false)
+                )
             }
+
+            TYPE_IMPORTANT -> {
+                ImportantViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.game_action_important_message, parent, false)
+                )
+            }
+
+            else -> throw IllegalArgumentException("Invalid type")
         }
-    }
-    fun updateMessagesList() {
-        mMessages = GameMessage.getGameActionsList()
-        this.notifyDataSetChanged()
+        return holder
     }
 
-    override fun getItemCount(): Int {
-        return mMessages.size
+
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
+        val message = dataList[position]
+        when(holder.itemViewType) {
+            TYPE_REGULAR -> {
+                val regularHolder = holder as RegularViewHolder
+                regularHolder.textView.text = message.heading
+                regularHolder.cardView.setOnClickListener{
+                    regularHolder.dialog.show()
+                }
+                regularHolder.dialog
+                    .setTitle(message.heading)
+                    .setMessage(message.description)
+                    .setPositiveButton("OK") {_,_ -> }
+            }
+
+            TYPE_IMPORTANT -> {
+                val importantHolder = holder as ImportantViewHolder
+                importantHolder.textView.text = message.heading
+                importantHolder.itemView.setOnClickListener{
+                    importantHolder.dialog.show()
+                }
+                importantHolder.dialog
+                    .setTitle(message.heading)
+                    .setMessage(message.description)
+                    .setPositiveButton("OK") {_,_ -> }
+            }
+
+            TYPE_SILENT -> {}
+        }
+    }
+
+    fun updateMessagesList() {
+        if (CmdManager.stateHistory.size < 2) return
+        val state = CmdManager.stateHistory[CmdManager.stateHistory.size - 2]
+        if (state.mainBtnState.importance == EventImportance.SILENT) return
+
+        dataList.add(
+            0,
+            GameMessage(
+                gameActionFormatter(state.mainBtnState.overwriteText ?: state.mainBtnState.description, state),
+                state.toString(),
+                state.mainBtnState.importance
+            )
+        )
+        this.notifyItemInserted(0)
+    }
+
+    private fun gameActionFormatter(string: String, state: MafiaGameState): String {
+        var s = string
+        when(state.mainBtnState) {
+            MainBtnState.START_DAY -> s += " ${(state.currentPhaseNumber)/2 + 1}"
+            MainBtnState.START_NIGHT -> s += " ${(state.currentPhaseNumber)/2}"
+
+            MainBtnState.START_SPEECH -> s = s.replace("#", state.cursor.toString())
+
+            MainBtnState.MAFIA_KILL -> s =
+                if (state.mafiaMissStreak == 0) s+ " ${(state.cursor)}"
+                else "Misfire ( ${state.mafiaMissStreak}/3)"
+
+            MainBtnState.CHECK_DON -> {}//TODO
+            MainBtnState.CHECK_SHR -> {}//TODO
+
+            MainBtnState.BEST_MOVE -> {}//TODO
+            else -> {}
+        }
+        return s
+    }
+
+    override fun getItemCount() = dataList.size-1
+
+    companion object {
+        private const val TYPE_SILENT = 0
+        private const val TYPE_REGULAR = 1
+        private const val TYPE_IMPORTANT = 2
     }
 }

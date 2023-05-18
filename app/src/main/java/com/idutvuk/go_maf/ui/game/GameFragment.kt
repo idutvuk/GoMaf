@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
+import com.idutvuk.go_maf.model.CmdManager
 import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
@@ -47,13 +49,20 @@ class GameFragment : Fragment() {
         b = FragmentGameBinding.inflate(inflater, container, false)
 
 
+        //setup RecyclerView adapter
+        val adapter = RecyclerViewLogAdapter(ArrayList())
+        b.bottomSheetLayout.rvLog.adapter = adapter
+        val layoutManager = LinearLayoutManager(context)
+        b.bottomSheetLayout.rvLog.layoutManager = layoutManager
+
+
+
         // create a layout params object for the buttons
         val layoutParams = ConstraintLayout.LayoutParams(
             ConstraintLayout.LayoutParams.WRAP_CONTENT,
             ConstraintLayout.LayoutParams.WRAP_CONTENT
         )
 
-        //TODO: fix oval shadow
         for (i in 0 until Game.numPlayers) {
             buttons.add(MaterialButton(requireContext(), null, R.attr.playerButtonStyle))
             buttons[i].text = "  $i  " //TODO: replace to (i + 1)
@@ -78,12 +87,6 @@ class GameFragment : Fragment() {
             buttons[i].y += pivotPoints[i][1]
         }
 
-
-//        val messages = GameMessage.getGameActionsList()
-        val messages = GameMessage.createGameMessagesList(10)
-        val adapter = RecyclerViewLogAdapter(messages)
-
-
 //subscribers
 
         viewModel.ldTimerActive.observe(viewLifecycleOwner) {
@@ -100,12 +103,12 @@ class GameFragment : Fragment() {
 
         viewModel.ldTime.observe(viewLifecycleOwner) {
             b.bottomSheetLayout.btnPrevPhase.icon = ContextCompat.getDrawable(requireContext(),
-                if (it == GameTime.DAY) R.drawable.ic_sun
-                else R.drawable.ic_moon
+                if (it == GameTime.DAY) GameTime.DAY.icon
+                else GameTime.NIGHT.icon
             )
             b.bottomSheetLayout.btnNextPhase.icon = ContextCompat.getDrawable(requireContext(),
-                if (it == GameTime.DAY) R.drawable.ic_moon
-            else R.drawable.ic_sun
+                if (it == GameTime.DAY) GameTime.NIGHT.icon
+            else GameTime.DAY.icon
             )
         }
 
@@ -118,11 +121,8 @@ class GameFragment : Fragment() {
         }
 
         viewModel.ldVoteList.observe(viewLifecycleOwner) {
-            var shortVoteList = ""
-            for (element in it) {
-                shortVoteList += "$element, "
-            }
-            b.table.tvContextInfo.text = shortVoteList
+
+            b.table.tvContextInfo.text = it
         }
 
         viewModel.ldMainButtonState.observe(viewLifecycleOwner) {
@@ -143,6 +143,8 @@ class GameFragment : Fragment() {
             for(i in 0 until Game.numPlayers) {
                 buttons[i].strokeWidth =  if (it[i]) 3 else 0
             }
+            adapter.updateMessagesList() //todo move it to other part of the code (combine all the livedata?)
+            b.bottomSheetLayout.rvLog.scrollToPosition(0)
         }
 
         viewModel.ldCursor.observe(viewLifecycleOwner) {
@@ -151,13 +153,10 @@ class GameFragment : Fragment() {
 
         //setup bottom sheet behavior
         BottomSheetBehavior.from(b.bottomSheetLayout.bottomSheet).apply {
-            peekHeight = 400
+            peekHeight = 380
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        //setup RecyclerView adapter
-        b.bottomSheetLayout.rvLog.adapter = adapter
-        b.bottomSheetLayout.rvLog.layoutManager = LinearLayoutManager(context)
 
 
         b.fabPeep.setOnClickListener {
@@ -223,8 +222,13 @@ class GameFragment : Fragment() {
             viewModel.onClickBtnMain()
         }
 
+        b.fabDebug.setOnClickListener {
+
+        }
+
         return b.root
     }
+
 
     /**
      * just give this method a number of player to point at

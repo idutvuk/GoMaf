@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView android:id="@+id/card_view"
+<com.google.android.material.card.MaterialCardView
+    android:id="@+id/cardView"
     style="@style/Widget.Material3.CardView.Filled"
     app:cardBackgroundColor="@color/cardview_light_background"
     android:layout_width="match_parent"
@@ -18,24 +19,13 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_heading"
+            android:id="@+id/tvHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:text="Heading"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-        <!-- TODO: expandable CardView -->
-        <TextView
-            android:id="@+id/tv_d_importance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:textSize="18sp"
-            android:text="9"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
