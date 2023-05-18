@@ -102,7 +102,7 @@ class GameViewModel : ViewModel() {
     }
 
     fun getEmoji(i: Int): CharSequence {
-        return gameState.players[i].emoji
+        return gameState.players[i].role.emoji
     }
 }
 

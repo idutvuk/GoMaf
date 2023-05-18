@@ -19,7 +19,6 @@ class PressPlayerNumber:CmdCommitState {
              */
             when (previousMainButtonActionState) {
                 MainBtnState.ADD_TO_VOTE -> {
-                    Log.d("GameLog", "(CmdM) Added to vote")
                     addToVoteList()
                 }
 

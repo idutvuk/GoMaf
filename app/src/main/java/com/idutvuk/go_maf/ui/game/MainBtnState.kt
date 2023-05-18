@@ -3,20 +3,51 @@ package com.idutvuk.go_maf.ui.game
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
-
-//TODO: add possibility to make any action in any time via holding the main button
 enum class MainBtnState(
+    /**
+     * Text that will be shown on the main button
+     */
     val text: String,
+
+    /**
+     * Icon that will be shown on the main button
+     */
     val icon: Int = R.drawable.ic_debug,
-    val requireNumber: PlayerSelectionMode //TODO: check for necessity
+
+    /**
+     * Does the action require one or many player numbers to input
+     */
+    val requireNumber: PlayerSelectionMode,
+
+//    /**
+//     * Does the action require additional information
+//     * If true -
+//     */
+//    val requireAdditionalInformation: Boolean = false,
+//
+    /**
+     * Description that should describe game state change inside recycler
+     */
+    val description: String = text,
+
+    /**
+     * if 0 - not shows up in RV
+     * if 1 - shows up in RV
+     * if 2 - shows up in RV but as game_action_important_message.xml
+     */
+    val importance: EventImportance,
+
+    val overwriteText: String? = null
 ) {
     /**
      * Crashes the app lol
      */
     CRASH(
         text = "It should crash the app",
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "CRASH BUTTON STATE",
+        importance = EventImportance.REGULAR,
+        ),
     //Misc/debug states
     /**
      * Default state
@@ -24,8 +55,10 @@ enum class MainBtnState(
     NEXT(
         text = "Skip",
         icon = R.drawable.ic_arrow_right,
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "Skipped",
+        importance = EventImportance.SILENT,
+        ),
 
     /**
      * Debug state. Should not be used in the game
@@ -33,8 +66,10 @@ enum class MainBtnState(
     DEBUG(
         text = "Debug mainBtn state",
         icon = R.drawable.ic_debug,
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+        requireNumber = PlayerSelectionMode.NONE,
+        description = "Debug state passed",
+        importance = EventImportance.REGULAR,
+        ),
 
 
     //Start/end game states
@@ -45,8 +80,9 @@ enum class MainBtnState(
     START_GAME(
         text = "Start game",
         icon = R.drawable.ic_play,
-        requireNumber = PlayerSelectionMode.NONE
-    ),
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.IMPORTANT,
+        ),
 
     /**
      * End game
@@ -54,7 +90,9 @@ enum class MainBtnState(
     END_GAME(
         text = "End game",
         icon = R.drawable.ic_stop,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.IMPORTANT,
+        overwriteText = "Game ended"
     ),
 
     //DayTimes
@@ -64,7 +102,9 @@ enum class MainBtnState(
      */
     START_VOTE(
         text = "Start vote",
-        requireNumber = PlayerSelectionMode.MULTIPLE
+        requireNumber = PlayerSelectionMode.MULTIPLE,
+        importance = EventImportance.IMPORTANT,
+        overwriteText = "Vote"
     ),
 
     /**
@@ -73,7 +113,9 @@ enum class MainBtnState(
     START_DAY(
         text = "Start day",
         icon = R.drawable.ic_sun,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.IMPORTANT,
+        overwriteText = "Day"
     ),
 
     /**
@@ -82,7 +124,9 @@ enum class MainBtnState(
     START_NIGHT(
         text = "Start night",
         icon = R.drawable.ic_moon,
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.IMPORTANT,
+        overwriteText = "Night"
     ),
 
     //Day actions
@@ -92,7 +136,9 @@ enum class MainBtnState(
      */
     START_SPEECH(
         text = "Start speech",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.REGULAR,
+        overwriteText = "Player # spoked"
     ),
 
     /**
@@ -102,7 +148,8 @@ enum class MainBtnState(
     @Deprecated("Should not be used in game")
     END_SPEECH(
         text = "End speech",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.SILENT
     ),
 
     /**
@@ -110,7 +157,8 @@ enum class MainBtnState(
      */
     ADD_TO_VOTE(
         text = "Add to vote",
-        requireNumber = PlayerSelectionMode.SINGLE
+        requireNumber = PlayerSelectionMode.SINGLE,
+        importance = EventImportance.SILENT
     ),
 
     /**
@@ -118,7 +166,8 @@ enum class MainBtnState(
      */
     KILL_IN_VOTE(
         text = "Kill by vote",
-        requireNumber = PlayerSelectionMode.MULTIPLE
+        requireNumber = PlayerSelectionMode.MULTIPLE,
+        importance = EventImportance.SILENT
     ),
 
     // Night actions
@@ -128,7 +177,9 @@ enum class MainBtnState(
      */
     START_MAFIA_SPEECH(
         text = "Mafia speech",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.REGULAR,
+        overwriteText = "Mafia speech"
     ),
 
     /**
@@ -138,7 +189,9 @@ enum class MainBtnState(
     MAFIA_KILL(
         text = "Kill",
         icon = R.drawable.ic_gun_target,
-        requireNumber = PlayerSelectionMode.SINGLE
+        requireNumber = PlayerSelectionMode.SINGLE,
+        importance = EventImportance.REGULAR,
+        overwriteText = "Killed "
     ),
 
     /**
@@ -146,7 +199,8 @@ enum class MainBtnState(
      */
     CHECK_DON(
         text = "Don check",
-        requireNumber = PlayerSelectionMode.SINGLE
+        requireNumber = PlayerSelectionMode.SINGLE,
+        importance = EventImportance.REGULAR,
     ),
 
     /**
@@ -154,7 +208,8 @@ enum class MainBtnState(
      */
     CHECK_SHR(
         text = "Sheriff check",
-        requireNumber = PlayerSelectionMode.SINGLE
+        requireNumber = PlayerSelectionMode.SINGLE,
+        importance = EventImportance.REGULAR
     ),
 
     /**
@@ -162,7 +217,8 @@ enum class MainBtnState(
      */
     BEST_MOVE(
         text = "Best move",
-        requireNumber = PlayerSelectionMode.MULTIPLE
+        requireNumber = PlayerSelectionMode.MULTIPLE,
+        importance = EventImportance.REGULAR
     ),
 
     /**
@@ -172,6 +228,7 @@ enum class MainBtnState(
      */
     WAITING_FOR_CLICK(
         text = "Cancel",
-        requireNumber = PlayerSelectionMode.NONE
+        requireNumber = PlayerSelectionMode.NONE,
+        importance = EventImportance.SILENT
     )
 }
