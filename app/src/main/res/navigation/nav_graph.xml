@@ -17,20 +17,17 @@
             android:id="@+id/action_mainMenuFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_mainMenuFragment_to_placeholder"
-            app:destination="@id/tournamentPlaceholder" />
-        <action
             android:id="@+id/action_mainMenuFragment_to_settingsFragment2"
             app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/action_mainMenuFragment_to_tutorialPlaceholder"
-            app:destination="@id/tutorialPlaceholder" />
         <action
             android:id="@+id/action_mainMenuFragment_to_settingsFragment3"
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_mainMenuFragment_to_debugFragment"
             app:destination="@id/debugFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_gamesViewerFragment"
+            app:destination="@id/gamesViewerFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -41,11 +38,14 @@
         android:id="@+id/settingsFragment"
         android:name="com.idutvuk.go_maf.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
-    <fragment android:id="@+id/tournamentPlaceholder" />
-    <fragment android:id="@+id/tutorialPlaceholder" />
     <fragment
         android:id="@+id/debugFragment"
         android:name="com.idutvuk.go_maf.ui.debug.DebugFragment"
         android:label="fragment_debug"
         tools:layout="@layout/fragment_debug" />
+    <fragment
+        android:id="@+id/gamesViewerFragment"
+        android:name="com.idutvuk.go_maf.ui.gameslist.GamesViewerFragment"
+        android:label="fragment_games_viewer_list"
+        tools:layout="@layout/fragment_games_viewer_list" />
 </navigation>
