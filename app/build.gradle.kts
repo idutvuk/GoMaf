@@ -41,12 +41,13 @@ android {
 }
 
 dependencies {
+
+//    implementation(libs.markdown)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
-    implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(libs.preference)
     implementation(libs.androidx.navigation.fragment.ktx)
