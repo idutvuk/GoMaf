@@ -42,7 +42,7 @@ android {
 
 dependencies {
 
-    implementation(libs.markdown)
+//    implementation(libs.markdown)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 
