@@ -34,6 +34,10 @@ class MainMenuFragment : Fragment() {
             navController.navigate(R.id.action_mainMenuFragment_to_settingsFragment)
         }
 
+        b.btnRules.setOnClickListener {
+            navController.navigate(R.id.action_mainMenuFragment_to_rulesFragment)
+        }
+
         b.btnExitApp.setOnClickListener {
             TODO("Not yet implemented")
         }

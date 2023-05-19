@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_mainMenuFragment_to_gamesViewerFragment"
             app:destination="@id/gamesViewerFragment" />
+        <action
+            android:id="@+id/action_mainMenuFragment_to_rulesFragment"
+            app:destination="@id/rulesFragment" />
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
@@ -48,4 +51,9 @@
         android:name="com.idutvuk.go_maf.ui.gameslist.GamesViewerFragment"
         android:label="fragment_games_viewer_list"
         tools:layout="@layout/fragment_games_viewer_list" />
+    <fragment
+        android:id="@+id/rulesFragment"
+        android:name="com.idutvuk.go_maf.ui.rules.RulesFragment"
+        android:label="fragment_rules"
+        tools:layout="@layout/fragment_rules" />
 </navigation>
