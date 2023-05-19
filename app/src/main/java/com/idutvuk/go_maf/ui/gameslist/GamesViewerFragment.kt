@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.idutvuk.go_maf.databinding.FragmentGamesViewerListBinding
-import com.idutvuk.go_maf.ui.gameslist.placeholder.PlaceholderContent
+import com.idutvuk.go_maf.ui.gameslist.placeholder.GamesContent
 
 /**
  * A fragment representing a list of Items.
@@ -20,7 +20,7 @@ class GamesViewerFragment : Fragment() {
     ): View {
         b = FragmentGamesViewerListBinding.inflate(inflater,container,false)
             b.rvGames.layoutManager = LinearLayoutManager(context)
-            b.rvGames.adapter = GamesRecyclerViewAdapter(PlaceholderContent.ITEMS)
+            b.rvGames.adapter = GamesRecyclerViewAdapter(GamesContent.ITEMS)
 
         return b.root
     }

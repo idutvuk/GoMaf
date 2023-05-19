@@ -87,7 +87,7 @@
             android:scaleType="fitXY"
             android:layout_gravity="top|end"
             android:layout_margin="16dp"
-            android:src="@drawable/black4"
+            tools:src="@drawable/ic_people"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
