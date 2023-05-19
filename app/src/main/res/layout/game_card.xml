@@ -1,69 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8" ?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:orientation="horizontal">
+    style="@style/Widget.Material3.CardView.Elevated"
+    app:cardCornerRadius="8dp"
+    android:layout_marginVertical="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivPfp"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvGameNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="# 34"
+            android:textSize="12sp"
+            android:textColor="@color/design_default_color_primary"/>
+
+        <TextView
+            android:id="@+id/tvGameDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="23.05.2023"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvGameTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="17:05:39"
+            android:textSize="24sp"
+            android:textStyle="bold"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipGameStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Game Status"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="@dimen/text_margin">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvGameCardNumber"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="14" />
+                android:src="@drawable/ic_people"
+                android:layout_marginEnd="10dp"/>
 
             <TextView
-                android:id="@+id/tvGameDate"
+                android:id="@+id/tvGamePlayerNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="24/04/23" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="12dp"
-                android:background="?android:attr/dividerHorizontal" />
-
-            <TextView
-                android:id="@+id/tvGameState"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Finished" />
+                tools:text="10"/>
 
             <TextView
                 android:id="@+id/tvGameDuration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="0:34:56" />
-
-            <com.google.android.material.divider.MaterialDivider
                 android:layout_width="match_parent"
-                android:layout_height=".5dp"
-                android:layout_marginTop="12dp"/>
-
-            <TextView
-                android:id="@+id/tvPlayers"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textAppearance="?attr/textAppearanceListItem"
-                tools:text="Player 1" />
-
+                android:gravity="end"
+                tools:text="0:35:02"/>
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivPfp"
+            app:shapeAppearanceOverlay="@style/RoundedImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:scaleType="fitXY"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:src="@drawable/black4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

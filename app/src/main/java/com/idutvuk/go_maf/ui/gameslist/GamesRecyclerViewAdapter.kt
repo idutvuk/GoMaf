@@ -40,7 +40,7 @@ class GamesRecyclerViewAdapter(
 
     inner class ViewHolder(binding: GameCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val idView: TextView = binding.tvGameCardNumber
+        val idView: TextView = binding.tvGameNumber
         val contentView: TextView = binding.tvGameDate
 
         override fun toString(): String {

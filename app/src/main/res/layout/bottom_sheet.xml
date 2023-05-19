@@ -5,6 +5,7 @@
     android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:maxWidth="640dp"
     android:background="@drawable/bottom_sheet_bg"
     android:orientation="vertical"
     android:clipChildren="false">
