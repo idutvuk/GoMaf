@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.idutvuk.go_maf.databinding.FragmentRulesBinding
 
 class RulesFragment : Fragment() {
 
@@ -14,12 +15,14 @@ class RulesFragment : Fragment() {
     }
 
     private lateinit var viewModel: RulesViewModel
-
-    override fun onCreateView(
+    lateinit var b: FragmentRulesBinding
+            override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_rules, container, false)
+    ): View {
+        b = FragmentRulesBinding.inflate(inflater,container,false)
+
+        return b.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
