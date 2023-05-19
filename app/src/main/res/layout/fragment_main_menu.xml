@@ -25,6 +25,14 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_saved_games"
+        android:text="Games"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.Button.OutlinedButton"/>
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_exit_app"
         android:text="Exit"

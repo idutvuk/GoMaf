@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:name="com.idutvuk.go_maf.ui.gameslist.GamesViewerFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".ui.gameslist.GamesViewerFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rvGames"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    tools:listitem="@layout/game_card" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
