@@ -1,6 +1,7 @@
 [versions]
 com-android-application = "8.1.0-alpha10"
 google-material = "1.2.0"
+markdown = "0.2.0.pre-55"
 navigation-fragment-ktx = "2.3.0"
 org-jetbrains-kotlin-android = "1.8.0"
 core-ktx = "1.9.0"
@@ -26,6 +27,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 material-1_2_0 = { module = "com.google.android.material:material", version.ref = "google-material" }
