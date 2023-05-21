@@ -37,15 +37,16 @@ fun UserProfilePicture (
 @Preview
 @Composable
 fun UserProfilePicturesRow(
-    pictures: ArrayList<Int> = picturesList,
-    backgroundColor: Color = Color.Transparent
+    pictures: List<Int> = picturesList,
+    backgroundColor: Color = Color.Transparent,
+    modifier: Modifier = Modifier
 ) { //todo automatize
-    Row {
+    Row (modifier = modifier){
         for (i in 0 until pictures.size) {
             UserProfilePicture(
                 pictures[i],
                 modifier = Modifier.offset(
-                    x= (-5*i).dp
+                    x= (-8*i).dp
                 ),
                 borderColor = backgroundColor
             )

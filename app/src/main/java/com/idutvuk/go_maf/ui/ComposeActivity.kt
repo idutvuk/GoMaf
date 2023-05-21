@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.idutvuk.go_maf.ui.component.ItemPreview
 import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
 
 class ComposeActivity : ComponentActivity() {
@@ -38,19 +39,7 @@ class ComposeActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListViewer() {
-    Scaffold(
-        topBar = { DefaultTopAppBar() }
-    ) { paddingValues ->
-        Box(modifier = Modifier
-            .padding(paddingValues)
-        ) {
-            Column() {
-                GameItemCard(name = "1")
-                GameItemCard(name = "2")
-                GameItemCard(name = "3")
-            }
-        }
-    }
+    ItemPreview()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,33 +64,6 @@ fun DefaultTopAppBar(
 }
 
 
-@Composable
-fun GameItemCard(name: String, modifier: Modifier = Modifier) {
-    Card (modifier = Modifier
-        .padding(
-            start = 4.dp,
-            end = 4.dp,
-            top = 5.dp,
-            bottom = 5.dp
-        )
-        .fillMaxWidth()
-    ){
-        Column {
-            Row {
-                Text(
-                    text = "Date",
-                    modifier = modifier
-                        .padding(5.dp)
-                )
-            }
-            Row {
-
-            }
-
-        }
-
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
