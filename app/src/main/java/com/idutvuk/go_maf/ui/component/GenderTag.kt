@@ -16,9 +16,12 @@ import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.ui.ui.theme.Typography
 
 @Composable
-fun GameActivityStatusTag(status: String) {
-    val color = if (status == "Male") R.color.blue else R.color.light_green
-    ChipView(gender = status, colorResource = colorResource(id = color))
+fun GenderTag(isActive: Boolean) { //TODO rename to proper name
+    if (isActive) {
+        ChipView(gender = "Active", colorResource = colorResource(id = R.color.light_green))
+    } else {
+        ChipView(gender = "Finished", colorResource = colorResource(id = R.color.blue))
+    }
 }
 
 @Composable

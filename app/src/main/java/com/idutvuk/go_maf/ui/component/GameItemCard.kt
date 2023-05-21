@@ -15,13 +15,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -30,9 +30,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.ui.ui.theme.Typography
+import java.util.Random
 
 @Composable
-fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
+fun GameItemCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -41,15 +42,16 @@ fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
             .clickable(onClick = { onItemClicked(dog) }),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
-        ),
+        )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-
-            val image: Painter = painterResource(id = dog.image)
+            val random = Random()
+            val id = if(random.nextBoolean()) R.drawable.black3 else R.drawable.red2
+            val image: Painter = painterResource(id = id)
             Image(
                 modifier = Modifier
                     .size(80.dp, 80.dp)
@@ -69,52 +71,58 @@ fun ItemDogCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
                     fontWeight = FontWeight.Bold,
                     style = Typography.bodySmall
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = buildString {
-                        append(dog.age)
-                        append("yrs | ")
-                        append(dog.gender)
-                    },
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                    style = Typography.bodySmall
-                )
 
                 Row(verticalAlignment = Alignment.Bottom) {
 
-                    val location: Painter = painterResource(id = R.drawable.ic_people)
+                    val numPlayersIcon: Painter = painterResource(id = R.drawable.ic_people)
 
                     Icon(
-                        painter = location,
+                        painter = numPlayersIcon,
                         contentDescription = null,
-                        modifier = Modifier.size(16.dp, 16.dp),
-                        tint = Color.Red
+                        modifier = Modifier.size(16.dp, 16.dp)
                     )
 
                     Text(
-                        text = dog.location,
+                        text = dog.location, //TODO: replace with playercount
                         modifier = Modifier.padding(8.dp, 12.dp, 12.dp, 0.dp),
                         style = Typography.bodySmall
                     )
                 }
+                Spacer(modifier = Modifier.height(10.dp))
+                UserProfilePicturesRow(
+                    backgroundColor = MaterialTheme.colorScheme.surfaceTint
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                GameActivityStatusTag(dog.gender)
+                GenderTag(isActive = true) //TODO replace with isGameActive
             }
         }
     }
 }
 
 @Preview(
-    showBackground = true
+
 )
 @Composable
 fun ItemPreview() {
-    ItemDogCard(dog = dogs[1], onItemClicked = {})
+    Column {
+        GameItemCard(dog = fakeDatasetOfDogs[0], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[1], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[2], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[0], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[1], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[2], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[0], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[1], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[2], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[0], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[1], onItemClicked = {})
+        GameItemCard(dog = fakeDatasetOfDogs[2], onItemClicked = {})
+    }
+
 }
 
 data class Dog(
@@ -133,15 +141,15 @@ data class Dog(
 data class Owner(val name: String, val bio: String)
 
 
-val dogs = arrayListOf(
+val fakeDatasetOfDogs = arrayListOf(
     Dog(
         id = 1,
-        name = "Buddy",
+        name = "23/05/2023 | 17:03",
         age = 3.5,
         gender = "Male",
         color = "Golden",
         weight = 25.5,
-        location = "Los Angeles, CA",
+        location = "10", //players count
         image = R.drawable.ic_people,
         about = "Buddy is a playful and energetic dog who loves to go on walks and play fetch. He gets along well with other dogs and people.",
         owner = Owner(
@@ -181,4 +189,11 @@ val dogs = arrayListOf(
             bio = "Max is my best friend and I couldn't imagine my life without him. He's always by my side and I wouldn't have it any other way.",
         )
     )
+)
+
+val picturesList = arrayListOf(
+    R.drawable.black7,
+    R.drawable.red3,
+    R.drawable.black2,
+    R.drawable.black3,
 )
