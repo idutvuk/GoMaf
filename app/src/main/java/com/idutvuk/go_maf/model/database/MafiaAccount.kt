@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.model.gamedata
+package com.idutvuk.go_maf.model.database
 
 data class MafiaAccount(
     val id: Int,
