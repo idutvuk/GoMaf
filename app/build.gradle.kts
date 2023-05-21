@@ -53,8 +53,9 @@ android {
 }
 
 dependencies {
+    //room
+    implementation (libs.androidx.room.runtime)
 
-//    implementation(libs.markdown)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 
