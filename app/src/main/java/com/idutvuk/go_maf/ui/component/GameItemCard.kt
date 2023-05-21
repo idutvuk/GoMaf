@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf.ui.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -104,7 +105,7 @@ fun GameItemCard(dog: Dog, onItemClicked: (dog: Dog) -> Unit) {
 }
 
 @Preview(
-
+    name = "Light theme"
 )
 @Composable
 fun ItemPreview() {
