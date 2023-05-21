@@ -17,6 +17,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -37,6 +40,15 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.4.0"
+    }
+    packagingOptions {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 
@@ -46,9 +58,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 
-
     implementation(libs.androidx.compose.bom)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
     androidTestImplementation(libs.androidx.compose.bom)
+//    implementation(libs.androidx.compose.runtime)
+//    implementation(libs.androidx.compose.ui)
 
 
     implementation(libs.core.ktx)
@@ -66,5 +86,9 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     testImplementation(libs.truth)
     androidTestImplementation(libs.truth)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
 }
