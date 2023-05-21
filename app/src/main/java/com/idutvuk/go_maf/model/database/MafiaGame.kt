@@ -19,8 +19,12 @@ data class MafiaGame(
 
     @ColumnInfo(name = "is_completed")
     val isCompleted: Boolean,
-//    val players: List<MafiaAccount>,
-//    val host: MafiaAccount,
+
+    @ColumnInfo(name = "host")
+    val host: MafiaAccount, //todo maybe serialize it to gson?
+
+    @ColumnInfo(name = "players")
+    var players: ArrayList<MafiaAccount>, //todo maybe serialize it to gson?
 
     @ColumnInfo(name = "duration")
     val duration: Time,

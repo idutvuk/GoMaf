@@ -56,6 +56,8 @@ dependencies {
     //room
     implementation (libs.androidx.room.runtime)
 
+    implementation (libs.gson)
+
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 

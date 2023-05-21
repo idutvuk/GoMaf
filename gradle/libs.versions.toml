@@ -2,6 +2,7 @@
 com-android-application = "8.1.0-alpha10"
 compose-bom = "2023.05.01"
 google-material = "1.2.0"
+gson = "2.10.1"
 markdown = "0.2.0.pre-55"
 navigation-fragment-ktx = "2.3.0"
 org-jetbrains-kotlin-android = "1.8.0"
@@ -29,6 +30,7 @@ androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = 
 androidx-navigation-fragment-ktx-2_3_0 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigation-fragment-ktx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room-runtime" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
