@@ -62,7 +62,6 @@ class GamesRecyclerViewAdapter(
                 true, false -> "Finished"
                 null -> "Active"
             }
-
         }
     }
 

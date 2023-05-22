@@ -53,7 +53,7 @@
         tools:layout="@layout/fragment_games_viewer_list" />
     <fragment
         android:id="@+id/rulesFragment"
-        android:name="com.idutvuk.go_maf.RulesFragment"
+        android:name="com.idutvuk.go_maf.ui.rules.RulesFragment"
         android:label="fragment_rules"
         tools:layout="@layout/fragment_rules" />
 </navigation>

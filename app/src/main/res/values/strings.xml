@@ -21,5 +21,6 @@
     <string name="debug_test">test</string>
     <string name="coming_soon">You shouldn\'t be able to see it.</string>
     <string name="description">Красота — словно ангел, несущий разрушение. Как нечто настолько красивое может нести столько зла? Но не существует на свете такого ангела, который был бы так разрушителен, как их алчность. В конце концов она их всех погубит. Им кажется, что они могут с ней справиться. Но алчность — та единственная змея, которую невозможно околдовать.</string>
+    <string name="title_activity_compose">ComposeActivity</string>
 
 </resources>

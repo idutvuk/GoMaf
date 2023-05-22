@@ -1,14 +1,12 @@
-package com.idutvuk.go_maf
+package com.idutvuk.go_maf.ui.rules
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.text.Html
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import com.idutvuk.go_maf.databinding.FragmentRulesBinding
+import com.idutvuk.go_maf.R
 
 class RulesFragment : Fragment() {
     override fun onCreateView(
