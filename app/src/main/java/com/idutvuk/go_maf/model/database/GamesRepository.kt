@@ -31,4 +31,8 @@ class GamesRepository(private val gameDao: GameDao) {
         coroutineScope.async(Dispatchers.IO) {
             return@async gameDao.getItem(id)
         }
+
+    companion object {
+        const val IS_DATA_MOCKED = false
+    }
 }

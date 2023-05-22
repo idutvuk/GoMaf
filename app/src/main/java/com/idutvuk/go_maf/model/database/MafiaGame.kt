@@ -35,6 +35,9 @@ data class MafiaGame(
 //    val history: ArrayList<MafiaGameState>
 ) {
     companion object {
+        /**
+         * mock data
+         */
         val gameDates = (16409L..16638L).shuffled().take(20).map { it*100000L } // UNIX timestamps between 2022-01-01 and 2023-12-31
         val gameTimes = (0L..43200L).shuffled().take(20).map { Time(it * 1000) } // random times between 12:00 AM and 12:00 PM
         val numPlayers = (6..12).toList()
