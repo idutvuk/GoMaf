@@ -7,7 +7,7 @@ import com.idutvuk.go_maf.model.database.MafiaAccount.Companion.users
 import java.sql.Date
 import java.sql.Time
 
-@Entity
+@Entity(tableName = "games")
 data class MafiaGame(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
@@ -21,14 +21,14 @@ data class MafiaGame(
     @ColumnInfo(name = "is_completed")
     val isCompleted: Boolean,
 
-    @ColumnInfo(name = "host")
-    val host: MafiaAccount, //todo maybe serialize it to gson?
+//    @ColumnInfo(name = "host")
+//    val host: MafiaAccount, //todo maybe serialize it to gson?
 
     @ColumnInfo(name = "num_players")
     val numPlayers: Int,
 
-    @ColumnInfo(name = "players")
-    var players: ArrayList<MafiaAccount>, //todo maybe serialize it to gson?
+//    @ColumnInfo(name = "players") //todo uncomment
+//    var players: ArrayList<MafiaAccount>, //todo maybe serialize it to gson?
 
     @ColumnInfo(name = "duration")
     val duration: Time,
@@ -49,9 +49,9 @@ data class MafiaGame(
                     time = startTime,
                     duration = duration,
                     isCompleted = false,
-                    host = users[0],
+//                    host = users[0],
                     numPlayers = players.size,
-                    players = players
+//                    players = players
                 )
             }
         }

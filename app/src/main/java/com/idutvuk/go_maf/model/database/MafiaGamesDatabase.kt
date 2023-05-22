@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 
 @Database(
@@ -11,6 +12,7 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class MafiaGamesDatabase : RoomDatabase() {
     abstract fun gameDao(): GameDao
 
@@ -18,10 +20,14 @@ abstract class MafiaGamesDatabase : RoomDatabase() {
         @Volatile
         private var Instance: MafiaGamesDatabase? = null
 
-        fun getDatabase(context: Context) : MafiaGamesDatabase {
+        fun getDatabase(context: Context): MafiaGamesDatabase {
             // if the Instance is not null, return it, otherwise create a new database instance.
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, MafiaGamesDatabase::class.java, "games")
+                Room.databaseBuilder(
+                    context,
+                    MafiaGamesDatabase::class.java,
+                    "games"
+                )
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }

@@ -5,10 +5,12 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.TypeConverters
 import kotlinx.coroutines.flow.Flow
 import java.sql.Date
 
 @Dao
+@TypeConverters(Converters::class)
 interface GameDao {
 
 //    @Query("SELECT * FROM games ORDER BY date ASC")

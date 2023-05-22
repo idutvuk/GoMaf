@@ -84,7 +84,7 @@ fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {
                         style = Typography.bodySmall
                     )
                     UserProfilePicturesRow(
-                        pictures = game.players.map { it.pictureId },
+//                        pictures = game.players.map { it.pictureId },
                         modifier = Modifier.weight(0.8f)
                     )
                 }
