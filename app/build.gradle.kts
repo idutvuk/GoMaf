@@ -1,8 +1,12 @@
+import org.jetbrains.kotlin.base.kapt3.KaptOptions
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.com.android.application)
     @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -55,7 +59,7 @@ android {
 dependencies {
     //room
     implementation (libs.androidx.room.runtime)
-
+    ksp(libs.androidx.room.compiler)
     implementation (libs.gson)
 
     implementation (libs.kotlinx.coroutines.core)
@@ -87,6 +91,9 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation (libs.androidx.runtime.livedata)
+
     implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
