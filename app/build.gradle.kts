@@ -58,6 +58,10 @@ dependencies {
 
     implementation (libs.gson)
 
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
+
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
 

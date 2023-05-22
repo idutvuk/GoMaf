@@ -36,7 +36,6 @@ class ComposeActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameListViewer() {
     ItemPreview()
