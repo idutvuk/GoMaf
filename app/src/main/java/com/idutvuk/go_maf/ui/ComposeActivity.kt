@@ -1,44 +1,85 @@
 package com.idutvuk.go_maf.ui
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.idutvuk.go_maf.ui.component.ItemPreview
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.idutvuk.go_maf.ui.component.GameItemsPreview
 import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
+import androidx.compose.runtime.livedata.observeAsState
+import com.idutvuk.go_maf.model.database.MafiaGame
+import com.idutvuk.go_maf.ui.component.GameItemCard
 
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             GoMafTheme {
-                GameListViewer()
+                val owner = LocalViewModelStoreOwner.current
+
+                owner?.let {
+                    val viewModel: MainViewModel = viewModel(
+                        it,
+                        "MainViewModel",
+                        MainViewModelFactory(
+                            LocalContext.current.applicationContext
+                                    as Application
+                        )
+                    )
+                    ScreenSetup(viewModel)
+                    GameListViewer()
+                }
             }
         }
     }
 }
 
+
+@Composable
+fun ScreenSetup(viewModel: MainViewModel) {
+    val allGames by viewModel.allGames.observeAsState(listOf())
+    val searchResults by viewModel.searchResults.observeAsState(listOf())
+
+    MainScreen(
+        allGames = allGames,
+        searchResults = searchResults,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+fun MainScreen(
+    allGames: List<MafiaGame>,
+    searchResults: List<MafiaGame>,
+    viewModel: MainViewModel
+) {
+    val searching = false
+    LazyColumn {
+        val list = if (searching) searchResults else allGames
+
+        items(list) { game ->
+            GameItemCard(game = game, onItemClicked = {})
+        }
+    }
+}
 @Composable
 fun GameListViewer() {
-    ItemPreview()
+    GameItemsPreview()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +102,6 @@ fun DefaultTopAppBar(
             }
         })
 }
-
 
 
 @Preview(showBackground = true)
