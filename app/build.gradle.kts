@@ -58,8 +58,9 @@ android {
 
 dependencies {
     //room
+    val roomVersion = "2.4.2"
     implementation (libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+    ksp("androidx.room:room-compiler:2.5.1")
     implementation (libs.gson)
 
     implementation (libs.kotlinx.coroutines.core)
