@@ -44,7 +44,6 @@ data class MafiaGame(
                 val duration = Time((30L..75L).random() * 60 * 1000)
                 val players = users.shuffled().take(numPlayers.random()).toCollection(arrayListOf())
                 MafiaGame(
-                    id = it,
                     date = Date(gameDates[it] * 1000),
                     time = startTime,
                     duration = duration,

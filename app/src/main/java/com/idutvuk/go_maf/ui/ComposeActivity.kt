@@ -4,13 +4,17 @@ import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -22,8 +26,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.idutvuk.go_maf.ui.component.GameItemsPreview
 import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
+import com.idutvuk.go_maf.ui.ui.theme.Typography
 
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +48,6 @@ class ComposeActivity : ComponentActivity() {
                         )
                     )
                     ScreenSetup(viewModel)
-                    GameListViewer()
                 }
             }
         }
@@ -58,7 +63,12 @@ fun ScreenSetup(viewModel: MainViewModel) {
     MainScreen(
         allGames = allGames,
         searchResults = searchResults,
-        viewModel = viewModel
+        viewModel = viewModel,
+        onFabClick = {
+            viewModel.insertGame(
+                game = MafiaGame.games[4]
+            )
+        }
     )
 }
 
@@ -66,14 +76,27 @@ fun ScreenSetup(viewModel: MainViewModel) {
 fun MainScreen(
     allGames: List<MafiaGame>,
     searchResults: List<MafiaGame>,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    onFabClick: () -> Unit
 ) {
-    val searching = false
-    LazyColumn {
-        val list = if (searching) searchResults else allGames
+    Scaffold(
+        topBar = { DefaultTopAppBar() },
+        floatingActionButton = {
+            FloatingActionButton(onClick = onFabClick) {
+                Icon(
+                    Icons.Filled.Add,
+                    contentDescription = "add"
+                )
+            }
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
 
-        items(list) { game ->
-            GameItemCard(game = game, onItemClicked = {})
+            items(allGames) { game ->
+                GameItemCard(game = game, onItemClicked = {})
+            }
         }
     }
 }
@@ -91,7 +114,9 @@ fun DefaultTopAppBar(
 ) {
     TopAppBar(
         title = {
-            Text("Saved games")
+            Text(text = "Saved games",
+                style = Typography.headlineLarge
+            )
         },
         navigationIcon = {
             IconButton(onClick = {}) {
