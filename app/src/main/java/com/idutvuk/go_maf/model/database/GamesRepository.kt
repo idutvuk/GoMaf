@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.*
 

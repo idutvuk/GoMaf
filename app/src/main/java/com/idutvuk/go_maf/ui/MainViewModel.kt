@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.model.database.GamesRepository
-import com.idutvuk.go_maf.model.database.MafiaGame
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
 
 class MainViewModel(application: Application) : ViewModel() {

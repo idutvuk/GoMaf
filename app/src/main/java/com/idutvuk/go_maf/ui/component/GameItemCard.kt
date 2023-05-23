@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.model.database.MafiaGame
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.ui.theme.Typography
 import java.lang.StringBuilder
 
@@ -53,13 +53,7 @@ fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {
         ) {
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
                 Text(
-                    text = StringBuilder(
-                        game.date.toString()
-                    ).append(
-                        " | "
-                    ).append(
-                        game.time.toString()
-                    ).toString(),
+                    text = game.startDate.toString(),
                     modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
                     fontWeight = FontWeight.Bold,
                     style = Typography.titleMedium
@@ -94,7 +88,7 @@ fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                GenderTag(isActive = game.isCompleted)
+                GenderTag(isActive = game.isOver)
             }
         }
     }
