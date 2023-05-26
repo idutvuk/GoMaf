@@ -26,6 +26,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.idutvuk.go_maf.ui.component.GameItemsPreview
 import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
@@ -60,20 +63,29 @@ fun ScreenSetup(viewModel: MainViewModel) {
     val allGames by viewModel.allGames.observeAsState(listOf())
     val searchResults by viewModel.searchResults.observeAsState(listOf())
 
-    MainScreen(
-        allGames = allGames,
-        searchResults = searchResults,
-        viewModel = viewModel,
-        onFabClick = {
-            viewModel.insertGame(
-                game = MafiaGame.games[4]
+    var screenState by remember { mutableStateOf(GAMES_VIEW) }
+    when (screenState) {
+        GAMES_VIEW -> {
+            HomeScreen(
+                allGames = allGames,
+                searchResults = searchResults,
+                viewModel = viewModel,
+                onFabClick = {
+                    screenState = NEW_GAME
+                }
             )
         }
-    )
+
+        GAME_VIEW -> TODO()
+        PLAYER_VIEW -> TODO()
+        NEW_GAME -> TODO()
+        GAME -> TODO()
+        GAME_END -> TODO()
+    }
 }
 
 @Composable
-fun MainScreen(
+fun HomeScreen(
     allGames: List<MafiaGame>,
     searchResults: List<MafiaGame>,
     viewModel: MainViewModel,
