@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.ui
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
@@ -32,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
+import com.idutvuk.go_maf.ui.component.GamesScreen
 import com.idutvuk.go_maf.ui.component.NewGameDialog
 import com.idutvuk.go_maf.ui.component.ScreenStatus.*
 import com.idutvuk.go_maf.ui.ui.theme.Typography
@@ -64,12 +66,13 @@ fun ScreenSetup(viewModel: MainViewModel) {
 
     var newGameDialogVis by remember { mutableStateOf( false ) }
     var playerDialogVis by remember { mutableStateOf( false ) }
+    var playersCount by remember { mutableStateOf( 11 ) }
 
 
     var screenState by remember { mutableStateOf(GAMES_VIEW) }
     when (screenState) {
         GAMES_VIEW -> {
-            HomeScreen(
+            GamesScreen(
                 allGames = allGames,
                 searchResults = searchResults,
                 viewModel = viewModel,
@@ -80,8 +83,9 @@ fun ScreenSetup(viewModel: MainViewModel) {
                     disableDialog = { newGameDialogVis = false },
                     startGame = {
                         newGameDialogVis = false
-                        screenState = GAME
-                    }
+                        playersCount = it
+                        //screenState = GAME
+                    },
                 )
             }
         }
@@ -90,39 +94,6 @@ fun ScreenSetup(viewModel: MainViewModel) {
 
         GAME -> TODO()
     }
-}
-
-@Composable
-fun HomeScreen(
-    allGames: List<MafiaGame>,
-    searchResults: List<MafiaGame>,
-    viewModel: MainViewModel,
-    onFabClick: () -> Unit
-) {
-    Scaffold(
-        topBar = { DefaultTopAppBar() },
-        floatingActionButton = {
-            FloatingActionButton(onClick = onFabClick) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "add"
-                )
-            }
-        }
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues = paddingValues)
-        ) {
-
-            items(allGames) { game ->
-                GameItemCard(game = game, onItemClicked = {})
-            }
-        }
-    }
-}
-@Composable
-fun GameListViewer() {
-    GameItemsPreview()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,13 +117,4 @@ fun DefaultTopAppBar(
                 )
             }
         })
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    GoMafTheme {
-        GameListViewer()
-    }
 }
