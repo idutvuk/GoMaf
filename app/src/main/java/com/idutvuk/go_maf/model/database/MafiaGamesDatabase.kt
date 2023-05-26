@@ -5,11 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.idutvuk.go_maf.model.database.entities.GamePlayer
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
+import com.idutvuk.go_maf.model.database.entities.User
 
 
 @Database(
-    entities = [MafiaGame::class],
-    version = 1,
+    entities = [
+        MafiaGame::class,
+        User::class,
+        GamePlayer::class,
+               ],
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

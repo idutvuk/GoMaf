@@ -2,6 +2,7 @@ package com.idutvuk.go_maf.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.*
 
@@ -31,4 +32,8 @@ class GamesRepository(private val gameDao: GameDao) {
         coroutineScope.async(Dispatchers.IO) {
             return@async gameDao.getItem(id)
         }
+
+    companion object {
+        const val IS_DATA_MOCKED = false
+    }
 }

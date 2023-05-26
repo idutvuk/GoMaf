@@ -27,7 +27,7 @@ import com.idutvuk.go_maf.ui.component.GameItemsPreview
 import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.idutvuk.go_maf.model.database.MafiaGame
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
 import com.idutvuk.go_maf.ui.ui.theme.Typography
 
