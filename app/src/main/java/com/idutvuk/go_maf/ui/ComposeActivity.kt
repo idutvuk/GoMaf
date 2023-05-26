@@ -47,10 +47,7 @@ class ComposeActivity : ComponentActivity() {
                     val viewModel: MainViewModel = viewModel(
                         it,
                         "MainViewModel",
-                        MainViewModelFactory(
-                            LocalContext.current.applicationContext
-                                    as Application
-                        )
+                        MainViewModelFactory(LocalContext.current.applicationContext as Application)
                     )
                     ScreenSetup(viewModel)
                 }
@@ -65,6 +62,10 @@ fun ScreenSetup(viewModel: MainViewModel) {
     val allGames by viewModel.allGames.observeAsState(listOf())
     val searchResults by viewModel.searchResults.observeAsState(listOf())
 
+    var newGameDialogVis by remember { mutableStateOf( false ) }
+    var playerDialogVis by remember { mutableStateOf( false ) }
+
+
     var screenState by remember { mutableStateOf(GAMES_VIEW) }
     when (screenState) {
         GAMES_VIEW -> {
@@ -72,23 +73,22 @@ fun ScreenSetup(viewModel: MainViewModel) {
                 allGames = allGames,
                 searchResults = searchResults,
                 viewModel = viewModel,
-                onFabClick = {
-                    screenState = NEW_GAME
-                }
+                onFabClick = { newGameDialogVis = true }
             )
-        }
-        NEW_GAME -> {
-
-            NewGameDialog()
+            if (newGameDialogVis) {
+                NewGameDialog(
+                    disableDialog = { newGameDialogVis = false },
+                    startGame = {
+                        newGameDialogVis = false
+                        screenState = GAME
+                    }
+                )
+            }
         }
 
         GAME_VIEW -> TODO()
 
-        PLAYER_VIEW -> TODO()
-
         GAME -> TODO()
-
-        GAME_END -> TODO()
     }
 }
 
