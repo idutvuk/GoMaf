@@ -10,7 +10,7 @@ import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
 
 class MainViewModel(application: Application) : ViewModel() {
     val allGames: LiveData<List<MafiaGame>>
-    private val repository: GamesRepository
+    private lateinit var repository: GamesRepository
     val searchResults: MutableLiveData<List<MafiaGame>>
 
     init {
@@ -21,7 +21,6 @@ class MainViewModel(application: Application) : ViewModel() {
         allGames = repository.allGames
         searchResults = repository.searchResults
     }
-
     fun insertGame(game: MafiaGame) {
         repository.insertGame(game)
     }

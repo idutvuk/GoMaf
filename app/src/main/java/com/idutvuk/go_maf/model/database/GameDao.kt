@@ -7,7 +7,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.TypeConverters
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
-import com.idutvuk.go_maf.model.database.entities.MafiaGamesWithHostUser
 import java.sql.Date
 
 @Dao
@@ -27,8 +26,8 @@ interface GameDao {
     fun delete(id: Int)
 
 
-    @Transaction
-    @Query("SELECT * FROM user")
-    fun getGamesWithHostUser(): List<MafiaGamesWithHostUser>
+//    @Transaction
+//    @Query("SELECT * FROM user")
+//    fun getGamesWithHostUser(): List<MafiaGamesWithHostUser>
 
 }

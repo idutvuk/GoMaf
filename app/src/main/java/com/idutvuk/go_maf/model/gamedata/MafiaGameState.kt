@@ -9,7 +9,7 @@ import java.lang.IllegalStateException
  * The state of a game.
  * It should contain all the information about game right now.
  */
-class MafiaGameState(
+data class MafiaGameState(
     val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
     /**
@@ -363,7 +363,7 @@ class MafiaGameState(
                 "isTimerActive=$isTimerActive" +
                 ")"
     }
-
+/*
     fun copy(): MafiaGameState {
         return MafiaGameState(
             numPlayers =                        this.numPlayers,
@@ -390,6 +390,7 @@ class MafiaGameState(
             isVoteCancelled =                   this.isVoteCancelled,
         )
     }
+    */
 }
 
 
