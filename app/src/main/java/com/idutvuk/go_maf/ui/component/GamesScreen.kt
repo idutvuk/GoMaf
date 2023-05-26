@@ -11,7 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
-import com.idutvuk.go_maf.ui.DefaultTopAppBar
+import com.idutvuk.go_maf.ui.component.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.MainViewModel
 
 @Composable

@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
+import com.idutvuk.go_maf.ui.component.GameScreen
 import com.idutvuk.go_maf.ui.component.GamesScreen
 import com.idutvuk.go_maf.ui.component.NewGameDialog
 import com.idutvuk.go_maf.ui.component.ScreenStatus.*
@@ -84,7 +85,7 @@ fun ScreenSetup(viewModel: MainViewModel) {
                     startGame = {
                         newGameDialogVis = false
                         playersCount = it
-                        //screenState = GAME
+                        screenState = GAME
                     },
                 )
             }
@@ -92,29 +93,10 @@ fun ScreenSetup(viewModel: MainViewModel) {
 
         GAME_VIEW -> TODO()
 
-        GAME -> TODO()
+        GAME -> GameScreen(
+            playersCount,
+            viewModel
+        )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DefaultTopAppBar(
-    //TODO put here
-    //--heading text
-    //--onclick listener
-) {
-    TopAppBar(
-        title = {
-            Text(text = "Saved games",
-                style = Typography.headlineLarge
-            )
-        },
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                Icon(
-                    Icons.Filled.ArrowBack,
-                    contentDescription = "back"
-                )
-            }
-        })
-}
