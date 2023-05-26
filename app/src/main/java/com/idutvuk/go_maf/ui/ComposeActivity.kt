@@ -32,6 +32,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.component.GameItemCard
+import com.idutvuk.go_maf.ui.component.NewGameDialog
+import com.idutvuk.go_maf.ui.component.ScreenStatus.*
 import com.idutvuk.go_maf.ui.ui.theme.Typography
 
 class ComposeActivity : ComponentActivity() {
@@ -75,11 +77,17 @@ fun ScreenSetup(viewModel: MainViewModel) {
                 }
             )
         }
+        NEW_GAME -> {
+
+            NewGameDialog()
+        }
 
         GAME_VIEW -> TODO()
+
         PLAYER_VIEW -> TODO()
-        NEW_GAME -> TODO()
+
         GAME -> TODO()
+
         GAME_END -> TODO()
     }
 }
