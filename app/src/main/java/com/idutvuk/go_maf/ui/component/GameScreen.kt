@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf.ui.component
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -31,21 +33,40 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PointMode
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.idutvuk.go_maf.ui.MainViewModel
+import com.idutvuk.go_maf.ui.ui.theme.GoMafTheme
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -59,6 +80,21 @@ fun GameScreen(
     val scaffoldState = rememberBottomSheetScaffoldState()
     val bottomSheetHeight = 160.dp
 
+
+    val totalTime by remember { mutableStateOf(10L * 1000L) }
+    var size by remember { mutableStateOf(IntSize.Zero) }
+    var value by remember { mutableStateOf(1f) }
+    var currentTime by remember { mutableStateOf(totalTime) }
+    var isTimerRunning by remember { mutableStateOf(false) }
+
+    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
+        if (currentTime > 0 && isTimerRunning) {
+            delay(100L)
+            currentTime -= 100L
+            value = currentTime / totalTime.toFloat()
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
@@ -69,27 +105,30 @@ fun GameScreen(
                     .height(bottomSheetHeight),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 ExtendedFloatingActionButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Default.Settings, contentDescription = null)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text("Debug state")
 
                 }
-                Row {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "back")
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.PlayArrow, contentDescription = "play/pause")
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add time")
-                    }
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(Icons.Default.ArrowForward, contentDescription = "forward")
-
-                    }
-                }
+                GameButtonRow(
+                    onUndoClick = {},
+                    onRedoClick = {},
+                    onPlayClick = {
+                        if (currentTime <= 0L) {
+                            currentTime = totalTime
+                            isTimerRunning = true
+                        } else {
+                            isTimerRunning = !isTimerRunning
+                        }
+                    },
+                    onAddTimeClick = {
+                        currentTime += 5L * 1000L
+                    },
+                    isTimerRunning = isTimerRunning,
+                    isTimerActive = true
+                )
             }
             Column(
                 Modifier
@@ -126,44 +165,14 @@ fun GameScreen(
                     modifier = Modifier.fillMaxSize()
                 ) {
                     CircularButtonLayout(playerCount)
+                    Timer(
+                        size = size,
+                        currentTime = currentTime,
+                        value = value,
+                        modifier = Modifier.size(150.dp).onSizeChanged { size = it }
+                    )
                 }
             }
         }
     }
 }
-
-@Preview(
-    widthDp = 800,
-    heightDp = 800
-)
-@Composable
-fun CircularButtonLayout(buttonCount: Int = 10) {
-    val angleOffset = Math.toRadians(60.0)
-    val angles: ArrayList<Float> = ArrayList(buttonCount)
-    for (i in 0 until buttonCount) {
-        angles.add(((2 * Math.PI - angleOffset) / (buttonCount - 1) * i + angleOffset / 2).toFloat())
-    }
-
-
-    repeat(buttonCount) { index ->
-        TextButton(
-            onClick = { /* Handle button click */ },
-            modifier = Modifier
-                .size(60.dp)
-                .offset {
-                    val radius = 140.dp.toPx()
-                    val x = (-radius * sin(angles[index])).toInt()
-                    val y = (radius * cos(angles[index])).toInt()
-                    IntOffset(x, y)
-                }
-        ) {
-            Text(
-                text = "$index",
-                fontSize = if (index < 10) 30.sp else 25.sp
-            )
-        }
-    }
-}
-
-
-

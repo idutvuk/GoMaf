@@ -43,7 +43,7 @@ class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            GoMafTheme {
+//            GoMafTheme {
                 val owner = LocalViewModelStoreOwner.current
 
                 owner?.let {
@@ -54,7 +54,7 @@ class ComposeActivity : ComponentActivity() {
                     )
                     ScreenSetup(viewModel)
                 }
-            }
+//            }
         }
     }
 }
