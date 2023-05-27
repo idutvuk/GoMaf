@@ -38,7 +38,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.idutvuk.go_maf.ui.MainViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.cos
@@ -50,13 +55,6 @@ fun GameScreen(
     playerCount: Int,
     viewModel: MainViewModel,
 ) {
-//    Scaffold(
-//        topBar = { DefaultTopAppBar() }
-//    ) {
-//        Box(modifier = Modifier.padding(it)) {
-//
-//        }
-//    }
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
     val bottomSheetHeight = 160.dp
@@ -123,49 +121,49 @@ fun GameScreen(
                     .aspectRatio(1f),
                 shape = RoundedCornerShape(100.dp)
             ) {
-                Table()
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularButtonLayout(playerCount)
+                }
             }
         }
     }
 }
 
+@Preview(
+    widthDp = 800,
+    heightDp = 800
+)
 @Composable
-fun Table() {
-    val n = 1
-    generatePivotPoints(generatePlayerAngles(n)).forEachIndexed{ index, points ->
+fun CircularButtonLayout(buttonCount: Int = 10) {
+    val angleOffset = Math.toRadians(60.0)
+    val angles: ArrayList<Float> = ArrayList(buttonCount)
+    for (i in 0 until buttonCount) {
+        angles.add(((2 * Math.PI - angleOffset) / (buttonCount - 1) * i + angleOffset / 2).toFloat())
+    }
+
+
+    repeat(buttonCount) { index ->
         TextButton(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.offset(
-//                x = points[i][0].dp,
-//                y = points[i][1].dp
-                x = 5.dp,
-                y = 20.dp
-            )
+            onClick = { /* Handle button click */ },
+            modifier = Modifier
+                .size(50.dp)
+                .offset {
+                    val radius = 140.dp.toPx()
+                    val x = (-radius * sin(angles[index])).toInt()
+                    val y = (radius * cos(angles[index])).toInt()
+                    IntOffset(x, y)
+                }
         ) {
-            Text("$index")
+            Text(
+                text = "$index",
+                fontSize = if (index <10) 30.sp else 25.sp
+            )
         }
     }
 }
 
-
-private fun generatePlayerAngles(numPlayers: Int): ArrayList<Float> {
-    val angles: ArrayList<Float> = ArrayList(numPlayers)
-    val angleOffset = Math.toRadians(60.0)
-    for (i in 0 until numPlayers) {
-        angles.add(((2 * Math.PI - angleOffset) / (numPlayers - 1) * i + angleOffset / 2).toFloat())
-    }
-    return angles
-}
-
-private fun generatePivotPoints(angles: ArrayList<Float>, radius: Int = 50): Array<IntArray> { //TODO: change to dynamic radius
-    val numPlayers = angles.size
-    val pivotPoints: Array<IntArray> = Array(numPlayers) { IntArray(2) }
-    for (i in 0 until numPlayers) {
-        val x = -(radius * sin(angles[i])).toInt()
-        val y = (radius * cos(angles[i])).toInt()
-        pivotPoints[i] = intArrayOf(x, y)
-    }
-    return pivotPoints
-}
 
 
