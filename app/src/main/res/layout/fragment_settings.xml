@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.idutvuk.go_maf.ui.settings.SettingsFragment">
+    tools:context="com.idutvuk.go_maf.legacy.SettingsFragment">
 
     <TextView
         android:id="@+id/tv_coming_soon"

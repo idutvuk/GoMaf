@@ -1,9 +1,10 @@
-package com.idutvuk.go_maf.ui.gameslist.placeholder
+package com.idutvuk.go_maf.legacy
 
 import java.sql.Time
 import java.sql.Date
 import java.util.Random
 
+@Deprecated("Use compose")
 object GamesContent {
 
     val ITEMS: MutableList<GameItem> = ArrayList()
@@ -33,7 +34,7 @@ object GamesContent {
         )
     }
 
-    private fun addItem(item:GameItem) {
+    private fun addItem(item: GameItem) {
         ITEMS.add(item)
     }
 

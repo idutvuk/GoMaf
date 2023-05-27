@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.ui.theme
+package com.idutvuk.go_maf.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

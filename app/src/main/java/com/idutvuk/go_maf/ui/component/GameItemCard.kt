@@ -28,8 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
-import com.idutvuk.go_maf.ui.ui.theme.Typography
-import java.lang.StringBuilder
+import com.idutvuk.go_maf.ui.theme.Typography
 
 @Composable
 fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {

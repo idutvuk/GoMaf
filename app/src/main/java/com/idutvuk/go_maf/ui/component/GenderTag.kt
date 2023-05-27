@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.ui.ui.theme.Typography
+import com.idutvuk.go_maf.ui.theme.Typography
 
 @Composable
 fun GenderTag(isActive: Boolean) { //TODO rename to proper name

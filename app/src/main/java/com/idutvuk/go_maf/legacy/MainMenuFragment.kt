@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.mainmenu
+package com.idutvuk.go_maf.legacy
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,7 +14,7 @@ import com.idutvuk.go_maf.R
 
 import com.idutvuk.go_maf.databinding.FragmentMainMenuBinding
 
-
+@Deprecated("Use compose")
 class MainMenuFragment : Fragment() {
     private lateinit var b: FragmentMainMenuBinding
     private lateinit var navController: NavController

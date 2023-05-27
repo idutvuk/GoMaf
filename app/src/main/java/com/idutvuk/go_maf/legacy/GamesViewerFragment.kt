@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.gameslist
+package com.idutvuk.go_maf.legacy
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,11 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.idutvuk.go_maf.databinding.FragmentGamesViewerListBinding
-import com.idutvuk.go_maf.ui.gameslist.placeholder.GamesContent
 
 /**
  * A fragment representing a list of Items.
  */
+@Deprecated("Use compose")
 class GamesViewerFragment : Fragment() {
     private lateinit var b: FragmentGamesViewerListBinding
     override fun onCreateView(

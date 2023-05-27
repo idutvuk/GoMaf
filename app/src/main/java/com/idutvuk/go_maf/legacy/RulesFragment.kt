@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.rules
+package com.idutvuk.go_maf.legacy
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import com.idutvuk.go_maf.R
-
+@Deprecated("Use compose")
 class RulesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

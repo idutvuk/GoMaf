@@ -1,18 +1,15 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.legacy
 
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.model.CmdCommitType
-import com.idutvuk.go_maf.model.CmdManager
-import com.idutvuk.go_maf.model.gamedata.Game
-import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.model.gamedata.Player
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
+import com.idutvuk.go_maf.ui.game.MainBtnState
 
-
+@Deprecated("Use compose")
 class GameViewModel : ViewModel() {
 
     private lateinit var messages: ArrayList<GameMessage>

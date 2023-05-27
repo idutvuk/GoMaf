@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.debug
+package com.idutvuk.go_maf.legacy
 
 import android.os.Bundle
 import android.view.LayoutInflater

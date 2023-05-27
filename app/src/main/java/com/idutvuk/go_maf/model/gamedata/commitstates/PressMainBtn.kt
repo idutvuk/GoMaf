@@ -1,7 +1,7 @@
 package com.idutvuk.go_maf.model.gamedata.commitstates
 
 import android.util.Log
-import com.idutvuk.go_maf.model.gamedata.Game
+import com.idutvuk.go_maf.legacy.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode

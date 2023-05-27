@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.gameslist
+package com.idutvuk.go_maf.legacy
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -7,14 +7,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.imageview.ShapeableImageView
-import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.GameCardBinding
-import com.idutvuk.go_maf.ui.gameslist.placeholder.GamesContent
 import java.util.Random
 
 /**
  * [RecyclerView.Adapter] that can display a [GamesContent.GameItem].
  */
+@Deprecated("Use compose")
 class GamesRecyclerViewAdapter(
     private val values: List<GamesContent.GameItem>,
 ) : RecyclerView.Adapter<GamesRecyclerViewAdapter.ViewHolder>() {

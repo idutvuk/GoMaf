@@ -1,22 +1,18 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.legacy
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.createSavedStateHandle
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.model.CmdManager
-import com.idutvuk.go_maf.model.GameMessage
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import org.w3c.dom.Text
+import com.idutvuk.go_maf.ui.game.EventImportance
+import com.idutvuk.go_maf.ui.game.MainBtnState
 import java.lang.IllegalArgumentException
-
+@Deprecated("Use compose")
 class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 

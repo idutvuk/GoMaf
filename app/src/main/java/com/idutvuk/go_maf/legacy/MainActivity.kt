@@ -1,11 +1,12 @@
-package com.idutvuk.go_maf.ui
+package com.idutvuk.go_maf.legacy
 
 import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.model.gamedata.Game
+import com.idutvuk.go_maf.legacy.Game
 
+@Deprecated("Use compose")
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

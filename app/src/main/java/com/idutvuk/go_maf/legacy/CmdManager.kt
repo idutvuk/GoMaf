@@ -1,12 +1,12 @@
-package com.idutvuk.go_maf.model
+package com.idutvuk.go_maf.legacy
 
 
-import com.idutvuk.go_maf.model.gamedata.Game
+import com.idutvuk.go_maf.model.CmdCommitType
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.Player
-import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.model.generateRoles
 
-
+@Deprecated("Use class CmdManager instead")
 object CmdManager {
     val roles = generateRoles(Game.numPlayers)
     val stateHistory = arrayListOf(

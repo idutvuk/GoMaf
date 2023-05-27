@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:name="com.idutvuk.go_maf.ui.gameslist.GamesViewerFragment"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    tools:context=".ui.gameslist.GamesViewerFragment"
+    tools:context=".legacy.GamesViewerFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <androidx.recyclerview.widget.RecyclerView

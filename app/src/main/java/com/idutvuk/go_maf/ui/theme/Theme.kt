@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.ui.theme
+package com.idutvuk.go_maf.ui.theme
 
 import android.app.Activity
 import android.os.Build

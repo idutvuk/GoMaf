@@ -1,14 +1,12 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.legacy
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,15 +19,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.databinding.FragmentGameBinding
-import com.idutvuk.go_maf.model.CmdManager
-import com.idutvuk.go_maf.model.GameMessage
-import com.idutvuk.go_maf.model.gamedata.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
-import com.idutvuk.go_maf.ui.TimerHandler
 import kotlin.math.cos
 import kotlin.math.sin
 
-
+@Deprecated("Use compose")
 class GameFragment : Fragment() {
 
     private lateinit var viewModel: GameViewModel

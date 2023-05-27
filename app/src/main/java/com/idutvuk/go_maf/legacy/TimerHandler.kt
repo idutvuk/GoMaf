@@ -1,11 +1,11 @@
-package com.idutvuk.go_maf.ui
+package com.idutvuk.go_maf.legacy
 
 import android.os.CountDownTimer
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.TextView
 
-
+@Deprecated("Use compose")
 object TimerHandler { //TODO: extract it to the GameFragment
     private lateinit var timer: CountDownTimer
     private var remainingTime: Long = 0
@@ -35,11 +35,11 @@ object TimerHandler { //TODO: extract it to the GameFragment
 
                 // Calculate progress as a percentage of total time
 //                pbTimer.visibility = ProgressBar.VISIBLE
-                pbTimer.progress = (remainingTime/1000).toInt()
+                pbTimer.progress = (remainingTime /1000).toInt()
 
                 // Your code for updating the UI with the remaining time
                 if (remainingTime == 30000L || remainingTime == 10000L || remainingTime == 0L) {
-                    Log.v("GameLog","${remainingTime/1000} secs remaining")
+                    Log.v("GameLog","${remainingTime /1000} secs remaining")
                 }
             }
 

@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.model.gamedata
+package com.idutvuk.go_maf.legacy
 
 import android.util.Log
 
