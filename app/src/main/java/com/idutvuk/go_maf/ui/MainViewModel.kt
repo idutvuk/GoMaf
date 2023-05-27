@@ -1,6 +1,7 @@
 package com.idutvuk.go_maf.ui
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,13 +11,21 @@ import com.idutvuk.go_maf.model.database.GamesRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
+import com.idutvuk.go_maf.ui.game.GameUiState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel(application: Application) : ViewModel() {
     val allGames: LiveData<List<MafiaGame>>
-    private lateinit var repository: GamesRepository
+    private var repository: GamesRepository
     val searchResults: MutableLiveData<List<MafiaGame>>
-    private lateinit var manager: GameManager
+    private var manager: GameManager
     private lateinit var gameState: MafiaGameState
+
+    private val _uiState = MutableStateFlow(GameUiState())
+    val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
 
     init {
         val gamesDb = MafiaGamesDatabase.getDatabase(application)
@@ -26,6 +35,7 @@ class MainViewModel(application: Application) : ViewModel() {
         allGames = repository.allGames
         searchResults = repository.searchResults
         manager = GameManager(10)
+
     }
     fun insertGame(game: MafiaGame) {
         repository.insertGame(game)
@@ -37,5 +47,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun commit() {
         gameState = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
+        Log.d("GameLog", gameState.mainBtnState.toString())
+        _uiState.value = GameUiState(gameState.mainBtnState)
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +32,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.ui.MainViewModel
 import kotlinx.coroutines.delay
@@ -54,7 +57,7 @@ fun GameScreen(
     var currentTime by remember { mutableStateOf(totalTime) }
     var isTimerRunning by remember { mutableStateOf(false) }
 
-    var gameState = MafiaGameState(playerCount)
+    val gameUiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
         if (currentTime > 0 && isTimerRunning) {
@@ -79,9 +82,12 @@ fun GameScreen(
                    viewModel.commit()
                 }
                 ) {
-                    Icon(Icons.Default.Settings, contentDescription = null)
+                    Icon(
+                        painter = painterResource(id = gameUiState.mainBtnState.icon),
+                        contentDescription = null
+                    )
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text("Debug state")
+                    Text(gameUiState.mainBtnState.text)
 
                 }
                 GameButtonRow(

@@ -18,12 +18,6 @@ enum class MainBtnState(
      */
     val requireNumber: PlayerSelectionMode,
 
-//    /**
-//     * Does the action require additional information
-//     * If true -
-//     */
-//    val requireAdditionalInformation: Boolean = false,
-//
     /**
      * Description that should describe game state change inside recycler
      */
