@@ -81,7 +81,7 @@ fun GameScreen(
     val bottomSheetHeight = 160.dp
 
 
-    val totalTime by remember { mutableStateOf(10L * 1000L) }
+    val totalTime by remember { mutableStateOf(60L * 1000L) }
     var size by remember { mutableStateOf(IntSize.Zero) }
     var value by remember { mutableStateOf(1f) }
     var currentTime by remember { mutableStateOf(totalTime) }
