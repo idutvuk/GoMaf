@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.ui.game.EventImportance
-import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.model.gamedata.EventImportance
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import java.lang.IllegalArgumentException
 @Deprecated("Use compose")
 class RecyclerViewLogAdapter(private var dataList: ArrayList<GameMessage>) :

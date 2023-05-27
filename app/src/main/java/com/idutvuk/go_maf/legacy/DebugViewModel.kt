@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.idutvuk.go_maf.databinding.FragmentDebugBinding
 
+@Deprecated("use compose")
 class DebugViewModel : ViewModel() {
     private lateinit var messages: ArrayList<GameMessage>
     fun initViews(

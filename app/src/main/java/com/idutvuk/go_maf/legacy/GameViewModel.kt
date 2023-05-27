@@ -3,11 +3,11 @@ package com.idutvuk.go_maf.legacy
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.idutvuk.go_maf.model.CmdCommitType
+import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
-import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
 
 @Deprecated("Use compose")
 class GameViewModel : ViewModel() {

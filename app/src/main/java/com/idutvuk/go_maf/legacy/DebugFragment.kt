@@ -10,7 +10,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.idutvuk.go_maf.databinding.FragmentDebugBinding
-
+@Deprecated("use compose")
 class DebugFragment : Fragment() {
     private lateinit var viewModel: DebugViewModel
     private lateinit var b: FragmentDebugBinding

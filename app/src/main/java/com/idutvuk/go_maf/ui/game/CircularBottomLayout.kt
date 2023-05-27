@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.component
+package com.idutvuk.go_maf.ui.game
 
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size

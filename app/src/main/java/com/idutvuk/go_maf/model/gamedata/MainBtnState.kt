@@ -1,7 +1,6 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.model.gamedata
 
 import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 
 enum class MainBtnState(
     /**

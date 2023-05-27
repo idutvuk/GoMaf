@@ -1,6 +1,6 @@
 package com.idutvuk.go_maf.legacy
 
-import com.idutvuk.go_maf.ui.game.EventImportance
+import com.idutvuk.go_maf.model.gamedata.EventImportance
 @Deprecated("Use compose")
 data class GameMessage (
     var heading: String = "EMPTY HEADING",

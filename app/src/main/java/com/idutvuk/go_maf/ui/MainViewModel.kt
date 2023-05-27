@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.idutvuk.go_maf.model.CmdCommitType
+import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.GameManager
 import com.idutvuk.go_maf.model.database.GamesRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame

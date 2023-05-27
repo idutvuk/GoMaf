@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.component
+package com.idutvuk.go_maf.ui.games
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
 
 @Composable
 fun NewGameDialog(

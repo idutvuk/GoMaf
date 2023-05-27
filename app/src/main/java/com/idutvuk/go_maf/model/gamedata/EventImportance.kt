@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.model.gamedata
 
 /**
  * Stores importance of a event

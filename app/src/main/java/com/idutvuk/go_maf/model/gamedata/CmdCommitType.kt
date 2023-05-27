@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.model
+package com.idutvuk.go_maf.model.gamedata
 
 import com.idutvuk.go_maf.model.gamedata.commitstates.CmdCommitState
 import com.idutvuk.go_maf.model.gamedata.commitstates.PressMainBtn

@@ -1,8 +1,7 @@
 package com.idutvuk.go_maf.model.gamedata
 
 import android.util.Log
-import com.idutvuk.go_maf.ui.game.MainBtnState
-import com.idutvuk.go_maf.ui.game.MainBtnState.*
+import com.idutvuk.go_maf.model.gamedata.MainBtnState.*
 import java.lang.IllegalStateException
 
 /**

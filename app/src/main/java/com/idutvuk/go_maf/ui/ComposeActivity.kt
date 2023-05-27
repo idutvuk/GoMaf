@@ -13,10 +13,10 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.idutvuk.go_maf.ui.component.GameScreen
-import com.idutvuk.go_maf.ui.component.GamesScreen
-import com.idutvuk.go_maf.ui.component.NewGameDialog
-import com.idutvuk.go_maf.ui.component.ScreenStatus.*
+import com.idutvuk.go_maf.ui.game.GameScreen
+import com.idutvuk.go_maf.ui.games.GamesScreen
+import com.idutvuk.go_maf.ui.games.NewGameDialog
+import com.idutvuk.go_maf.ui.ScreenStatus.*
 
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

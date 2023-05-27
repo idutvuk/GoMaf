@@ -1,7 +1,7 @@
 package com.idutvuk.go_maf.legacy
 
 
-import com.idutvuk.go_maf.model.CmdCommitType
+import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.Player
 import com.idutvuk.go_maf.model.generateRoles

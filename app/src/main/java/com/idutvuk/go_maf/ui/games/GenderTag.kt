@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.component
+package com.idutvuk.go_maf.ui.games
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

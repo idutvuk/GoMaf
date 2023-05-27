@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.component
+package com.idutvuk.go_maf.ui
 
 enum class ScreenStatus() {
     GAMES_VIEW,
