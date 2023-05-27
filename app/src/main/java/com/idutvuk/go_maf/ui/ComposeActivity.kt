@@ -67,7 +67,7 @@ fun ScreenSetup(viewModel: MainViewModel) {
 
     var newGameDialogVis by remember { mutableStateOf( false ) }
     var playerDialogVis by remember { mutableStateOf( false ) }
-    var playersCount by remember { mutableStateOf( 11 ) }
+    var playersCount by remember { mutableStateOf( 10 ) }
 
 
     var screenState by remember { mutableStateOf(GAMES_VIEW) }

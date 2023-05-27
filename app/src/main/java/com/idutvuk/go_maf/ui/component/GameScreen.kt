@@ -119,7 +119,7 @@ fun GameScreen(
                     .fillMaxWidth()
                     .padding(15.dp)
                     .aspectRatio(1f),
-                shape = RoundedCornerShape(100.dp)
+                shape = RoundedCornerShape(120.dp)
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -149,7 +149,7 @@ fun CircularButtonLayout(buttonCount: Int = 10) {
         TextButton(
             onClick = { /* Handle button click */ },
             modifier = Modifier
-                .size(50.dp)
+                .size(60.dp)
                 .offset {
                     val radius = 140.dp.toPx()
                     val x = (-radius * sin(angles[index])).toInt()
@@ -159,7 +159,7 @@ fun CircularButtonLayout(buttonCount: Int = 10) {
         ) {
             Text(
                 text = "$index",
-                fontSize = if (index <10) 30.sp else 25.sp
+                fontSize = if (index < 10) 30.sp else 25.sp
             )
         }
     }
