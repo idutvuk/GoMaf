@@ -42,7 +42,7 @@ fun UserProfilePicturesRow(
     modifier: Modifier = Modifier
 ) { //todo automatize
     Row (modifier = modifier){
-        for (i in 0 until pictures.size) {
+        for (i in pictures.indices) {
             UserProfilePicture(
                 pictures[i],
                 modifier = Modifier.offset(
