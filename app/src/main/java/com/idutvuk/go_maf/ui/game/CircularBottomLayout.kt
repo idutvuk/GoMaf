@@ -13,17 +13,17 @@ import androidx.compose.ui.unit.sp
 import kotlin.math.cos
 import kotlin.math.sin
 
-@Preview(
-widthDp = 800,
-heightDp = 800
-)
+
 @Composable
-fun CircularButtonLayout(buttonCount: Int = 10) {
-    val angleOffset = Math.toRadians(60.0)
-    val angles: ArrayList<Float> = ArrayList(buttonCount)
-    for (i in 0 until buttonCount) {
-        angles.add(((2 * Math.PI - angleOffset) / (buttonCount - 1) * i + angleOffset / 2).toFloat())
-    }
+fun CircularButtonLayout(
+    buttonCount: Int = 10,
+    angles: ArrayList<Float>
+) {
+//    val angleOffset = Math.toRadians(60.0)
+//    val angles: ArrayList<Float> = ArrayList(buttonCount)
+//    for (i in 0 until buttonCount) {
+//        angles.add(((2 * Math.PI - angleOffset) / (buttonCount - 1) * i + angleOffset / 2).toFloat())
+//    }
 
     repeat(buttonCount) { index ->
         TextButton(

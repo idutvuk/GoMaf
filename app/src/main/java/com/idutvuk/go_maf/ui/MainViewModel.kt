@@ -48,6 +48,10 @@ class MainViewModel(application: Application) : ViewModel() {
     fun commit() {
         gameState = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
         Log.d("GameLog", gameState.mainBtnState.toString())
-        _uiState.value = GameUiState(gameState.mainBtnState)
+        _uiState.value = GameUiState(
+            mainBtnState = gameState.mainBtnState,
+            isTimerActive = gameState.isTimerActive,
+            cursor = gameState.cursor,
+        )
     }
 }

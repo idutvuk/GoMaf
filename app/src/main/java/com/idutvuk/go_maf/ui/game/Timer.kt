@@ -39,7 +39,7 @@ fun Timer(
     currentTime: Long,
     modifier: Modifier = Modifier,
 ) {
-    val inactiveBarColor = MaterialTheme.colorScheme.tertiary
+    val inactiveBarColor = MaterialTheme.colorScheme.primaryContainer
     val activeBarColor = MaterialTheme.colorScheme.primary
 
     Box(
@@ -61,7 +61,7 @@ fun Timer(
                 sweepAngle = 360f * value,
                 useCenter = false,
                 size = Size(size.width.toFloat(), size.height.toFloat()),
-                style = Stroke(5.dp.toPx(), cap = StrokeCap.Round)
+                style = Stroke(3.dp.toPx(), cap = StrokeCap.Round)
             )
         }
         Text(
