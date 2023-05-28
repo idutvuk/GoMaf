@@ -11,13 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -35,9 +32,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.idutvuk.go_maf.R
-import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.ui.MainViewModel
+import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,9 +43,10 @@ fun GameScreen(
     playerCount: Int,
     viewModel: MainViewModel,
 ) {
+
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val bottomSheetHeight = 160.dp
+    val bottomSheetHeight = 230.dp
 
     val totalTime by remember { mutableStateOf(60L * 1000L) }
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -66,24 +63,75 @@ fun GameScreen(
             value = currentTime / totalTime.toFloat()
         }
     }
-
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
+        topBar = { DefaultTopAppBar() },
         sheetContent = {
+
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = REVOLVER_SCRIPT)
+                Spacer(Modifier.height(20.dp))
+                Button(
+                    onClick = {
+                        scope.launch { scaffoldState.bottomSheetState.partialExpand() }
+                    }
+                ) {
+                    Text("Click to collapse sheet")
+                }
+            }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .aspectRatio(1f),
+                shape = RoundedCornerShape(120.dp)
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularButtonLayout(playerCount)
+                    Timer(
+                        size = size,
+                        currentTime = currentTime,
+                        value = value,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .onSizeChanged { size = it }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(15.dp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(bottomSheetHeight)
-                    .padding(horizontal = 10.dp),
+                    .padding(horizontal = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
                     onClick = { viewModel.commit() },
                 ) {
                     Icon(
+                        modifier = Modifier.padding(vertical = 10.dp),
                         painter = painterResource(id = gameUiState.mainBtnState.icon),
                         contentDescription = null
                     )
@@ -109,51 +157,14 @@ fun GameScreen(
                     isTimerActive = true
                 )
             }
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .padding(64.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Sheet content")
-                Spacer(Modifier.height(20.dp))
-                Button(
-                    onClick = {
-                        scope.launch { scaffoldState.bottomSheetState.partialExpand() }
-                    }
-                ) {
-                    Text("Click to collapse sheet")
-                }
-            }
-        }) { innerPadding ->
-        Box(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-                    .aspectRatio(1f),
-                shape = RoundedCornerShape(120.dp)
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularButtonLayout(playerCount)
-                    Timer(
-                        size = size,
-                        currentTime = currentTime,
-                        value = value,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .onSizeChanged { size = it }
-                    )
-                }
-            }
+
         }
     }
 }
+
+
+const val REVOLVER_SCRIPT =
+        "Ави: Как ты выигрываешь?\n" +
+        "Джейк: Всё очень просто. Ты делаешь основную работу, а я тебе лишь помогаю. Я должен скармливать тебе пешки, заставляя поверить, что ты сам их выиграл. Потому что ты — умён, а я, стало быть, глуп. В каждой игре всегда есть тот, кто ведёт партию и тот, кого разводят. Чем больше жертве кажется, что она ведёт игру, тем меньше она её в действительности контролирует. Так жертва затягивает на своей шее петлю, а я, как ведущий игру, ей помогаю.\n" +
+        "Ави: Так что, это и есть твоя хвалёная формула?.\n" +
+        "Джейк: Формула необычайно глубока по своей эффективности и области применения, но в то же время ужасно проста и абсолютно логична.\n"
