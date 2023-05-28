@@ -55,12 +55,12 @@ fun GameScreen(
 
     val totalTime by remember { mutableStateOf(60L * 1000L) }
     var size by remember { mutableStateOf(IntSize.Zero) }
-    var value by remember { mutableStateOf(1f) }
+    var timerCircularBarValue by remember { mutableStateOf(1f) }
     var currentTime by remember { mutableStateOf(totalTime) }
 
     val gameUiState by viewModel.uiState.collectAsState()
 
-    var isTimerRunning by remember { mutableStateOf(gameUiState.isTimerActive) }
+    var isTimerRunning by remember { mutableStateOf(true) }
 
     val angles by remember { mutableStateOf(generateAngles(playerCount)) }
 
@@ -69,26 +69,39 @@ fun GameScreen(
         label = "cursorAnim"
     )
 
-    LaunchedEffect(key1 = currentTime, key2 = gameUiState.isTimerActive) {
-        if (currentTime > 0 && gameUiState.isTimerActive) {
+    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning, key3 = gameUiState.isTimerActive) {
+        if (currentTime > 0 && isTimerRunning) {
             delay(100L)
             currentTime -= 100L
-            value = currentTime / totalTime.toFloat()
+            timerCircularBarValue = currentTime / totalTime.toFloat()
         }
     }
+
+    LaunchedEffect(gameUiState.isTimerActive) {
+        timerCircularBarValue = 1F
+        isTimerRunning = gameUiState.isTimerActive
+        if (!gameUiState.isTimerActive) {
+            delay(200L)
+            currentTime = 60L * 1000L
+        }
+    }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
         topBar = { DefaultTopAppBar("Game") },
         sheetContent = {
-
             Column(
                 Modifier
                     .fillMaxWidth()
                     .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "${gameUiState.cursor} ${cursorAngle}")
+                Text(
+                    text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
+                            "selmode:  ${gameUiState.selectionMode}\n" +
+                            "main Btn state ${gameUiState.mainBtnState}\n"
+                )
                 Spacer(Modifier.height(20.dp))
                 Text(text = REVOLVER_SCRIPT)
                 Spacer(Modifier.height(20.dp))
@@ -120,7 +133,15 @@ fun GameScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    CircularButtonLayout(playerCount, angles)
+                    CircularButtonLayout(
+                        buttonCount = playerCount,
+                        angles = angles,
+                        onButtonClick = { index ->
+                            viewModel.clickButton(index)
+                        },
+                        selectedPlayers = gameUiState.selectedPlayers,
+                        livingPlayers = gameUiState.livingPlayers
+                    )
 
                     Icon(
                         painter = painterResource(id = R.drawable.ic_arrow),
@@ -134,7 +155,7 @@ fun GameScreen(
                     Timer(
                         size = size,
                         currentTime = currentTime,
-                        value = value,
+                        value = timerCircularBarValue,
                         modifier = Modifier
                             .size((TIMER_RADIUS * 2).dp)
                             .onSizeChanged { size = it },
@@ -167,7 +188,9 @@ fun GameScreen(
 
                 }
                 GameButtonRow(
-                    onUndoClick = {},
+                    onUndoClick = {
+                        viewModel.undo()
+                    },
                     onRedoClick = {},
                     onPlayClick = {
                         if (currentTime <= 0L) {
@@ -181,7 +204,8 @@ fun GameScreen(
                         currentTime += 5L * 1000L
                     },
                     isTimerActive = gameUiState.isTimerActive,
-                    isTimerRunning = isTimerRunning
+                    isTimerRunning = isTimerRunning,
+                    canUndo = gameUiState.canUndo
                 )
             }
 

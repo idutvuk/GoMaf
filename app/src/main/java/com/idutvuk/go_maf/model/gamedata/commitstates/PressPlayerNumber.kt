@@ -16,7 +16,7 @@ class PressPlayerNumber:CmdCommitState {
              * MAFIA_KILL
              * TODO: FOUL (?)
              */
-            when (previousMainButtonActionState) {
+            when (prevMainBtnState) {
                 MainBtnState.ADD_TO_VOTE -> {
                     addToVoteList()
                 }

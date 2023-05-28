@@ -1,7 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata.commitstates
 
 import android.util.Log
-import com.idutvuk.go_maf.legacy.Game
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
@@ -30,14 +29,14 @@ class PressMainBtn:CmdCommitState {
 
 
                 MAFIA_KILL -> {
-                    if (selectedPlayersCopy.isNotEmpty()) {
+                    if (selectedPlayers.isNotEmpty()) {
                         mafiaKill()
                     }
                 }
 
                 CHECK_DON -> {
                     if (currentPhaseNumber != 0) {
-                        if (selectedPlayersCopy.isNotEmpty()) {
+                        if (selectedPlayers.isNotEmpty()) {
                             mainBtnState = CHECK_SHR
                             primaryMessage = if (checkDon()) "shr" else "not shr"
                         }
@@ -51,13 +50,13 @@ class PressMainBtn:CmdCommitState {
                          * can we do best move today?
                          */
                         val nextPhase = if (
-                            livingPlayersCount() + 2 >= Game.numPlayers
+                            livingPlayersCount() + 2 >= numPlayers
                             && currentPhaseNumber == 2
                         )
                             BEST_MOVE else START_DAY
 
 
-                        if (selectedPlayersCopy.isNotEmpty()) {
+                        if (selectedPlayers.isNotEmpty()) {
                             primaryMessage = if (checkShr()) "red" else "black"
                         }
                     }
@@ -87,7 +86,7 @@ class PressMainBtn:CmdCommitState {
                      * MAFIA_KILL
                      * TODO: FOUL (?)
                      */
-                    when(previousMainButtonActionState) {
+                    when(prevMainBtnState) {
                         MAFIA_KILL -> {
                             delayedBtnState = CHECK_DON
                             failedMafiaKill()
@@ -115,12 +114,10 @@ class PressMainBtn:CmdCommitState {
                 START_SPEECH -> {
                     selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
                     isTimerActive = true
-                    Log.d("GameLog", "Speech started. Cursor: $cursor")
                 }
 
                 ADD_TO_VOTE -> {
-                    if (selectedPlayersCopy.size == 1) { //if player already selected
-                        Log.d("GameLog", "(CmdM) Added to vote")
+                    if (selectedPlayers.size == 1) { //if player already selected
                         addToVoteList()
                     }
                 }
@@ -156,11 +153,11 @@ class PressMainBtn:CmdCommitState {
                     }
                 }
 
-                KILL_IN_VOTE -> for (preyIndex in selectedPlayersCopy) {
+                KILL_IN_VOTE -> for (preyIndex in selectedPlayers) {
 //                    voteKill(preyIndex)
                     if (speakQueue.isNullOrEmpty()) speakQueue = arrayListOf(preyIndex)
                     else speakQueue!!.add(preyIndex)
-                    cursor = selectedPlayersCopy.elementAt(0)
+                    cursor = selectedPlayers.elementAt(0)
                 }
 
                 END_GAME -> {}

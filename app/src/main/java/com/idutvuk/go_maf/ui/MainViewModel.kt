@@ -11,6 +11,8 @@ import com.idutvuk.go_maf.model.database.GamesRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
+import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +22,6 @@ class MainViewModel(application: Application) : ViewModel() {
     private var repository: GamesRepository
     val searchResults: MutableLiveData<List<MafiaGame>>
     private lateinit var manager: GameManager
-    private lateinit var gameState: MafiaGameState
 
     private val _uiState = MutableStateFlow(MafiaGameState(10))
     val uiState: StateFlow<MafiaGameState> = _uiState.asStateFlow()
@@ -47,9 +48,42 @@ class MainViewModel(application: Application) : ViewModel() {
         manager = GameManager(playerCount)
     }
 
+    fun clickButton(index: Int) {
+        if (_uiState.value.mainBtnState == MainBtnState.WAITING_FOR_CLICK) {
+            switchSelection(index)
+            manager.stateHistory[manager.currentHistoryIndex] = _uiState.value
+
+            _uiState.value = manager.commit(CmdCommitType.PRESS_PLAYER_NUMBER)
+        } else {
+            when (_uiState.value.selectionMode) {
+                PlayerSelectionMode.NONE -> return
+                PlayerSelectionMode.MULTIPLE -> switchSelection(index)
+
+                PlayerSelectionMode.SINGLE -> {
+                    _uiState.value.selectedPlayers.clear()
+                    Log.d("GameLog","VM: Selection cleared")
+                    _uiState.value.selectedPlayers.add(index)
+                }
+            }
+        }
+    }
+
+    private fun switchSelection(numberToSwitch: Int) {
+        if (_uiState.value.selectedPlayers.contains(numberToSwitch)) {
+            _uiState.value.selectedPlayers.remove(numberToSwitch)
+        } else {
+            _uiState.value.selectedPlayers.add(numberToSwitch)
+        }
+    }
+
     fun commit() {
-        gameState = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
-        Log.d("GameLog", gameState.mainBtnState.toString())
-        _uiState.value = gameState
+        _uiState.value = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
+    }
+
+
+
+    fun undo() {
+        manager.stateHistory.removeLastOrNull()
+        _uiState.value = manager.stateHistory.last()
     }
 }

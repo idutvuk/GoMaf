@@ -54,7 +54,7 @@ class GameViewModel : ViewModel() {
 
             ldTime.value = time
             ldPlayersVis.value = Array(Game.numPlayers, init = {players[it].isEnabled})
-            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayersCopy.contains(it)})
+            ldButtonsSelected.value = Array(Game.numPlayers, init = {selectedPlayers.contains(it)})
             ldMainButtonState.value = mainBtnState
             ldBackButton.value = false //TODO: implement
             ldSkipButton.value = false //TODO: implement

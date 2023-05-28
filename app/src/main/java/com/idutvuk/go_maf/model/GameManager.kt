@@ -31,7 +31,7 @@ class GameManager (numPlayers: Int) {
 
         stateHistory.add(gameState)
         currentHistoryIndex++
-
+        gameState.canUndo = true
         return gameState
     }
 }

@@ -20,9 +20,13 @@ fun GameButtonRow(
     onAddTimeClick: () -> Unit,
     isTimerActive: Boolean,
     isTimerRunning: Boolean,
+    canUndo: Boolean,
 ) {
     Row {
-        IconButton(onClick = onUndoClick) {
+        IconButton(
+            onClick = onUndoClick,
+            enabled = canUndo
+        ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "back")
         }
 
@@ -56,7 +60,6 @@ fun GameButtonRow(
             enabled = isTimerActive
             ) {
             Icon(Icons.Default.Add, contentDescription = "forward")
-
         }
     }
 }
