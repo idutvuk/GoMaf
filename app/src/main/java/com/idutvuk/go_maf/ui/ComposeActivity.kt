@@ -17,12 +17,13 @@ import com.idutvuk.go_maf.ui.game.GameScreen
 import com.idutvuk.go_maf.ui.games.GamesScreen
 import com.idutvuk.go_maf.ui.games.NewGameDialog
 import com.idutvuk.go_maf.ui.ScreenStatus.*
+import com.idutvuk.go_maf.ui.theme.GoMafTheme
 
 class ComposeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-//            GoMafTheme {
+            GoMafTheme {
                 val owner = LocalViewModelStoreOwner.current
 
                 owner?.let {
@@ -33,49 +34,10 @@ class ComposeActivity : ComponentActivity() {
                     )
                     ScreenSetup(viewModel)
                 }
-//            }
-        }
-    }
-}
-
-
-@Composable
-fun ScreenSetup(viewModel: MainViewModel) {
-    val allGames by viewModel.allGames.observeAsState(listOf())
-    val searchResults by viewModel.searchResults.observeAsState(listOf())
-
-    var newGameDialogVis by remember { mutableStateOf( false ) }
-    var playerDialogVis by remember { mutableStateOf( false ) }
-    var playersCount by remember { mutableStateOf( 10 ) }
-
-
-    var screenState by remember { mutableStateOf(GAMES_VIEW) }
-    when (screenState) {
-        GAMES_VIEW -> {
-            GamesScreen(
-                allGames = allGames,
-                searchResults = searchResults,
-                viewModel = viewModel,
-                onFabClick = { newGameDialogVis = true }
-            )
-            if (newGameDialogVis) {
-                NewGameDialog(
-                    disableDialog = { newGameDialogVis = false },
-                    startGame = {
-                        newGameDialogVis = false
-                        playersCount = it
-                        screenState = GAME
-                    },
-                )
             }
         }
-
-        GAME_VIEW -> TODO()
-
-        GAME -> GameScreen(
-            playersCount,
-            viewModel
-        )
     }
 }
+
+
 

@@ -74,13 +74,14 @@ fun GameScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(bottomSheetHeight),
+                    .height(bottomSheetHeight)
+                    .padding(horizontal = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                ExtendedFloatingActionButton(onClick = {
-                   viewModel.commit()
-                }
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { viewModel.commit() },
                 ) {
                     Icon(
                         painter = painterResource(id = gameUiState.mainBtnState.icon),
