@@ -16,16 +16,17 @@ fun DefaultTopAppBar(
     //TODO put here
     //--heading text
     //--onclick listener
+    title: String,
 ) {
     TopAppBar(
         title = {
             Text(
-                text = "Saved games",
+                text = title,
                 style = Typography.headlineLarge
             )
         },
         navigationIcon = {
-            IconButton(onClick = {}) {
+            IconButton(onClick = { } ) {
                 Icon(
                     Icons.Filled.ArrowBack,
                     contentDescription = "back"

@@ -33,7 +33,9 @@ fun NewGameDialog(
             }
         },
         confirmButton = {
-            TextButton(onClick = { startGame(sliderPosition.toInt()) }) {
+            TextButton(onClick = {
+                startGame(sliderPosition.toInt())
+            }) {
                 Text("Start")
             }
         },

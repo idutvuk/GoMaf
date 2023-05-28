@@ -11,8 +11,6 @@ import com.idutvuk.go_maf.model.database.GamesRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.model.gamedata.MainBtnState
-import com.idutvuk.go_maf.ui.game.GameUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,11 +19,11 @@ class MainViewModel(application: Application) : ViewModel() {
     val allGames: LiveData<List<MafiaGame>>
     private var repository: GamesRepository
     val searchResults: MutableLiveData<List<MafiaGame>>
-    private var manager: GameManager
+    private lateinit var manager: GameManager
     private lateinit var gameState: MafiaGameState
 
-    private val _uiState = MutableStateFlow(GameUiState())
-    val uiState: StateFlow<GameUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(MafiaGameState(10))
+    val uiState: StateFlow<MafiaGameState> = _uiState.asStateFlow()
 
     init {
         val gamesDb = MafiaGamesDatabase.getDatabase(application)
@@ -34,7 +32,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
         allGames = repository.allGames
         searchResults = repository.searchResults
-        manager = GameManager(10)
+
 
     }
     fun insertGame(game: MafiaGame) {
@@ -45,13 +43,13 @@ class MainViewModel(application: Application) : ViewModel() {
         repository.getGame(id)
     }
 
+    fun startGame(playerCount: Int) {
+        manager = GameManager(playerCount)
+    }
+
     fun commit() {
         gameState = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
         Log.d("GameLog", gameState.mainBtnState.toString())
-        _uiState.value = GameUiState(
-            mainBtnState = gameState.mainBtnState,
-            isTimerActive = gameState.isTimerActive,
-            cursor = gameState.cursor,
-        )
+        _uiState.value = gameState
     }
 }

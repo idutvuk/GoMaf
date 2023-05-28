@@ -22,7 +22,7 @@ fun GamesScreen(
     onFabClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { DefaultTopAppBar() },
+        topBar = { DefaultTopAppBar("Saved Games") },
         floatingActionButton = {
             FloatingActionButton(onClick = onFabClick) {
                 Icon(

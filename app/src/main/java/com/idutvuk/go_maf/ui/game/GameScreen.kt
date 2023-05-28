@@ -1,9 +1,6 @@
 package com.idutvuk.go_maf.ui.game
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,17 +8,12 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,8 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
@@ -67,9 +57,10 @@ fun GameScreen(
     var size by remember { mutableStateOf(IntSize.Zero) }
     var value by remember { mutableStateOf(1f) }
     var currentTime by remember { mutableStateOf(totalTime) }
-    var isTimerRunning by remember { mutableStateOf(false) }
 
     val gameUiState by viewModel.uiState.collectAsState()
+
+    var isTimerRunning by remember { mutableStateOf(gameUiState.isTimerActive) }
 
     val angles by remember { mutableStateOf(generateAngles(playerCount)) }
 
@@ -78,8 +69,8 @@ fun GameScreen(
         label = "cursorAnim"
     )
 
-    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
-        if (currentTime > 0 && isTimerRunning) {
+    LaunchedEffect(key1 = currentTime, key2 = gameUiState.isTimerActive) {
+        if (currentTime > 0 && gameUiState.isTimerActive) {
             delay(100L)
             currentTime -= 100L
             value = currentTime / totalTime.toFloat()
@@ -88,7 +79,7 @@ fun GameScreen(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
-        topBar = { DefaultTopAppBar() },
+        topBar = { DefaultTopAppBar("Game") },
         sheetContent = {
 
             Column(
@@ -97,7 +88,7 @@ fun GameScreen(
                     .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "${gameUiState.cursor.toString()} ${cursorAngle}")
+                Text(text = "${gameUiState.cursor} ${cursorAngle}")
                 Spacer(Modifier.height(20.dp))
                 Text(text = REVOLVER_SCRIPT)
                 Spacer(Modifier.height(20.dp))
@@ -146,7 +137,8 @@ fun GameScreen(
                         value = value,
                         modifier = Modifier
                             .size((TIMER_RADIUS * 2).dp)
-                            .onSizeChanged { size = it }
+                            .onSizeChanged { size = it },
+                        isTimerActive = gameUiState.isTimerActive
                     )
                 }
             }
@@ -188,8 +180,8 @@ fun GameScreen(
                     onAddTimeClick = {
                         currentTime += 5L * 1000L
                     },
-                    isTimerRunning = isTimerRunning,
-                    isTimerActive = true
+                    isTimerActive = gameUiState.isTimerActive,
+                    isTimerRunning = isTimerRunning
                 )
             }
 

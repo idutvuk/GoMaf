@@ -9,6 +9,8 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.painterResource
+import com.idutvuk.go_maf.R
 
 @Composable
 fun GameButtonRow(
@@ -16,23 +18,37 @@ fun GameButtonRow(
     onRedoClick: () -> Unit,
     onPlayClick: () -> Unit,
     onAddTimeClick: () -> Unit,
-    isTimerRunning: Boolean,
     isTimerActive: Boolean,
+    isTimerRunning: Boolean,
 ) {
     Row {
         IconButton(onClick = onUndoClick) {
             Icon(Icons.Default.ArrowBack, contentDescription = "back")
         }
 
-        IconButton(onClick = onRedoClick) {
-            Icon(Icons.Default.ArrowForward, contentDescription = "play/pause")
+        IconButton(
+            onClick = onRedoClick,
+            enabled = false //todo enable
+        ) {
+            Icon(Icons.Default.ArrowForward, contentDescription = "forward")
         }
 
         IconButton(
             onClick = onPlayClick,
             enabled = isTimerActive
         ) {
-            Icon(Icons.Default.PlayArrow, contentDescription = "Add time")
+            if (isTimerRunning) {
+                Icon(
+                    Icons.Default.PlayArrow,
+                    contentDescription = null
+                )
+            }
+            else {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_pause),
+                    contentDescription = null
+                )
+            }
         }
 
         IconButton(

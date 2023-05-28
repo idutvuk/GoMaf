@@ -362,34 +362,6 @@ data class MafiaGameState(
                 "isTimerActive=$isTimerActive" +
                 ")"
     }
-/*
-    fun copy(): MafiaGameState {
-        return MafiaGameState(
-            numPlayers =                        this.numPlayers,
-            players =                           this.players.copyOf(),
-            speakQueue =                        this.speakQueue?.clone() as? ArrayList<Int>,
-            gameOver =                          this.gameOver,
-            currentPhaseNumber =                this.currentPhaseNumber,
-            time =                              this.time,
-            mainBtnState =                      this.mainBtnState,
-            previousMainButtonActionState =     this.previousMainButtonActionState,
-            delayedBtnState =                   this.delayedBtnState,
-            firstSpokedPlayer =                 this.firstSpokedPlayer,
-            cursor =                            this.cursor,
-            selectionMode =                     this.selectionMode,
-            selectionRequested =                this.selectionRequested,
-            snackbarMessage =                   this.snackbarMessage,
-            primaryMessage =                    this.primaryMessage,
-            secondaryMessage =                  this.secondaryMessage,
-            mafiaMissStreak =                   this.mafiaMissStreak,
-            isMafiaMissedToday =                this.isMafiaMissedToday,
-            isTimerActive =                     this.isTimerActive,
-            initVoteList =                      this.voteList,
-            initSelectedPlayers =               this.initSelectedPlayers,
-            isVoteCancelled =                   this.isVoteCancelled,
-        )
-    }
-    */
 }
 
 

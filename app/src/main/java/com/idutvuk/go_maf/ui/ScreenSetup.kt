@@ -39,6 +39,7 @@ fun ScreenSetup(viewModel: MainViewModel) {
                         newGameDialogVis = false
                         playersCount = it
                         screenState = ScreenStatus.GAME
+                        viewModel.startGame(it)
                     },
                 )
             }
