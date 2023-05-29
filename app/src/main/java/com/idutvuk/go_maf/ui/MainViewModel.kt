@@ -1,7 +1,6 @@
 package com.idutvuk.go_maf.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,10 +57,8 @@ class MainViewModel(application: Application) : ViewModel() {
             when (_uiState.value.selectionMode) {
                 PlayerSelectionMode.NONE -> return
                 PlayerSelectionMode.MULTIPLE -> switchSelection(index)
-
                 PlayerSelectionMode.SINGLE -> {
                     _uiState.value.selectedPlayers.clear()
-                    Log.d("GameLog","VM: Selection cleared")
                     _uiState.value.selectedPlayers.add(index)
                 }
             }
@@ -82,7 +79,7 @@ class MainViewModel(application: Application) : ViewModel() {
 
 
 
-    fun undo() {
+    fun onPressUndoBtn() {
         manager.stateHistory.removeLastOrNull()
         _uiState.value = manager.stateHistory.last()
     }

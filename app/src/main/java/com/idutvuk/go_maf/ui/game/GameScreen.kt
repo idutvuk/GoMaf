@@ -18,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
@@ -84,6 +85,15 @@ fun GameScreen(
             delay(200L)
             currentTime = 60L * 1000L
         }
+    }
+
+    LaunchedEffect(gameUiState.snackbarMessage) {
+        if (gameUiState.snackbarMessage != null && gameUiState.snackbarMessage != "")
+        scaffoldState.snackbarHostState.showSnackbar(
+            message = gameUiState.snackbarMessage!!,
+            actionLabel = "Ok",
+            duration = SnackbarDuration.Short
+        )
     }
 
     BottomSheetScaffold(
@@ -189,7 +199,7 @@ fun GameScreen(
                 }
                 GameButtonRow(
                     onUndoClick = {
-                        viewModel.undo()
+                        viewModel.onPressUndoBtn()
                     },
                     onRedoClick = {},
                     onPlayClick = {
