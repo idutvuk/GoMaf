@@ -42,6 +42,7 @@ import com.idutvuk.go_maf.model.gamedata.EventImportance
 )
 @Composable
 fun GameActionRow(
+    modifier: Modifier = Modifier,
     heading: String = "Don check",
     description: String = "Ok?",
     importance: EventImportance = EventImportance.REGULAR
@@ -49,7 +50,7 @@ fun GameActionRow(
 
     var expanded by rememberSaveable { mutableStateOf(false) }
     Card(
-        modifier = Modifier.padding(
+        modifier = modifier.padding(
             vertical = 5.dp,
         ),
         colors =

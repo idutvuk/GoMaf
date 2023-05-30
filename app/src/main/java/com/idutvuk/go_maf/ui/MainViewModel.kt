@@ -93,4 +93,10 @@ class MainViewModel(application: Application) : ViewModel() {
         _uiState.value = if (_uiState.value.time == GameTime.DAY) manager.commit(CmdCommitType.SKIP_DAY)
         else manager.commit(CmdCommitType.SKIP_NIGHT)
     }
+
+    fun foul(index: Int) {
+        _uiState.value.foul(index)
+        manager.stateHistory[manager.currentHistoryIndex] = _uiState.value
+    }
+
 }

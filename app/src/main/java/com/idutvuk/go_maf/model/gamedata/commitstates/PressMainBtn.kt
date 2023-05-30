@@ -88,7 +88,7 @@ class PressMainBtn:CmdCommitState {
                      */
                     when(prevMainBtnState) {
                         MAFIA_KILL -> {
-                            delayedBtnState = CHECK_DON
+//                            delayedBtnState = CHECK_DON
                             failedMafiaKill()
                         }
                         else -> {}

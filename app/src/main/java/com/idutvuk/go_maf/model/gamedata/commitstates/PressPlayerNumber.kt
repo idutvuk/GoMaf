@@ -22,7 +22,7 @@ class PressPlayerNumber:CmdCommitState {
                 }
 
                 MainBtnState.MAFIA_KILL -> {
-                    delayedBtnState = MainBtnState.CHECK_DON
+//                    delayedBtnState = MainBtnState.CHECK_DON
                     mafiaMissStreak = 0
                     mafiaKill()
                 }
@@ -40,7 +40,7 @@ class PressPlayerNumber:CmdCommitState {
                 )
                 //TODO: add to vote on click
             }
-            clearSelection()
+            selectedPlayers.clear()
 //            mainBtnState = delayedBtnState
         }
         return gameState

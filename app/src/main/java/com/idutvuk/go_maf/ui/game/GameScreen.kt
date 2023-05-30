@@ -1,6 +1,7 @@
 package com.idutvuk.go_maf.ui.game
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
@@ -44,10 +46,9 @@ import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.components.GameActionRow
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlin.math.PI
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun GameScreen(
     playerCount: Int,
@@ -67,7 +68,17 @@ fun GameScreen(
 
     var isTimerRunning by remember { mutableStateOf(true) }
 
+    var isPlayerRolesShown by remember { mutableStateOf(false) }
+    var isWaitingForFoul by remember { mutableStateOf(false) }
+
     val angles by remember { mutableStateOf(generateAngles(playerCount)) }
+
+    val lazyListState by remember { mutableStateOf(LazyListState()) }
+
+    var isVoteListShown by remember { mutableStateOf(false) }
+    LaunchedEffect(gameUiState.voteList) {
+        isVoteListShown = !(gameUiState.voteList.isNullOrEmpty())
+    }
 
     val cursorAngle by animateFloatAsState(
         targetValue = 180F + angles[gameUiState.cursor] * (180F / PI.toFloat()),
@@ -100,6 +111,10 @@ fun GameScreen(
             )
     }
 
+    LaunchedEffect(gameUiState) {
+        lazyListState.scrollToItem(0)
+    }
+
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
@@ -118,25 +133,19 @@ fun GameScreen(
                             "main Btn state ${gameUiState.mainBtnState}\n"
                 )
                 Spacer(Modifier.height(20.dp))
-                LazyColumn {
+                LazyColumn(
+                    reverseLayout = true,
+                    state = lazyListState
+                ) {
                     items(gameUiState.snapshotHistory) { snapshot ->
                         if (snapshot.importance != EventImportance.SILENT)
                             GameActionRow(
+                                modifier = Modifier.animateItemPlacement(),
                                 heading = snapshot.heading,
                                 description = snapshot.description,
                                 importance = snapshot.importance
                             )
                     }
-                }
-
-                Text(text = REVOLVER_SCRIPT)
-                Spacer(Modifier.height(20.dp))
-                Button(
-                    onClick = {
-                        scope.launch { scaffoldState.bottomSheetState.partialExpand() }
-                    }
-                ) {
-                    Text("Click to collapse sheet")
                 }
             }
         }
@@ -163,10 +172,17 @@ fun GameScreen(
                         buttonCount = playerCount,
                         angles = angles,
                         onButtonClick = { index ->
-                            viewModel.clickButton(index)
+                            if(isWaitingForFoul) {
+                                viewModel.foul(index)
+                                isWaitingForFoul = false
+                            } else {
+                                viewModel.clickButton(index)
+                            }
                         },
                         selectedPlayers = gameUiState.selectedPlayers,
-                        livingPlayers = gameUiState.livingPlayers
+                        livingPlayers = gameUiState.livingPlayers,
+                        isPlayerRolesShown = isPlayerRolesShown,
+                        roles = gameUiState.players.map {it.role},
                     )
 
                     Icon(
@@ -202,7 +218,7 @@ fun GameScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 10.dp),
-                    onClick = { viewModel.commit() },
+                    onClick = { isWaitingForFoul = false; viewModel.commit() },
                 ) {
                     Icon(
                         modifier = Modifier.padding(vertical = 10.dp),
@@ -236,6 +252,12 @@ fun GameScreen(
                     onPrevPhaseClick = {},
                     onNextPhaseClick = {
                         viewModel.nextPhase()
+                    },
+                    onPressFoulClick = {
+
+                    },
+                    onPeepClick = {
+                        isPlayerRolesShown = !isPlayerRolesShown
                     }
                 )
             }
@@ -255,10 +277,3 @@ fun generateAngles(buttonCount: Int): ArrayList<Float> {
     }
     return angles
 }
-
-const
-val REVOLVER_SCRIPT =
-    "Ави: Как ты выигрываешь?\n" +
-            "Джейк: Всё очень просто. Ты делаешь основную работу, а я тебе лишь помогаю. Я должен скармливать тебе пешки, заставляя поверить, что ты сам их выиграл. Потому что ты — умён, а я, стало быть, глуп. В каждой игре всегда есть тот, кто ведёт партию и тот, кого разводят. Чем больше жертве кажется, что она ведёт игру, тем меньше она её в действительности контролирует. Так жертва затягивает на своей шее петлю, а я, как ведущий игру, ей помогаю.\n" +
-            "Ави: Так что, это и есть твоя хвалёная формула?.\n" +
-            "Джейк: Формула необычайно глубока по своей эффективности и области применения, но в то же время ужасно проста и абсолютно логична.\n"

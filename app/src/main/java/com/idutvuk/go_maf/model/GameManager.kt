@@ -28,9 +28,10 @@ class GameManager (numPlayers: Int) {
 
         gameState = cmdCommitType.cmdCommitState.changeGameState(gameState)
         Log.d("GameLog","commited")
-        if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN || //if not SKIP_DAY or SKIP_NIGHT
-            cmdCommitType == CmdCommitType.PRESS_PLAYER_NUMBER
-        ) gameState.nextMainBtnState()
+//        if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN || //if not SKIP_DAY or SKIP_NIGHT
+//            cmdCommitType == CmdCommitType.PRESS_PLAYER_NUMBER
+//        )
+            gameState.nextMainBtnState()
 
         gameState.snapshotHistory.add(StateSnapshot(
             heading = gameActionFormatter(gameState.mainBtnState.overwriteText ?: gameState.mainBtnState.description, gameState),

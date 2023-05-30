@@ -299,7 +299,7 @@ data class MafiaGameState(
                     NEXT
                 }
 
-                MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
+                MAFIA_KILL -> nextStateSingleClick(END_GAME)
 
                 CHECK_DON -> nextStateSingleClick(CHECK_SHR)
 
@@ -318,7 +318,7 @@ data class MafiaGameState(
      * возвращает следующую фазу, если выделение игрока уже произошло.
      * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
      */
-    fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
+    private fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
         assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
         if (selectedPlayers.size == 1) return nextPhase
         delayedBtnState = nextPhase

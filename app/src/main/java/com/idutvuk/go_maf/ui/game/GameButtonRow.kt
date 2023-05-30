@@ -2,10 +2,8 @@ package com.idutvuk.go_maf.ui.game
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -21,26 +19,28 @@ fun GameButtonRow(
     onAddTimeClick: () -> Unit,
     onPrevPhaseClick: () -> Unit,
     onNextPhaseClick: () -> Unit,
+    onPressFoulClick: () -> Unit,
+    onPeepClick: () -> Unit,
     isTimerActive: Boolean,
     isTimerRunning: Boolean,
     canUndo: Boolean,
     currentTime: GameTime,
 ) {
     Row {
-        IconButton(onClick = onPrevPhaseClick, enabled = false) {
-            if (currentTime == GameTime.DAY) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_sun),
-                    contentDescription = "back to day"
-                )
-            }
-            else {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_moon),
-                    contentDescription = "back to night"
-                )
-            }
-        }
+//        IconButton(onClick = onPrevPhaseClick, enabled = false) {
+//            if (currentTime == GameTime.DAY) {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.ic_sun),
+//                    contentDescription = "back to day"
+//                )
+//            }
+//            else {
+//                Icon(
+//                    painter = painterResource(id = R.drawable.ic_moon),
+//                    contentDescription = "back to night"
+//                )
+//            }
+//        }
         IconButton(
             onClick = onUndoClick,
             enabled = canUndo
@@ -77,7 +77,24 @@ fun GameButtonRow(
             onClick = onAddTimeClick,
             enabled = isTimerActive
             ) {
-            Icon(Icons.Default.Add, contentDescription = "forward")
+            Icon(
+                painter = painterResource(id = R.drawable.ic_add_timer),
+                contentDescription = "Add time"
+            )
+        }
+
+        IconButton(onClick = onPeepClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_eye),
+                contentDescription = "Peep"
+            )
+        }
+
+        IconButton(onClick = onPressFoulClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_foul),
+                contentDescription = "foul"
+            )
         }
 
         IconButton(onClick = onNextPhaseClick) {
