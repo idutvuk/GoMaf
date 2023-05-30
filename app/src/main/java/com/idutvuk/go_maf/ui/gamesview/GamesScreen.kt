@@ -1,10 +1,11 @@
-package com.idutvuk.go_maf.ui.games
+package com.idutvuk.go_maf.ui.gamesview
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -14,6 +15,7 @@ import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.MainViewModel
+import java.sql.Date
 
 @Composable
 fun GamesScreen(
@@ -43,7 +45,13 @@ fun GamesScreen(
         ) {
 
             items(allGames) { game ->
-                GameItemCard(game = game, onItemClicked = {})
+                GameItemCard(
+                    game = game,
+                    onItemClicked = {gameId ->
+
+                        navController.navigate("game_view/$gameId")
+                    }
+                )
             }
         }
     }

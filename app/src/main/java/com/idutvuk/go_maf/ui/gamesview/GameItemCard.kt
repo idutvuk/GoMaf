@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.games
+package com.idutvuk.go_maf.ui.gamesview
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,13 +31,16 @@ import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.theme.Typography
 
 @Composable
-fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {
+fun GameItemCard(
+    game: MafiaGame,
+    onItemClicked: (gameId: Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = { onItemClicked(game) }),
+            .clickable(onClick = { onItemClicked(game.id) }),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
         )
@@ -89,18 +92,6 @@ fun GameItemCard(game: MafiaGame, onItemClicked: (game: MafiaGame) -> Unit) {
             ) {
                 GenderTag(isActive = game.isOver)
             }
-        }
-    }
-}
-
-@Preview(
-    name = "Light theme"
-)
-@Composable
-fun GameItemsPreview() {
-    LazyColumn {
-        items(MafiaGame.games) { game ->
-            GameItemCard(game = game, onItemClicked = {})
         }
     }
 }

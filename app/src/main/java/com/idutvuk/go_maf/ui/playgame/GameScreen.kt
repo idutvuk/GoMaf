@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.ui.playgame
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -42,11 +42,13 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.R
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.gamedata.EventImportance
 import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.components.GameActionRow
 import kotlinx.coroutines.delay
+import java.sql.Date
 import kotlin.math.PI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -115,6 +117,18 @@ fun GameScreen(
 
     LaunchedEffect(gameUiState) {
         lazyListState.scrollToItem(0)
+    }
+
+    LaunchedEffect(gameUiState.gameOver) {
+        viewModel.insertGame(
+            MafiaGame(
+                startDate = Date(0L),
+                duration = 180,
+                isOver = true,
+                numPlayers = playerCount,
+                hostUserId = 34
+            )
+        )
     }
 
     BottomSheetScaffold(

@@ -19,7 +19,7 @@ data class MafiaGameState(
      * ...or vote before-dead speeches
      */
     var speakQueue: ArrayList<Int>? = null,
-    private var gameOver: Boolean = false,
+    var gameOver: Boolean = false,
 
     /**
      * ## passed nights + passed days + current phase.

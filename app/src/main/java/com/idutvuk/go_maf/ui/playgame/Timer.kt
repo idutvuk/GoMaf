@@ -1,8 +1,7 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.ui.playgame
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn

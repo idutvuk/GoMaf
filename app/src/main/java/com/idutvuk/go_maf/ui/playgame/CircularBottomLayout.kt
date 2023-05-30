@@ -1,7 +1,6 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.ui.playgame
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme

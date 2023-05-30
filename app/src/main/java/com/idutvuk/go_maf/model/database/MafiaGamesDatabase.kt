@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.idutvuk.go_maf.model.database.entities.GamePlayer
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
+import com.idutvuk.go_maf.model.database.entities.MafiaGamePlayer
 import com.idutvuk.go_maf.model.database.entities.User
 
 
@@ -14,14 +14,16 @@ import com.idutvuk.go_maf.model.database.entities.User
     entities = [
         MafiaGame::class,
         User::class,
-        GamePlayer::class,
+        MafiaGamePlayer::class,
                ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class MafiaGamesDatabase : RoomDatabase() {
     abstract fun gameDao(): GameDao
+
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

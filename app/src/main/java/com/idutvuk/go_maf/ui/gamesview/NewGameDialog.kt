@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.games
+package com.idutvuk.go_maf.ui.gamesview
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

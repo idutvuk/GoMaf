@@ -1,12 +1,8 @@
 package com.idutvuk.go_maf.model.database.entities
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Query
-import androidx.room.Relation
-import androidx.room.Transaction
 import com.idutvuk.go_maf.model.database.MafiaAccount.Companion.users
 import java.sql.Date
 import java.sql.Time

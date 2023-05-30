@@ -1,4 +1,4 @@
-package com.idutvuk.go_maf.ui.game
+package com.idutvuk.go_maf.ui.playgame
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons

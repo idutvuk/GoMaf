@@ -8,12 +8,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.idutvuk.go_maf.ui.game.GameScreen
-import com.idutvuk.go_maf.ui.games.GamesScreen
-import com.idutvuk.go_maf.ui.games.NewGameDialog
+import androidx.navigation.navArgument
+import com.idutvuk.go_maf.ui.playgame.GameScreen
+import com.idutvuk.go_maf.ui.gamesview.GamesScreen
+import com.idutvuk.go_maf.ui.gamesview.NewGameDialog
+import com.idutvuk.go_maf.ui.gameview.GameViewScreen
 
 
 @Composable
@@ -25,13 +28,10 @@ fun ScreenSetup(viewModel: MainViewModel) {
     var playerDialogVis by remember { mutableStateOf(false) }
     var playersCount by remember { mutableStateOf(10) }
 
-
-    var screenState by remember { mutableStateOf(ScreenStatus.GAMES_VIEW) }
-
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "games") {
-        composable("games") {
+    NavHost(navController = navController, startDestination = "games_view") {
+        composable("games_view") {
             GamesScreen(
                 navController = navController,
                 allGames = allGames,
@@ -45,48 +45,34 @@ fun ScreenSetup(viewModel: MainViewModel) {
                     startGame = {
                         newGameDialogVis = false
                         playersCount = it
-                        navController.navigate("game")
+                        navController.navigate("play_game")
                         viewModel.startGame(it)
                     },
                 )
             }
         }
-        composable("game") {
+
+        composable("play_game") {
             GameScreen(
                 navController = navController,
                 playerCount = playersCount,
                 viewModel = viewModel
             )
         }
+
+        composable(
+            route = "game_view/{gameId}",
+            arguments = listOf(navArgument("gameId") {type = NavType.LongType})
+        ) { backStackEntry ->
+
+            GameViewScreen(
+                gameId = backStackEntry.arguments?.getLong("gameId") ?: 0,
+                viewModel = viewModel,
+                onBackClicked = {navController.popBackStack()}
+            )
+        }
+
     }
-//    when (screenState) {
-//        ScreenStatus.GAMES_VIEW -> {
-//            GamesScreen(
-//                allGames = allGames,
-//                searchResults = searchResults,
-//                viewModel = viewModel,
-//                onFabClick = { newGameDialogVis = true }
-//            )
-//            if (newGameDialogVis) {
-//                NewGameDialog(
-//                    disableDialog = { newGameDialogVis = false },
-//                    startGame = {
-//                        newGameDialogVis = false
-//                        playersCount = it
-//                        screenState = ScreenStatus.GAME
-//                        viewModel.startGame(it)
-//                    },
-//                )
-//            }
-//        }
-//
-//        ScreenStatus.GAME_VIEW -> TODO()
-//
-//        ScreenStatus.GAME -> GameScreen(
-//            playersCount,
-//            viewModel
-//        )
-//    }
 }
 
 @Preview

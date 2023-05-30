@@ -7,27 +7,26 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.TypeConverters
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
+import com.idutvuk.go_maf.model.database.relation.MafiaGameWithPlayers
 import java.sql.Date
 
 @Dao
 @TypeConverters(Converters::class)
 interface GameDao {
     @Query("SELECT * FROM game ORDER BY start_date ASC")
-    fun getAll(): LiveData<List<MafiaGame>>
+    fun getAllGames(): LiveData<List<MafiaGame>>
     @Query("SELECT * FROM game WHERE id = :id")
-    fun getItem(id: Int): List<MafiaGame>
+    fun findGameById(id: Int): List<MafiaGame>
 
     @Query("SELECT * FROM game WHERE start_date BETWEEN :dateStart AND :dateEnd")
-    fun findByDate(dateStart: Date, dateEnd: Date): List<MafiaGame>
+    fun findGamesByDateRange(dateStart: Date, dateEnd: Date): List<MafiaGame>
     @Insert
-    fun insertAll(vararg games: MafiaGame)
+    fun insertAllGames(vararg games: MafiaGame)
 
     @Query("DELETE FROM game WHERE id = :id")
-    fun delete(id: Int)
+    fun deleteGameById(id: Int)
 
-
-//    @Transaction
-//    @Query("SELECT * FROM user")
-//    fun getGamesWithHostUser(): List<MafiaGamesWithHostUser>
-
+    @Transaction
+    @Query("SELECT * FROM game WHERE id = :gameId")
+    fun getGameWithPlayers(gameId: Long): LiveData<MafiaGameWithPlayers>
 }
