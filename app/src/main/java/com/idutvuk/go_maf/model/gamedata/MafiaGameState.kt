@@ -1,5 +1,6 @@
 package com.idutvuk.go_maf.model.gamedata
 
+import android.service.autofill.FillEventHistory
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.MainBtnState.*
 import java.lang.IllegalStateException
@@ -65,6 +66,7 @@ data class MafiaGameState(
     var selectionRequested: Boolean = false,
 
     var snackbarMessage: String? = null,
+
     /**
      * changes heading on the top of the fragment
      */
@@ -95,7 +97,9 @@ data class MafiaGameState(
     var isVoteCancelled: Boolean = false,
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
 
-    var canUndo: Boolean = false
+    var canUndo: Boolean = false,
+
+    var snapshotHistory: ArrayList<StateSnapshot> = arrayListOf(),
 ) {
 
     fun addToVoteList(index: Int): Boolean {
@@ -337,6 +341,12 @@ data class MafiaGameState(
             else -> throw IllegalStateException("Incorrect value of fouls")
         }
     }
+
+    override fun toString(): String {
+        return "MafiaGameState(players=${players.contentToString()}, speakQueue=$speakQueue, gameOver=$gameOver, time=$time, cursor=$cursor, selectionMode=$selectionMode, primaryMessage='$primaryMessage', secondaryMessage='$secondaryMessage', mafiaMissStreak=$mafiaMissStreak, isVoteCancelled=$isVoteCancelled, selectedPlayers=$selectedPlayers), importance=${mainBtnState.importance}"
+    }
+
+
 }
 
 

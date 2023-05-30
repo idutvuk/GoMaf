@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
@@ -37,8 +39,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
+import com.idutvuk.go_maf.model.gamedata.EventImportance
 import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
+import com.idutvuk.go_maf.ui.components.GameActionRow
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.PI
@@ -66,7 +70,7 @@ fun GameScreen(
     val angles by remember { mutableStateOf(generateAngles(playerCount)) }
 
     val cursorAngle by animateFloatAsState(
-        targetValue = 180F + angles[gameUiState.cursor ?: 0] * (180F/ PI.toFloat()),
+        targetValue = 180F + angles[gameUiState.cursor] * (180F / PI.toFloat()),
         label = "cursorAnim"
     )
 
@@ -89,11 +93,11 @@ fun GameScreen(
 
     LaunchedEffect(gameUiState.snackbarMessage) {
         if (gameUiState.snackbarMessage != null && gameUiState.snackbarMessage != "")
-        scaffoldState.snackbarHostState.showSnackbar(
-            message = gameUiState.snackbarMessage!!,
-            actionLabel = "Ok",
-            duration = SnackbarDuration.Short
-        )
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = gameUiState.snackbarMessage!!,
+                actionLabel = "Ok",
+                duration = SnackbarDuration.Short
+            )
     }
 
     BottomSheetScaffold(
@@ -114,6 +118,17 @@ fun GameScreen(
                             "main Btn state ${gameUiState.mainBtnState}\n"
                 )
                 Spacer(Modifier.height(20.dp))
+                LazyColumn {
+                    items(gameUiState.snapshotHistory) { snapshot ->
+                        if (snapshot.importance != EventImportance.SILENT)
+                            GameActionRow(
+                                heading = snapshot.heading,
+                                description = snapshot.description,
+                                importance = snapshot.importance
+                            )
+                    }
+                }
+
                 Text(text = REVOLVER_SCRIPT)
                 Spacer(Modifier.height(20.dp))
                 Button(
@@ -229,7 +244,8 @@ fun GameScreen(
     }
 }
 
-const val TIMER_RADIUS = 75
+const
+val TIMER_RADIUS = 75
 
 fun generateAngles(buttonCount: Int): ArrayList<Float> {
     val angleOffset = Math.toRadians(60.0)
@@ -240,8 +256,9 @@ fun generateAngles(buttonCount: Int): ArrayList<Float> {
     return angles
 }
 
-const val REVOLVER_SCRIPT =
-        "Ави: Как ты выигрываешь?\n" +
-        "Джейк: Всё очень просто. Ты делаешь основную работу, а я тебе лишь помогаю. Я должен скармливать тебе пешки, заставляя поверить, что ты сам их выиграл. Потому что ты — умён, а я, стало быть, глуп. В каждой игре всегда есть тот, кто ведёт партию и тот, кого разводят. Чем больше жертве кажется, что она ведёт игру, тем меньше она её в действительности контролирует. Так жертва затягивает на своей шее петлю, а я, как ведущий игру, ей помогаю.\n" +
-        "Ави: Так что, это и есть твоя хвалёная формула?.\n" +
-        "Джейк: Формула необычайно глубока по своей эффективности и области применения, но в то же время ужасно проста и абсолютно логична.\n"
+const
+val REVOLVER_SCRIPT =
+    "Ави: Как ты выигрываешь?\n" +
+            "Джейк: Всё очень просто. Ты делаешь основную работу, а я тебе лишь помогаю. Я должен скармливать тебе пешки, заставляя поверить, что ты сам их выиграл. Потому что ты — умён, а я, стало быть, глуп. В каждой игре всегда есть тот, кто ведёт партию и тот, кого разводят. Чем больше жертве кажется, что она ведёт игру, тем меньше она её в действительности контролирует. Так жертва затягивает на своей шее петлю, а я, как ведущий игру, ей помогаю.\n" +
+            "Ави: Так что, это и есть твоя хвалёная формула?.\n" +
+            "Джейк: Формула необычайно глубока по своей эффективности и области применения, но в то же время ужасно проста и абсолютно логична.\n"
