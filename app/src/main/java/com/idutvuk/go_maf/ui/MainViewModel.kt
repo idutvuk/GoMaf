@@ -1,15 +1,17 @@
 package com.idutvuk.go_maf.ui
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.GameManager
-import com.idutvuk.go_maf.model.database.GamesRepository
+import com.idutvuk.go_maf.model.UserRepository
+import com.idutvuk.go_maf.model.database.GameRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
+import com.idutvuk.go_maf.model.database.relation.MafiaGameWithPlayers
+import com.idutvuk.go_maf.model.database.entities.User
 import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.MainBtnState
@@ -20,7 +22,8 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class MainViewModel(application: Application) : ViewModel() {
     val allGames: LiveData<List<MafiaGame>>
-    private var repository: GamesRepository
+    private var gameRepository: GameRepository
+    private val userRepository: UserRepository
     val searchResults: MutableLiveData<List<MafiaGame>>
     private lateinit var manager: GameManager
 
@@ -29,21 +32,37 @@ class MainViewModel(application: Application) : ViewModel() {
 
     init {
         val gamesDb = MafiaGamesDatabase.getDatabase(application)
-        val gameDao = gamesDb.gameDao()
-        repository = GamesRepository(gameDao)
 
-        allGames = repository.allGames
-        searchResults = repository.searchResults
+        val gameDao = gamesDb.gameDao()
+        gameRepository = GameRepository(gameDao)
+        val userDao = gamesDb.userDao()
+        userRepository = UserRepository(userDao)
+
+        allGames = gameRepository.allGames
+        searchResults = gameRepository.searchResults
 
 
     }
     fun insertGame(game: MafiaGame) {
-        repository.insertGame(game)
+        gameRepository.insertGame(game)
     }
 
     fun findGame(id: Int) {
-        repository.getGame(id)
+        gameRepository.getGame(id)
     }
+
+    fun getGameWithPlayers(id: Long): LiveData<MafiaGameWithPlayers> {
+        return gameRepository.getGameWithPlayers(id)
+    }
+
+    fun getUser(userId: Long): User {
+        return userRepository.getUser(userId)
+    }
+
+    suspend fun insertUser(user: User) {
+        userRepository.insertUser(user)
+    }
+
 
     fun startGame(playerCount: Int) {
         manager = GameManager(playerCount)
