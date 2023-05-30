@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainMenuFragment"
-        android:name="com.idutvuk.go_maf.ui.mainmenu.MainMenuFragment"
+        android:name="com.idutvuk.go_maf.legacy.MainMenuFragment"
         android:label="fragment_main_menu"
         tools:layout="@layout/fragment_main_menu" >
         <action
@@ -34,26 +34,26 @@
     </fragment>
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.idutvuk.go_maf.ui.game.GameFragment"
+        android:name="com.idutvuk.go_maf.legacy.GameFragment"
         android:label="fragment_game"
         tools:layout="@layout/fragment_game" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.idutvuk.go_maf.ui.settings.SettingsFragment"
+        android:name="com.idutvuk.go_maf.legacy.SettingsFragment"
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/debugFragment"
-        android:name="com.idutvuk.go_maf.ui.debug.DebugFragment"
+        android:name="com.idutvuk.go_maf.legacy.DebugFragment"
         android:label="fragment_debug"
         tools:layout="@layout/fragment_debug" />
     <fragment
         android:id="@+id/gamesViewerFragment"
-        android:name="com.idutvuk.go_maf.ui.gameslist.GamesViewerFragment"
+        android:name="com.idutvuk.go_maf.legacy.GamesViewerFragment"
         android:label="fragment_games_viewer_list"
         tools:layout="@layout/fragment_games_viewer_list" />
     <fragment
         android:id="@+id/rulesFragment"
-        android:name="com.idutvuk.go_maf.ui.rules.RulesFragment"
+        android:name="com.idutvuk.go_maf.legacy.RulesFragment"
         android:label="fragment_rules"
         tools:layout="@layout/fragment_rules" />
 </navigation>

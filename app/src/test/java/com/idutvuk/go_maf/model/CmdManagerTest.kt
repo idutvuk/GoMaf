@@ -1,9 +1,8 @@
 package com.idutvuk.go_maf.model
 
 import com.google.common.truth.Truth.assertThat
-import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.model.gamedata.Player
-import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.legacy.CmdManager
+import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import org.junit.Before
 import org.junit.Test
 

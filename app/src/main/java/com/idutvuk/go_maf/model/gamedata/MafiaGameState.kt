@@ -1,8 +1,8 @@
 package com.idutvuk.go_maf.model.gamedata
 
+import android.service.autofill.FillEventHistory
 import android.util.Log
-import com.idutvuk.go_maf.ui.game.MainBtnState
-import com.idutvuk.go_maf.ui.game.MainBtnState.*
+import com.idutvuk.go_maf.model.gamedata.MainBtnState.*
 import java.lang.IllegalStateException
 
 /**
@@ -12,6 +12,7 @@ import java.lang.IllegalStateException
 data class MafiaGameState(
     val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
+    var livingPlayers: List<Boolean> = players.map { it.alive },
     /**
      * Queue of players wanting to speak
      * used in vote dead speeches
@@ -37,7 +38,7 @@ data class MafiaGameState(
 
 
     var mainBtnState: MainBtnState = START_GAME,
-    var previousMainButtonActionState: MainBtnState = CRASH,
+    var prevMainBtnState: MainBtnState = CRASH,
     var delayedBtnState: MainBtnState = CRASH,
 
     /**
@@ -65,6 +66,7 @@ data class MafiaGameState(
     var selectionRequested: Boolean = false,
 
     var snackbarMessage: String? = null,
+
     /**
      * changes heading on the top of the fragment
      */
@@ -91,22 +93,20 @@ data class MafiaGameState(
      */
     var isTimerActive: Boolean = false,
 
-    val initVoteList:ArrayList<Int> = arrayListOf(),
+    val voteList:ArrayList<Int> = arrayListOf(),
     var isVoteCancelled: Boolean = false,
-    val initSelectedPlayers: ArrayList<Int> = arrayListOf()
+    var selectedPlayers: ArrayList<Int> = arrayListOf(),
+
+    var canUndo: Boolean = false,
+
+    var snapshotHistory: ArrayList<StateSnapshot> = arrayListOf(),
 ) {
-
-    private var voteList: ArrayList<Int> = initVoteList
-
-    val voteListCopy: Set<Int>
-        get() = voteList.toSet()
 
     fun addToVoteList(index: Int): Boolean {
         return voteList.add(index)
     }
 
     fun addToVoteList(): Boolean {
-        Log.d("GameLog",selectedPlayers.toString())
         assert(selectedPlayers.size == 1)
         return addToVoteList(selectedPlayers[0])
     }
@@ -115,15 +115,7 @@ data class MafiaGameState(
         voteList.clear()
     }
 
-    /**
-     * Selected players is a selector of the voted players
-     * like cursor, but used when multiple players selected
-     */
-    private val selectedPlayers: ArrayList<Int> = initSelectedPlayers
-
-    val selectedPlayersCopy: Set<Int>
-        get() = selectedPlayers.toSet()
-
+    @Deprecated("use compose")
     fun togglePlayerSelection(index: Int) {
         if (!selectedPlayers.contains(index)) {
             selectedPlayers.add(index)
@@ -132,6 +124,7 @@ data class MafiaGameState(
         }
     }
 
+    @Deprecated("use compose")
     fun clearSelection() {
         selectedPlayers.clear()
     }
@@ -189,6 +182,8 @@ data class MafiaGameState(
 
     private fun kill(i: Int) {
         players[i].alive = false
+        snackbarMessage = "killed $i"
+        livingPlayers = players.map { it.alive }
         gameOver = isGameOver()
     }
 
@@ -259,7 +254,7 @@ data class MafiaGameState(
                 NEXT -> delayedBtnState
 
                 DEBUG -> {
-                    Log.d("GameLog", "s")
+                    Log.d("GameLog", "MGS: debug pressed")
                     START_GAME
                 }
 
@@ -268,7 +263,7 @@ data class MafiaGameState(
                 END_GAME -> END_GAME //todo something on the game end
 
                 START_VOTE -> {
-                    when (voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
+                    when (voteList.size) {
                         0 -> START_NIGHT
                         1 -> if (currentPhaseNumber == 2) START_NIGHT else START_SPEECH
                         else -> KILL_IN_VOTE
@@ -304,7 +299,7 @@ data class MafiaGameState(
                     NEXT
                 }
 
-                MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
+                MAFIA_KILL -> nextStateSingleClick(END_GAME)
 
                 CHECK_DON -> nextStateSingleClick(CHECK_SHR)
 
@@ -323,74 +318,35 @@ data class MafiaGameState(
      * возвращает следующую фазу, если выделение игрока уже произошло.
      * В противном случае ставит необходимую фазу в delay и возвращает ожидание клика
      */
-    fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
+    private fun nextStateSingleClick(nextPhase: MainBtnState): MainBtnState {
         assert(mainBtnState.requireNumber == PlayerSelectionMode.SINGLE)
-        if (selectedPlayersCopy.size == 1) return nextPhase
+        if (selectedPlayers.size == 1) return nextPhase
         delayedBtnState = nextPhase
-        previousMainButtonActionState = mainBtnState
+        prevMainBtnState = mainBtnState
         return WAITING_FOR_CLICK
     }
 
     fun foul(i: Int) {
-        when(players[i].fouls) {
-            0,1,2 -> players[i].fouls++
+        when (players[i].fouls) {
+            0, 1, 2 -> players[i].fouls++
             2 -> {
                 players[i].mute()
             }
+
             3 -> {
                 kill(i)
                 isVoteCancelled = true
             }
+
             else -> throw IllegalStateException("Incorrect value of fouls")
         }
     }
 
     override fun toString(): String {
-        return "voteList=$voteList, \n" +
-                "phase number = $currentPhaseNumber, " +
-                "time=$time, \n" +
-                "mainBtnState=$mainBtnState, " +
-                "previousMainButtonActionState=$previousMainButtonActionState, " +
-                "delayedMainButtonActionState=$delayedBtnState, " +
-                "firstSpokedPlayer=$firstSpokedPlayer, " +
-                "cursor=$cursor, " +
-                "selectedPlayers=$selectedPlayers, " +
-                "selectionMode=$selectionMode, " +
-                "selectionRequested=$selectionRequested, " +
-                "primaryMessage='$primaryMessage', " +
-                "mafiaMissStreak=$mafiaMissStreak, " +
-                "isMafiaMissedToday=$isMafiaMissedToday, " +
-                "isTimerActive=$isTimerActive" +
-                ")"
+        return "MafiaGameState(players=${players.contentToString()}, speakQueue=$speakQueue, gameOver=$gameOver, time=$time, cursor=$cursor, selectionMode=$selectionMode, primaryMessage='$primaryMessage', secondaryMessage='$secondaryMessage', mafiaMissStreak=$mafiaMissStreak, isVoteCancelled=$isVoteCancelled, selectedPlayers=$selectedPlayers), importance=${mainBtnState.importance}"
     }
-/*
-    fun copy(): MafiaGameState {
-        return MafiaGameState(
-            numPlayers =                        this.numPlayers,
-            players =                           this.players.copyOf(),
-            speakQueue =                        this.speakQueue?.clone() as? ArrayList<Int>,
-            gameOver =                          this.gameOver,
-            currentPhaseNumber =                this.currentPhaseNumber,
-            time =                              this.time,
-            mainBtnState =                      this.mainBtnState,
-            previousMainButtonActionState =     this.previousMainButtonActionState,
-            delayedBtnState =                   this.delayedBtnState,
-            firstSpokedPlayer =                 this.firstSpokedPlayer,
-            cursor =                            this.cursor,
-            selectionMode =                     this.selectionMode,
-            selectionRequested =                this.selectionRequested,
-            snackbarMessage =                   this.snackbarMessage,
-            primaryMessage =                    this.primaryMessage,
-            secondaryMessage =                  this.secondaryMessage,
-            mafiaMissStreak =                   this.mafiaMissStreak,
-            isMafiaMissedToday =                this.isMafiaMissedToday,
-            isTimerActive =                     this.isTimerActive,
-            initVoteList =                      this.voteList,
-            initSelectedPlayers =               this.initSelectedPlayers,
-            isVoteCancelled =                   this.isVoteCancelled,
-        )
-    }
-    */
+
+
 }
 
 

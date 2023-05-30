@@ -3,7 +3,7 @@ package com.idutvuk.go_maf.model.gamedata
 import android.util.Log
 import java.lang.Error
 
-class Player(
+data class Player(
     val number: Int,
     val role: Role = Role.CIV,
     val nickname: String = "Debugger",
@@ -43,4 +43,6 @@ class Player(
     fun unmute() {
         canSpeak = true
     }
+
+
 }

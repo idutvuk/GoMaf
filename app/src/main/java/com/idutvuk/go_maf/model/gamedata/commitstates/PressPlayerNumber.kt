@@ -1,8 +1,7 @@
 package com.idutvuk.go_maf.model.gamedata.commitstates
 
-import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
-import com.idutvuk.go_maf.ui.game.MainBtnState
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import java.lang.Error
 
 class PressPlayerNumber:CmdCommitState {
@@ -17,13 +16,13 @@ class PressPlayerNumber:CmdCommitState {
              * MAFIA_KILL
              * TODO: FOUL (?)
              */
-            when (previousMainButtonActionState) {
+            when (prevMainBtnState) {
                 MainBtnState.ADD_TO_VOTE -> {
                     addToVoteList()
                 }
 
                 MainBtnState.MAFIA_KILL -> {
-                    delayedBtnState = MainBtnState.CHECK_DON
+//                    delayedBtnState = MainBtnState.CHECK_DON
                     mafiaMissStreak = 0
                     mafiaKill()
                 }
@@ -41,7 +40,7 @@ class PressPlayerNumber:CmdCommitState {
                 )
                 //TODO: add to vote on click
             }
-            clearSelection()
+            selectedPlayers.clear()
 //            mainBtnState = delayedBtnState
         }
         return gameState

@@ -8,12 +8,9 @@
     <path
         android:fillColor="@android:color/white"
         android:pathData="
-        M   71.41,    10.41
-        L   76,       5.83
-        l   4.59,    4.58
-        L   82,       9
-        l   -6,       -6
-            -6,       6
-            z
+    M   64,    10
+    L   76,    0
+    l   12,     10
+    z
 "/>
 </vector>
