@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.MainViewModel
@@ -19,10 +20,15 @@ fun GamesScreen(
     allGames: List<MafiaGame>,
     searchResults: List<MafiaGame>,
     viewModel: MainViewModel,
-    onFabClick: () -> Unit
+    onFabClick: () -> Unit,
+    navController: NavHostController
 ) {
     Scaffold(
-        topBar = { DefaultTopAppBar("Saved Games") },
+        topBar = { DefaultTopAppBar(
+            title = "Saved Games",
+            onNavButtonPress = {}
+        )
+                 },
         floatingActionButton = {
             FloatingActionButton(onClick = onFabClick) {
                 Icon(

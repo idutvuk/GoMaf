@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.gamedata.EventImportance
 import com.idutvuk.go_maf.ui.MainViewModel
@@ -53,6 +54,7 @@ import kotlin.math.PI
 fun GameScreen(
     playerCount: Int,
     viewModel: MainViewModel,
+    navController: NavHostController,
 ) {
 
     val scope = rememberCoroutineScope()
@@ -118,7 +120,11 @@ fun GameScreen(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
-        topBar = { DefaultTopAppBar("Game") },
+        topBar = { DefaultTopAppBar(
+            title = "Game",
+            onNavButtonPress = { navController.popBackStack() }
+        )
+                 },
         sheetContent = {
             Column(
                 Modifier
