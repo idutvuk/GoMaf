@@ -48,7 +48,7 @@ class GameViewModel : ViewModel() {
 
         with(gameState) {
             var votelistString = ""
-            for (i in voteListCopy)
+            for (i in voteList)
                 votelistString += "$i, "
             ldVoteList.value = votelistString
 

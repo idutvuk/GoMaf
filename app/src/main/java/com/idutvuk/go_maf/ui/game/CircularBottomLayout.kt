@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.idutvuk.go_maf.model.gamedata.GameTime
 import kotlin.math.cos
 import kotlin.math.sin
 

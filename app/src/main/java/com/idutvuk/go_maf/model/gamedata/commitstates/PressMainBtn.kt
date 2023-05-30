@@ -135,7 +135,7 @@ class PressMainBtn:CmdCommitState {
                 }
 
                 START_VOTE -> {
-                    when(voteListCopy.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
+                    when(voteList.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
                         0 -> {
                             snackbarMessage = "Vote skipped (nobody was elected)"
                         }
@@ -143,7 +143,7 @@ class PressMainBtn:CmdCommitState {
                             if (currentPhaseNumber == 2) {//if today is first day
                                 snackbarMessage = "Vote skipped (only one player was elected at the first day)"
                             } else {
-                                cursor = voteListCopy.first()
+                                cursor = voteList.first()
                                 delayedBtnState= START_NIGHT
                                 speakQueue = arrayListOf(cursor)
                                 voteKill(cursor)

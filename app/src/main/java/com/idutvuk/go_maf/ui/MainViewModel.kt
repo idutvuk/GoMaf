@@ -9,6 +9,7 @@ import com.idutvuk.go_maf.model.GameManager
 import com.idutvuk.go_maf.model.database.GamesRepository
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.MafiaGamesDatabase
+import com.idutvuk.go_maf.model.gamedata.GameTime
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
@@ -22,8 +23,8 @@ class MainViewModel(application: Application) : ViewModel() {
     val searchResults: MutableLiveData<List<MafiaGame>>
     private lateinit var manager: GameManager
 
-    private val _uiState = MutableStateFlow(MafiaGameState(10))
-    val uiState: StateFlow<MafiaGameState> = _uiState.asStateFlow()
+    private lateinit var _uiState: MutableStateFlow<MafiaGameState>
+    lateinit var uiState: StateFlow<MafiaGameState>
 
     init {
         val gamesDb = MafiaGamesDatabase.getDatabase(application)
@@ -45,6 +46,8 @@ class MainViewModel(application: Application) : ViewModel() {
 
     fun startGame(playerCount: Int) {
         manager = GameManager(playerCount)
+        _uiState = MutableStateFlow(MafiaGameState(playerCount))
+        uiState = _uiState.asStateFlow()
     }
 
     fun clickButton(index: Int) {
@@ -74,13 +77,19 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
     fun commit() {
+        manager.stateHistory[manager.currentHistoryIndex] = _uiState.value
         _uiState.value = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
     }
 
 
 
     fun onPressUndoBtn() {
-        manager.stateHistory.removeLastOrNull()
-        _uiState.value = manager.stateHistory.last()
+        _uiState.value = manager.undo()
+    }
+
+    fun nextPhase() {
+        manager.stateHistory[manager.currentHistoryIndex] = _uiState.value
+        _uiState.value = if (_uiState.value.time == GameTime.DAY) manager.commit(CmdCommitType.SKIP_DAY)
+        else manager.commit(CmdCommitType.SKIP_NIGHT)
     }
 }

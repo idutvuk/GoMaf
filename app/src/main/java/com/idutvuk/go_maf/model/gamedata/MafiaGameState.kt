@@ -11,7 +11,7 @@ import java.lang.IllegalStateException
 data class MafiaGameState(
     val numPlayers: Int,
     var players: Array<Player> = Array(numPlayers) { Player(it) },
-    val livingPlayers: List<Boolean> = players.map { it.alive },
+    var livingPlayers: List<Boolean> = players.map { it.alive },
     /**
      * Queue of players wanting to speak
      * used in vote dead speeches
@@ -91,17 +91,12 @@ data class MafiaGameState(
      */
     var isTimerActive: Boolean = false,
 
-    val initVoteList:ArrayList<Int> = arrayListOf(),
+    val voteList:ArrayList<Int> = arrayListOf(),
     var isVoteCancelled: Boolean = false,
     var selectedPlayers: ArrayList<Int> = arrayListOf(),
 
     var canUndo: Boolean = false
 ) {
-
-    private var voteList: ArrayList<Int> = initVoteList
-
-    val voteListCopy: Set<Int>
-        get() = voteList.toSet()
 
     fun addToVoteList(index: Int): Boolean {
         return voteList.add(index)
@@ -183,6 +178,8 @@ data class MafiaGameState(
 
     private fun kill(i: Int) {
         players[i].alive = false
+        snackbarMessage = "killed $i"
+        livingPlayers = players.map { it.alive }
         gameOver = isGameOver()
     }
 
@@ -262,7 +259,7 @@ data class MafiaGameState(
                 END_GAME -> END_GAME //todo something on the game end
 
                 START_VOTE -> {
-                    when (voteListCopy.size) {
+                    when (voteList.size) {
                         0 -> START_NIGHT
                         1 -> if (currentPhaseNumber == 2) START_NIGHT else START_SPEECH
                         else -> KILL_IN_VOTE

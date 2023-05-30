@@ -19,7 +19,7 @@ class GameManager (numPlayers: Int) {
 
     //TODO: Make ghost games possible
     fun commit(cmdCommitType: CmdCommitType): MafiaGameState {
-        var gameState = stateHistory.last().copy()
+        var gameState = stateHistory[currentHistoryIndex].copy()
 
         gameState.snackbarMessage = null
 
@@ -34,4 +34,10 @@ class GameManager (numPlayers: Int) {
         gameState.canUndo = true
         return gameState
     }
+
+    fun undo(): MafiaGameState {
+        stateHistory.removeLastOrNull()
+        return stateHistory[--currentHistoryIndex]
+    }
+
 }

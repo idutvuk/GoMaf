@@ -109,6 +109,7 @@ fun GameScreen(
             ) {
                 Text(
                     text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
+                            "votelist: ${gameUiState.voteList}\n" +
                             "selmode:  ${gameUiState.selectionMode}\n" +
                             "main Btn state ${gameUiState.mainBtnState}\n"
                 )
@@ -198,6 +199,7 @@ fun GameScreen(
 
                 }
                 GameButtonRow(
+                    canUndo = gameUiState.canUndo,
                     onUndoClick = {
                         viewModel.onPressUndoBtn()
                     },
@@ -215,7 +217,11 @@ fun GameScreen(
                     },
                     isTimerActive = gameUiState.isTimerActive,
                     isTimerRunning = isTimerRunning,
-                    canUndo = gameUiState.canUndo
+                    currentTime = gameUiState.time,
+                    onPrevPhaseClick = {},
+                    onNextPhaseClick = {
+                        viewModel.nextPhase()
+                    }
                 )
             }
 
