@@ -1,6 +1,7 @@
 package com.idutvuk.go_maf.model
 
 
+import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.MainBtnState
@@ -26,7 +27,7 @@ class GameManager (numPlayers: Int) {
         gameState.snackbarMessage = null
 
         gameState = cmdCommitType.cmdCommitState.changeGameState(gameState)
-
+        Log.d("GameLog","commited")
         if (cmdCommitType == CmdCommitType.PRESS_MAIN_BTN || //if not SKIP_DAY or SKIP_NIGHT
             cmdCommitType == CmdCommitType.PRESS_PLAYER_NUMBER
         ) gameState.nextMainBtnState()

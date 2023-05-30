@@ -27,7 +27,7 @@ fun GameButtonRow(
     currentTime: GameTime,
 ) {
     Row {
-        IconButton(onClick = { onPrevPhaseClick}) {
+        IconButton(onClick = onPrevPhaseClick, enabled = false) {
             if (currentTime == GameTime.DAY) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_sun),
@@ -80,7 +80,7 @@ fun GameButtonRow(
             Icon(Icons.Default.Add, contentDescription = "forward")
         }
 
-        IconButton(onClick = { onNextPhaseClick}) {
+        IconButton(onClick = onNextPhaseClick) {
             if (currentTime == GameTime.NIGHT) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_sun),
