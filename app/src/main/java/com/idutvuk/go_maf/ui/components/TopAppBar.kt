@@ -17,6 +17,7 @@ fun DefaultTopAppBar(
     //--heading text
     //--onclick listener
     title: String,
+    onNavButtonPress: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -26,7 +27,7 @@ fun DefaultTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = { } ) {
+            IconButton(onClick = onNavButtonPress ) {
                 Icon(
                     Icons.Filled.ArrowBack,
                     contentDescription = "back"

@@ -66,6 +66,7 @@ dependencies {
     implementation (libs.kotlinx.coroutines.android)
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
+    implementation("androidx.navigation:navigation-compose:2.5.3")
 
     implementation(libs.androidx.compose.bom)
     implementation(libs.lifecycle.runtime.ktx)
