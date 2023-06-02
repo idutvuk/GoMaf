@@ -13,10 +13,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.playgame.GameScreen
 import com.idutvuk.go_maf.ui.gamesview.GamesScreen
 import com.idutvuk.go_maf.ui.gamesview.NewGameDialog
 import com.idutvuk.go_maf.ui.gameview.GameViewScreen
+import java.time.LocalDate
+
+import java.util.Calendar
+import java.util.Date
 
 
 @Composable
@@ -46,6 +51,15 @@ fun ScreenSetup(viewModel: MainViewModel) {
                         newGameDialogVis = false
                         playersCount = it
                         navController.navigate("play_game")
+                        viewModel.insertGame(
+                            MafiaGame(
+                                startDate = System.currentTimeMillis(),
+                                duration = 0,
+                                isOver = false,
+                                numPlayers = it,
+                                hostUserId = 0
+                            )
+                        )
                         viewModel.startGame(it)
                     },
                 )
@@ -71,7 +85,6 @@ fun ScreenSetup(viewModel: MainViewModel) {
                 onBackClicked = {navController.popBackStack()}
             )
         }
-
     }
 }
 

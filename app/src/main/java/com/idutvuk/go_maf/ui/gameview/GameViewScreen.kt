@@ -51,9 +51,7 @@ fun GameViewScreen(
 
                     items(users) {userId ->
                         val user = viewModel.getUser(userId)
-                        user?.let {
-                            Text(user.username)
-                        }
+                        Text(user.username)
                     }
                 }
             }

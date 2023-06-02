@@ -18,13 +18,13 @@ interface GameDao {
     @Query("SELECT * FROM game WHERE id = :id")
     fun findGameById(id: Int): List<MafiaGame>
 
-    @Query("SELECT * FROM game WHERE start_date BETWEEN :dateStart AND :dateEnd")
-    fun findGamesByDateRange(dateStart: Date, dateEnd: Date): List<MafiaGame>
+//    @Query("SELECT * FROM game WHERE start_date BETWEEN :dateStart AND :dateEnd")
+//    fun findGamesByDateRange(dateStart: Date, dateEnd: Date): List<MafiaGame>
     @Insert
     fun insertAllGames(vararg games: MafiaGame)
 
     @Query("DELETE FROM game WHERE id = :id")
-    fun deleteGameById(id: Int)
+    fun deleteGameById(id: Long)
 
     @Transaction
     @Query("SELECT * FROM game WHERE id = :gameId")

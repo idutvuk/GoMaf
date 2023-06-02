@@ -122,7 +122,7 @@ fun GameScreen(
     LaunchedEffect(gameUiState.gameOver) {
         viewModel.insertGame(
             MafiaGame(
-                startDate = Date(0L),
+                startDate = 0L,
                 duration = 180,
                 isOver = true,
                 numPlayers = playerCount,
@@ -147,10 +147,11 @@ fun GameScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
-                            "votelist: ${gameUiState.voteList}\n" +
-                            "selmode:  ${gameUiState.selectionMode}\n" +
-                            "main Btn state ${gameUiState.mainBtnState}\n"
+                    text = ""
+//                    text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
+//                            "votelist: ${gameUiState.voteList}\n" +
+//                            "selmode:  ${gameUiState.selectionMode}\n" +
+//                            "main Btn state ${gameUiState.mainBtnState}\n"
                 )
                 Spacer(Modifier.height(20.dp))
                 LazyColumn(

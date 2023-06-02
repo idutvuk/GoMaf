@@ -40,8 +40,6 @@ class MainViewModel(application: Application) : ViewModel() {
 
         allGames = gameRepository.allGames
         searchResults = gameRepository.searchResults
-
-
     }
     fun insertGame(game: MafiaGame) {
         gameRepository.insertGame(game)

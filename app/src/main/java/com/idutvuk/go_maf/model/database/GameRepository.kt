@@ -23,7 +23,7 @@ class GameRepository(private val gameDao: GameDao) {
         }
     }
 
-    fun deleteGame(id: Int) {
+    fun deleteGame(id: Long) {
         coroutineScope.launch(Dispatchers.IO) {
             gameDao.deleteGameById(id)
         }

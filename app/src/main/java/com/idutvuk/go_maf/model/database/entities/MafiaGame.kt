@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.idutvuk.go_maf.model.database.MafiaAccount.Companion.users
-import java.sql.Date
 import java.sql.Time
+import java.util.Date
 
 @Entity(tableName = "game")
 data class MafiaGame(
@@ -13,10 +13,10 @@ data class MafiaGame(
     val id: Int = 0,
 
     @ColumnInfo(name="start_date")
-    val startDate: Date,
+    val startDate: Long,
 
     @ColumnInfo(name="duration")
-    val duration: Int,
+    val duration: Long,
 
     @ColumnInfo(name = "is_over")
     val isOver: Boolean,
@@ -37,10 +37,10 @@ data class MafiaGame(
         val games by lazy {
             List(20) {
                 val startTime = Time((gameDates[it] * 1000) + gameTimes[it].seconds)
-                val duration = ((30..75).random() * 60)
+                val duration = 0L
                 val players = users.shuffled().take(numPlayers.random()).toCollection(arrayListOf())
                 MafiaGame(
-                    startDate = Date(gameDates[it] * 1000),
+                    startDate = 0,
                     duration = duration,
                     isOver = false,
                     numPlayers = players.size,
