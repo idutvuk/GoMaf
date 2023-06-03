@@ -55,7 +55,7 @@ fun CircularButtonLayout(
             Text(
                 text = "$index",
                 fontFamily = FontFamily.SansSerif,
-                fontSize = if (index < 10) 30.sp else 25.sp
+                fontSize = if (index < 10) 30.sp else 20.sp
             )
         }
 

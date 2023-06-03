@@ -16,7 +16,7 @@ import com.idutvuk.go_maf.model.database.entities.User
         User::class,
         MafiaGamePlayer::class,
                ],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -38,6 +38,7 @@ abstract class MafiaGamesDatabase : RoomDatabase() {
                     "games"
                 )
                     .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .build()
                     .also { Instance = it }
             }

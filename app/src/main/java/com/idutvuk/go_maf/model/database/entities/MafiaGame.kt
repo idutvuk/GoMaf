@@ -5,15 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.idutvuk.go_maf.model.database.MafiaAccount.Companion.users
 import java.sql.Time
-import java.util.Date
 
 @Entity(tableName = "game")
 data class MafiaGame(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    @ColumnInfo(name="start_date")
-    val startDate: Long,
+    @ColumnInfo(name="start_time")
+    val startTime: Long,
 
     @ColumnInfo(name="duration")
     val duration: Long,
@@ -40,7 +39,7 @@ data class MafiaGame(
                 val duration = 0L
                 val players = users.shuffled().take(numPlayers.random()).toCollection(arrayListOf())
                 MafiaGame(
-                    startDate = 0,
+                    startTime = 0,
                     duration = duration,
                     isOver = false,
                     numPlayers = players.size,

@@ -38,7 +38,7 @@ fun GameViewScreen(
                     .padding(it)
             ) {
                 // Display game stats
-                Text("Start Date: ${game.mafiaGame.startDate}")
+                Text("Start Date: ${game.mafiaGame.startTime}")
                 Text("Duration: ${game.mafiaGame.duration}")
                 Text("Number of Players: ${game.mafiaGame.numPlayers}")
 

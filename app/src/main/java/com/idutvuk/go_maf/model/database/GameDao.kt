@@ -8,20 +8,20 @@ import androidx.room.Transaction
 import androidx.room.TypeConverters
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.database.relation.MafiaGameWithPlayers
-import java.sql.Date
+import kotlinx.coroutines.CompletableDeferred
 
 @Dao
 @TypeConverters(Converters::class)
 interface GameDao {
-    @Query("SELECT * FROM game ORDER BY start_date ASC")
+    @Query("SELECT * FROM game ORDER BY start_time ASC")
     fun getAllGames(): LiveData<List<MafiaGame>>
     @Query("SELECT * FROM game WHERE id = :id")
-    fun findGameById(id: Int): List<MafiaGame>
+    fun findGameById(id: Long): List<MafiaGame>
 
-//    @Query("SELECT * FROM game WHERE start_date BETWEEN :dateStart AND :dateEnd")
-//    fun findGamesByDateRange(dateStart: Date, dateEnd: Date): List<MafiaGame>
+
+
     @Insert
-    fun insertAllGames(vararg games: MafiaGame)
+    fun insertGames(vararg games: MafiaGame): List<Long>
 
     @Query("DELETE FROM game WHERE id = :id")
     fun deleteGameById(id: Long)
@@ -29,4 +29,7 @@ interface GameDao {
     @Transaction
     @Query("SELECT * FROM game WHERE id = :gameId")
     fun getGameWithPlayers(gameId: Long): LiveData<MafiaGameWithPlayers>
+
+    @Query("UPDATE game SET is_over = 1, duration = :duration WHERE id = :gameId")
+    fun finishGame(gameId: Long, duration: Long)
 }

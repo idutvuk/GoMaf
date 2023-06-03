@@ -18,10 +18,6 @@ import com.idutvuk.go_maf.ui.playgame.GameScreen
 import com.idutvuk.go_maf.ui.gamesview.GamesScreen
 import com.idutvuk.go_maf.ui.gamesview.NewGameDialog
 import com.idutvuk.go_maf.ui.gameview.GameViewScreen
-import java.time.LocalDate
-
-import java.util.Calendar
-import java.util.Date
 
 
 @Composable
@@ -50,26 +46,30 @@ fun ScreenSetup(viewModel: MainViewModel) {
                     startGame = {
                         newGameDialogVis = false
                         playersCount = it
-                        navController.navigate("play_game")
-                        viewModel.insertGame(
-                            MafiaGame(
-                                startDate = System.currentTimeMillis(),
-                                duration = 0,
-                                isOver = false,
-                                numPlayers = it,
-                                hostUserId = 0
+                        navController.navigate("play_game/${
+                            viewModel.insertGame(
+                                MafiaGame(
+                                    startTime = System.currentTimeMillis(),
+                                    duration = 0,
+                                    isOver = false,
+                                    numPlayers = it,
+                                    hostUserId = 0
+                                )
                             )
-                        )
+                        }")
                         viewModel.startGame(it)
                     },
                 )
             }
         }
 
-        composable("play_game") {
+        composable(route = "play_game/{gameId}",
+            arguments = listOf(navArgument("gameId") {type = NavType.LongType})
+        ) { backStackEntry ->
             GameScreen(
                 navController = navController,
                 playerCount = playersCount,
+                gameId = backStackEntry.arguments?.getLong("gameId") ?: 0,
                 viewModel = viewModel
             )
         }

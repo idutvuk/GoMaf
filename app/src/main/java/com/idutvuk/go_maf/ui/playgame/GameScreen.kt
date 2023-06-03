@@ -48,7 +48,6 @@ import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.components.GameActionRow
 import kotlinx.coroutines.delay
-import java.sql.Date
 import kotlin.math.PI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -56,6 +55,7 @@ import kotlin.math.PI
 fun GameScreen(
     playerCount: Int,
     viewModel: MainViewModel,
+    gameId: Long,
     navController: NavHostController,
 ) {
 
@@ -120,15 +120,7 @@ fun GameScreen(
     }
 
     LaunchedEffect(gameUiState.gameOver) {
-        viewModel.insertGame(
-            MafiaGame(
-                startDate = 0L,
-                duration = 180,
-                isOver = true,
-                numPlayers = playerCount,
-                hostUserId = 34
-            )
-        )
+        viewModel.finishGame(gameId)
     }
 
     BottomSheetScaffold(
