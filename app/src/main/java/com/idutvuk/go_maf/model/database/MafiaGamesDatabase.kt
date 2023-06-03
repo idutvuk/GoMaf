@@ -16,7 +16,7 @@ import com.idutvuk.go_maf.model.database.entities.User
         User::class,
         MafiaGamePlayer::class,
                ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

@@ -44,11 +44,11 @@ class MainViewModel(application: Application) : ViewModel() {
     }
     var insertedId = 0L
     fun insertGame(item: MafiaGame): Long {
+        return gameRepository.insertGame(item)[0]
+    }
 
-            insertedId = gameRepository.insertGame(item)[0]
-            Log.i("DB_LOG", "Inserted ID is: $insertedId")
-            return insertedId
-
+    fun deleteGame(id: Long) {
+        gameRepository.deleteGame(id)
     }
 
     fun getGameWithPlayers(id: Long): LiveData<MafiaGameWithPlayers> {

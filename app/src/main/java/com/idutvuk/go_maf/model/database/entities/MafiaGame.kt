@@ -9,7 +9,7 @@ import java.sql.Time
 @Entity(tableName = "game")
 data class MafiaGame(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0,
 
     @ColumnInfo(name="start_time")
     val startTime: Long,

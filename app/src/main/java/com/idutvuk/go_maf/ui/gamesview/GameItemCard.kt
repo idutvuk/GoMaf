@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat
 @Composable
 fun GameItemCard(
     game: MafiaGame,
-    onItemClicked: (gameId: Int) -> Unit
+    onItemClicked: (gameId: Long) -> Unit
 ) {
     Card(
         modifier = Modifier
