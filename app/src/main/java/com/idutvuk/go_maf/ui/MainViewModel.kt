@@ -1,6 +1,7 @@
 package com.idutvuk.go_maf.ui
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -40,15 +41,14 @@ class MainViewModel(application: Application) : ViewModel() {
 
         allGames = gameRepository.allGames
         searchResults = gameRepository.searchResults
-
-
     }
-    fun insertGame(game: MafiaGame) {
-        gameRepository.insertGame(game)
+    var insertedId = 0L
+    fun insertGame(item: MafiaGame): Long {
+        return gameRepository.insertGame(item)[0]
     }
 
-    fun findGame(id: Int) {
-        gameRepository.getGame(id)
+    fun deleteGame(id: Long) {
+        gameRepository.deleteGame(id)
     }
 
     fun getGameWithPlayers(id: Long): LiveData<MafiaGameWithPlayers> {
@@ -68,6 +68,10 @@ class MainViewModel(application: Application) : ViewModel() {
         manager = GameManager(playerCount)
         _uiState = MutableStateFlow(MafiaGameState(playerCount))
         uiState = _uiState.asStateFlow()
+    }
+
+    fun finishGame(gameId: Long) {
+        gameRepository.finishGame(gameId =  gameId)
     }
 
     fun clickButton(index: Int) {

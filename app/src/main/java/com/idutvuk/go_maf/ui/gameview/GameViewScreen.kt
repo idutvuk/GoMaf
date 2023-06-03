@@ -13,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 
@@ -20,13 +21,13 @@ import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 fun GameViewScreen(
     gameId: Long,
     viewModel: MainViewModel,
-    onBackClicked: () -> Unit
+    navController: NavController
 ) {
     Scaffold(
         topBar = {
             DefaultTopAppBar(
                 title = "Game view",
-                onNavButtonPress = onBackClicked
+                navController
             )
         }
     ) {
@@ -38,7 +39,7 @@ fun GameViewScreen(
                     .padding(it)
             ) {
                 // Display game stats
-                Text("Start Date: ${game.mafiaGame.startDate}")
+                Text("Start Date: ${game.mafiaGame.startTime}")
                 Text("Duration: ${game.mafiaGame.duration}")
                 Text("Number of Players: ${game.mafiaGame.numPlayers}")
 
@@ -51,9 +52,7 @@ fun GameViewScreen(
 
                     items(users) {userId ->
                         val user = viewModel.getUser(userId)
-                        user?.let {
-                            Text(user.username)
-                        }
+                        Text(user.username)
                     }
                 }
             }

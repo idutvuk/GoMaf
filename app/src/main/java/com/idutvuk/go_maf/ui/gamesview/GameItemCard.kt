@@ -9,8 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,16 +23,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.ui.theme.Typography
+import java.text.SimpleDateFormat
 
 @Composable
 fun GameItemCard(
     game: MafiaGame,
-    onItemClicked: (gameId: Int) -> Unit
+    onItemClicked: (gameId: Long) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -51,16 +50,25 @@ fun GameItemCard(
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
+                    top = 8.dp,
+                    bottom = 12.dp
                 )
         ) {
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
-                Text(
-                    text = game.startDate.toString(),
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                    fontWeight = FontWeight.Bold,
-                    style = Typography.titleMedium
-                )
-
+                Row {
+                    Text(
+                        text = SimpleDateFormat("dd/M/yyyy hh:mm").format(game.startTime),
+                        modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                        fontWeight = FontWeight.Bold,
+                        style = Typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+//                    Text(
+//                        text = SimpleDateFormat("hh:mm:ss").format(game.duration),
+//                        modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+//                        style = Typography.titleSmall
+//                    )
+                }
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Row(verticalAlignment = Alignment.Bottom) {
@@ -79,10 +87,10 @@ fun GameItemCard(
                             .padding(8.dp, 12.dp, 12.dp, 0.dp),
                         style = Typography.bodySmall
                     )
-                    UserProfilePicturesRow(
-//                        pictures = game.players.map { it.pictureId },
-                        modifier = Modifier.weight(0.8f)
-                    )
+//                    UserProfilePicturesRow(
+////                        pictures = game.players.map { it.pictureId },
+//                        modifier = Modifier.weight(0.8f)
+//                    )
                 }
 
             }
@@ -90,7 +98,7 @@ fun GameItemCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                GenderTag(isActive = game.isOver)
+                GameStatusTag(isActive = !game.isOver)
             }
         }
     }

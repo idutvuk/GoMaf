@@ -32,6 +32,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.idutvuk.go_maf.model.gamedata.EventImportance
@@ -90,7 +91,8 @@ fun GameActionRow(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 10.dp),
-                        text = description
+                        text = description,
+                        fontFamily = FontFamily.Monospace
                     )
                 }
             }

@@ -11,19 +11,20 @@ class GameRepository(private val gameDao: GameDao) {
     val allGames: LiveData<List<MafiaGame>> = gameDao.getAllGames()
     val searchResults = MutableLiveData<List<MafiaGame>>()
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
-    fun insertGame(newGame: MafiaGame) {
-        coroutineScope.launch(Dispatchers.IO) {
-            gameDao.insertAllGames(newGame)
-        }
+
+    fun insertGame(newGame: MafiaGame): List<Long> {
+//        withContext(Dispatchers.IO) {
+            return gameDao.insertGames(newGame)
+//        }
     }
 
-    fun getGame(id: Int) {
+    fun getGame(id: Long) {
         coroutineScope.launch(Dispatchers.Main) {
             searchResults.value = asyncFind(id).await()
         }
     }
 
-    fun deleteGame(id: Int) {
+    fun deleteGame(id: Long) {
         coroutineScope.launch(Dispatchers.IO) {
             gameDao.deleteGameById(id)
         }
@@ -33,8 +34,15 @@ class GameRepository(private val gameDao: GameDao) {
         return gameDao.getGameWithPlayers(gameId)
     }
 
+    fun finishGame(gameId: Long) {
+        coroutineScope.launch(Dispatchers.IO) {
+            gameDao.finishGame(
+                gameId,  System.currentTimeMillis() - gameDao.findGameById(gameId)[0].startTime
+            )
+        }
+    }
 
-    private fun asyncFind(id: Int): Deferred<List<MafiaGame>?> =
+    private fun asyncFind(id: Long): Deferred<List<MafiaGame>?> =
         coroutineScope.async(Dispatchers.IO) {
             return@async gameDao.findGameById(id)
         }

@@ -160,7 +160,7 @@ class PressMainBtn:CmdCommitState {
                     cursor = selectedPlayers.elementAt(0)
                 }
 
-                END_GAME -> {}
+                END_GAME -> {prevMainBtnState = END_GAME}
 
                 CRASH -> {
                     throw RuntimeException("Crash state should not be accessible")

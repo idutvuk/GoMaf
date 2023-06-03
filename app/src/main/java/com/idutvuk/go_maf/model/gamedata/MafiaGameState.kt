@@ -1,8 +1,8 @@
 package com.idutvuk.go_maf.model.gamedata
 
-import android.service.autofill.FillEventHistory
 import android.util.Log
 import com.idutvuk.go_maf.model.gamedata.MainBtnState.*
+import com.idutvuk.go_maf.model.generateRoles
 import java.lang.IllegalStateException
 
 /**
@@ -11,7 +11,13 @@ import java.lang.IllegalStateException
  */
 data class MafiaGameState(
     val numPlayers: Int,
-    var players: Array<Player> = Array(numPlayers) { Player(it) },
+    val roles: Array<Role> = generateRoles(numPlayers),
+    var players: Array<Player> = Array(numPlayers) {
+        Player(
+            number = it,
+            role = roles[it]
+        )
+                                                   },
     var livingPlayers: List<Boolean> = players.map { it.alive },
     /**
      * Queue of players wanting to speak

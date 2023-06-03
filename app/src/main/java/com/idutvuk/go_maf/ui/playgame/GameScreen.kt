@@ -44,11 +44,11 @@ import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.gamedata.EventImportance
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.components.GameActionRow
 import kotlinx.coroutines.delay
-import java.sql.Date
 import kotlin.math.PI
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -56,6 +56,7 @@ import kotlin.math.PI
 fun GameScreen(
     playerCount: Int,
     viewModel: MainViewModel,
+    gameId: Long,
     navController: NavHostController,
 ) {
 
@@ -120,15 +121,13 @@ fun GameScreen(
     }
 
     LaunchedEffect(gameUiState.gameOver) {
-        viewModel.insertGame(
-            MafiaGame(
-                startDate = Date(0L),
-                duration = 180,
-                isOver = true,
-                numPlayers = playerCount,
-                hostUserId = 34
-            )
-        )
+        viewModel.finishGame(gameId)
+    }
+
+    LaunchedEffect(gameUiState.prevMainBtnState) {
+        if (gameUiState.prevMainBtnState == MainBtnState.END_GAME) {
+            navController.navigate("games_view")
+        }
     }
 
     BottomSheetScaffold(
@@ -136,7 +135,7 @@ fun GameScreen(
         sheetPeekHeight = bottomSheetHeight,
         topBar = { DefaultTopAppBar(
             title = "Game",
-            onNavButtonPress = { navController.popBackStack() }
+            navController
         )
                  },
         sheetContent = {
@@ -147,10 +146,11 @@ fun GameScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
-                            "votelist: ${gameUiState.voteList}\n" +
-                            "selmode:  ${gameUiState.selectionMode}\n" +
-                            "main Btn state ${gameUiState.mainBtnState}\n"
+                    text = ""
+//                    text = "DEBUG: selected players: ${gameUiState.selectedPlayers}\n" +
+//                            "votelist: ${gameUiState.voteList}\n" +
+//                            "selmode:  ${gameUiState.selectionMode}\n" +
+//                            "main Btn state ${gameUiState.mainBtnState}\n"
                 )
                 Spacer(Modifier.height(20.dp))
                 LazyColumn(

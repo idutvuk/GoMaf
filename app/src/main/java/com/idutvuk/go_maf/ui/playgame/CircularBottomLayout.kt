@@ -43,7 +43,7 @@ fun CircularButtonLayout(
                 BorderStroke(0.dp, Color.Transparent)
             },
             modifier = Modifier
-                .size(60.dp)
+                .size(65.dp)
                 .offset {
                     val radius = 140.dp.toPx()
                     val x = (-radius * sin(angles[index])).toInt()
@@ -55,7 +55,7 @@ fun CircularButtonLayout(
             Text(
                 text = "$index",
                 fontFamily = FontFamily.SansSerif,
-                fontSize = if (index < 10) 30.sp else 25.sp
+                fontSize = if (index < 10) 30.sp else 20.sp
             )
         }
 

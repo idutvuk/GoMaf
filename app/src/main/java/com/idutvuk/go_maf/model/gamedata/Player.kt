@@ -6,7 +6,6 @@ import java.lang.Error
 data class Player(
     val number: Int,
     val role: Role = Role.CIV,
-    val nickname: String = "Debugger",
     var isEnabled: Boolean = true,
     var canSpeak: Boolean = true
 ) {
@@ -32,8 +31,8 @@ data class Player(
 
 
     override fun toString(): String {
-        return strNum + role.emoji + role +(if (alive) "✅alive" else "💀 dead") +
-                ", fouls: $fouls. Aka $nickname"
+        return '\n' + strNum + role.emoji +(if (alive) "✅" else "💀") +
+                ", fouls: $fouls"
     }
 
     fun mute() {
