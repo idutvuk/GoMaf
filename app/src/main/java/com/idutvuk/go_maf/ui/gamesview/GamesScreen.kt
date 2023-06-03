@@ -34,7 +34,7 @@ fun GamesScreen(
     Scaffold(
         topBar = { DefaultTopAppBar(
             title = "Saved Games",
-            onNavButtonPress = {}
+            navController
         )
                  },
         floatingActionButton = {
@@ -58,7 +58,7 @@ fun GamesScreen(
                 )
                 SwipeToDismiss(
                     state = dismissState,
-                    background = {SwipeBackground(dismissState = dismissState) },
+                    background = { SwipeBackground(dismissState = dismissState) },
                     dismissContent = {
                         GameItemCard(
                             game = game,

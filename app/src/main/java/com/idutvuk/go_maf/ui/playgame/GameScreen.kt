@@ -135,7 +135,7 @@ fun GameScreen(
         sheetPeekHeight = bottomSheetHeight,
         topBar = { DefaultTopAppBar(
             title = "Game",
-            onNavButtonPress = { navController.popBackStack() }
+            navController
         )
                  },
         sheetContent = {
