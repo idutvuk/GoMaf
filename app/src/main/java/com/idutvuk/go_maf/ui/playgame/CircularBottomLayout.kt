@@ -43,7 +43,7 @@ fun CircularButtonLayout(
                 BorderStroke(0.dp, Color.Transparent)
             },
             modifier = Modifier
-                .size(60.dp)
+                .size(65.dp)
                 .offset {
                     val radius = 140.dp.toPx()
                     val x = (-radius * sin(angles[index])).toInt()

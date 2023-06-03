@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.GameManager
 import com.idutvuk.go_maf.model.UserRepository
@@ -21,7 +20,6 @@ import com.idutvuk.go_maf.model.gamedata.PlayerSelectionMode
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : ViewModel() {
     val allGames: LiveData<List<MafiaGame>>

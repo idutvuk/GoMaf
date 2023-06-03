@@ -2,25 +2,6 @@ package com.idutvuk.go_maf.model
 
 import com.idutvuk.go_maf.model.gamedata.Role
 
-/**
- * Nicknames generator for _debug_ purpose
- */
-val nicknames = arrayOf(
-    "Jake Green",
-    "Zach",
-    "Avi",
-    "Doroti Macha",
-    "Sorter",
-    "Paul",
-    "Lord John",
-    "Lily Walker",
-    "Slim Higgins",
-    "Billy",
-    "Rachel",
-    "Joe",
-    "Fred"
-)
-
 fun generateRoles(playerCount: Int) : Array<Role> {
     val roles = Array(playerCount) { Role.CIV }
     if (playerCount == 6) {
