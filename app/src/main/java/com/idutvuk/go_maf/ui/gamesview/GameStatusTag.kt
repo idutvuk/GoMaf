@@ -16,7 +16,7 @@ import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.ui.theme.Typography
 
 @Composable
-fun GenderTag(isActive: Boolean) { //TODO rename to proper name
+fun GameStatusTag(isActive: Boolean) { //TODO rename to proper name
     if (isActive) {
         ChipView(gender = "Active", colorResource = colorResource(id = R.color.light_green))
     } else {

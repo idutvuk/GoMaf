@@ -44,6 +44,7 @@ import androidx.navigation.NavHostController
 import com.idutvuk.go_maf.R
 import com.idutvuk.go_maf.model.database.entities.MafiaGame
 import com.idutvuk.go_maf.model.gamedata.EventImportance
+import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import com.idutvuk.go_maf.ui.MainViewModel
 import com.idutvuk.go_maf.ui.components.DefaultTopAppBar
 import com.idutvuk.go_maf.ui.components.GameActionRow
@@ -121,6 +122,12 @@ fun GameScreen(
 
     LaunchedEffect(gameUiState.gameOver) {
         viewModel.finishGame(gameId)
+    }
+
+    LaunchedEffect(gameUiState.prevMainBtnState) {
+        if (gameUiState.prevMainBtnState == MainBtnState.END_GAME) {
+            navController.navigate("games_view")
+        }
     }
 
     BottomSheetScaffold(

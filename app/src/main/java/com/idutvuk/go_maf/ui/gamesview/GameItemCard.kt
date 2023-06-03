@@ -50,6 +50,8 @@ fun GameItemCard(
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
+                    top = 8.dp,
+                    bottom = 12.dp
                 )
         ) {
             Column(modifier = Modifier.align(Alignment.CenterVertically)) {
@@ -61,11 +63,11 @@ fun GameItemCard(
                         style = Typography.titleMedium
                     )
                     Spacer(modifier = Modifier.width(15.dp))
-                    Text(
-                        text = SimpleDateFormat("hh:mm:ss").format(game.duration),
-                        modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
-                        style = Typography.titleSmall
-                    )
+//                    Text(
+//                        text = SimpleDateFormat("hh:mm:ss").format(game.duration),
+//                        modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+//                        style = Typography.titleSmall
+//                    )
                 }
                 Spacer(modifier = Modifier.height(10.dp))
 
@@ -85,10 +87,10 @@ fun GameItemCard(
                             .padding(8.dp, 12.dp, 12.dp, 0.dp),
                         style = Typography.bodySmall
                     )
-                    UserProfilePicturesRow(
-//                        pictures = game.players.map { it.pictureId },
-                        modifier = Modifier.weight(0.8f)
-                    )
+//                    UserProfilePicturesRow(
+////                        pictures = game.players.map { it.pictureId },
+//                        modifier = Modifier.weight(0.8f)
+//                    )
                 }
 
             }
@@ -96,7 +98,7 @@ fun GameItemCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                GenderTag(isActive = game.isOver)
+                GameStatusTag(isActive = !game.isOver)
             }
         }
     }
