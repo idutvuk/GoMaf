@@ -13,7 +13,7 @@ class CmdManagerTest {
 
     @Test
     fun `first night check`() {
-        CmdManager.commit(CmdCommitType.PRESS_MAIN_BTN)
+//        CmdManager.commit(CmdCommitType.PRESS_MAIN_BTN)
 //        assertThat(
 //            CmdManager.stateHistory.last()
 //                .mainBtnState

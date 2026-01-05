@@ -51,21 +51,21 @@ fun ScreenSetup(viewModel: MainViewModel) {
             if (newGameDialogVis) {
                 NewGameDialog(
                     disableDialog = { newGameDialogVis = false },
-                    startGame = {
+                    startGame = { playerCount, roles ->
                         newGameDialogVis = false
-                        playersCount = it
+                        playersCount = playerCount
                         navController.navigate("play_game/${
                             viewModel.insertGame(
                                 MafiaGame(
                                     startTime = System.currentTimeMillis(),
                                     duration = 0,
                                     isOver = false,
-                                    numPlayers = it,
+                                    numPlayers = playerCount,
                                     hostUserId = 0
                                 )
                             )
                         }")
-                        viewModel.startGame(it)
+                        viewModel.startGame(playerCount, roles)
                     },
                 )
             }

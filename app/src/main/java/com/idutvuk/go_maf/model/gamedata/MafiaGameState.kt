@@ -135,15 +135,7 @@ data class MafiaGameState(
         selectedPlayers.clear()
     }
 
-    fun livingPlayersCount(): Int {
-        var livingPlayers = 0
-        for (i in 0 until numPlayers) {
-            if (players[i].alive) {
-                livingPlayers++
-            }
-        }
-        return livingPlayers
-    }
+    fun livingPlayersCount() = players.count { it.alive }
 
     /**
      * Returns closest alive player to selected player

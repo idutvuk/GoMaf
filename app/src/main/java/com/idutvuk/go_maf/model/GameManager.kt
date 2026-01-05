@@ -6,16 +6,17 @@ import com.idutvuk.go_maf.model.gamedata.CmdCommitType
 import com.idutvuk.go_maf.model.gamedata.MafiaGameState
 import com.idutvuk.go_maf.model.gamedata.MainBtnState
 import com.idutvuk.go_maf.model.gamedata.Player
+import com.idutvuk.go_maf.model.gamedata.Role
 import com.idutvuk.go_maf.model.gamedata.StateSnapshot
 
 
-class GameManager (numPlayers: Int) {
+class GameManager (numPlayers: Int, roles: Array<Role>? = null) {
 
-    val roles = generateRoles(numPlayers)
+    val roles = roles ?: generateRoles(numPlayers)
     val stateHistory = arrayListOf(
         MafiaGameState(
             numPlayers,
-            players = Array(numPlayers, init = { Player(it, role = roles[it]) })
+            players = Array(numPlayers, init = { Player(it, role = roles!![it]) })
         )
     )
     var currentHistoryIndex = 0

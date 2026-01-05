@@ -64,9 +64,9 @@ class MainViewModel(application: Application) : ViewModel() {
     }
 
 
-    fun startGame(playerCount: Int) {
-        manager = GameManager(playerCount)
-        _uiState = MutableStateFlow(MafiaGameState(playerCount))
+    fun startGame(playerCount: Int, roles: Array<com.idutvuk.go_maf.model.gamedata.Role>? = null) {
+        manager = GameManager(playerCount, roles)
+        _uiState = MutableStateFlow(MafiaGameState(playerCount, roles = manager.roles))
         uiState = _uiState.asStateFlow()
     }
 
