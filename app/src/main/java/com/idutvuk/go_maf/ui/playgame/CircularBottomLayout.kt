@@ -1,8 +1,10 @@
 package com.idutvuk.go_maf.ui.playgame
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -10,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,18 +47,24 @@ fun CircularButtonLayout(
             },
             modifier = Modifier
                 .size(65.dp)
-                .offset {
+                .offset { // radial offset off center
                     val radius = 140.dp.toPx()
                     val x = (-radius * sin(angles[index])).toInt()
                     val y = (radius * cos(angles[index])).toInt()
                     IntOffset(x, y)
                 },
-            enabled = livingPlayers[index]
+            enabled = livingPlayers[index],
+            contentPadding = PaddingValues(0.dp),
+
         ) {
             Text(
-                text = "$index",
+                text = (index+1).toString(),
                 fontFamily = FontFamily.SansSerif,
-                fontSize = if (index < 10) 30.sp else 20.sp
+                textAlign = TextAlign.Center,
+                softWrap = false,
+                fontSize = 24.sp,
+                modifier = Modifier.wrapContentSize()
+
             )
         }
 
@@ -71,7 +80,7 @@ fun CircularButtonLayout(
                     },
                 text = roles[index].emoji,
                 fontFamily = FontFamily.SansSerif,
-                fontSize = 20.sp
+                fontSize = 16.sp,
             )
         }
     }
