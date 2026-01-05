@@ -12,9 +12,9 @@ data class Player(
     var alive = true
         set(value) {
             if (value == field)
-                throw Error("Player already ${if(value) "alive" else "dead"}")
+                Log.e("GameLog","Player ${number} already ${if(value) "alive" else "dead"}")
 
-            assert(value != field) //todo remove unnecessary
+//            assert(value != field)
 
             if (value) { //if want to revive
                 Log.i("GameLog","Player $number revived")
@@ -27,7 +27,7 @@ data class Player(
         }
 
     var fouls = 0
-    internal val strNum = String.format("%02d", number + 1)
+    internal val strNum = String.format("%02d", number)
 
 
     override fun toString(): String {

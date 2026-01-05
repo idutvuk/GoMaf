@@ -14,7 +14,7 @@ data class MafiaGameState(
     val roles: Array<Role> = generateRoles(numPlayers),
     var players: Array<Player> = Array(numPlayers) {
         Player(
-            number = it,
+            number = it + 1,
             role = roles[it]
         )
                                                    },
@@ -180,7 +180,7 @@ data class MafiaGameState(
 
     private fun kill(i: Int) {
         players[i].alive = false
-        snackbarMessage = "killed $i"
+        snackbarMessage = "killed ${players[i].number}"
         livingPlayers = players.map { it.alive }
         gameOver = isGameOver()
     }
@@ -297,7 +297,7 @@ data class MafiaGameState(
                     NEXT
                 }
 
-                MAFIA_KILL -> nextStateSingleClick(END_GAME)
+                MAFIA_KILL -> nextStateSingleClick(CHECK_DON)
 
                 CHECK_DON -> nextStateSingleClick(CHECK_SHR)
 
@@ -325,17 +325,16 @@ data class MafiaGameState(
     }
 
     fun foul(i: Int) {
+        players[i].fouls++
         when (players[i].fouls) {
-            0, 1, 2 -> players[i].fouls++
+            0,1 -> return
             2 -> {
                 players[i].mute()
             }
-
             3 -> {
                 kill(i)
                 isVoteCancelled = true
             }
-
             else -> throw IllegalStateException("Incorrect value of fouls")
         }
     }

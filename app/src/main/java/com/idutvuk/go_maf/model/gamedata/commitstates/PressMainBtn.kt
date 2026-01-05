@@ -10,7 +10,7 @@ import java.lang.RuntimeException
 
 class PressMainBtn:CmdCommitState {
     /**
-     * тут не должно быть никакой логики по изменению Main button
+     * keep no logic for changin MainBtn state here
      */
     override fun changeGameState(gameState: MafiaGameState): MafiaGameState {
         with(gameState) {
