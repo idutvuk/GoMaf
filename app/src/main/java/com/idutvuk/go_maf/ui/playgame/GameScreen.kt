@@ -209,6 +209,7 @@ fun GameScreen(
                         livingPlayers = gameUiState.livingPlayers,
                         isPlayerRolesShown = isPlayerRolesShown,
                         roles = gameUiState.players.map {it.role},
+                        isWaitingForClick = gameUiState.mainBtnState == MainBtnState.WAITING_FOR_CLICK,
                     )
 
                     Icon(
@@ -306,7 +307,7 @@ fun GameScreen(
                         viewModel.nextPhase()
                     },
                     onPressFoulClick = {
-                        // todo
+                        isWaitingForFoul = true
                     },
                     onPeepClick = {
                         isPlayerRolesShown = !isPlayerRolesShown
