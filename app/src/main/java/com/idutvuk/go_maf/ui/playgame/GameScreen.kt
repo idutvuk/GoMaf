@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +17,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarDuration
@@ -233,28 +239,55 @@ fun GameScreen(
                     .padding(horizontal = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 10.dp),
-                    onClick = { isWaitingForFoul = false; viewModel.commit() },
+                // main button row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        modifier = Modifier.padding(vertical = 10.dp),
-                        painter = painterResource(id = gameUiState.mainBtnState.icon),
-                        contentDescription = null
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(text = gameUiState.mainBtnState.text)
-
+                    IconButton(
+                        onClick = { viewModel.onPressUndoBtn() },
+                        enabled = gameUiState.canUndo,
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "back",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    
+                    Spacer(modifier = Modifier.weight(1f))
+                    
+                    Button(
+                        modifier = Modifier
+                            .weight(10f)
+                            .padding(vertical = 10.dp, horizontal = 8.dp),
+                        onClick = { isWaitingForFoul = false; viewModel.commit() },
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            painter = painterResource(id = gameUiState.mainBtnState.icon),
+                            contentDescription = null
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(text = gameUiState.mainBtnState.text)
+                    }
+                    
+                    Spacer(modifier = Modifier.weight(1f))
+                    
+                    IconButton(
+                        onClick = { viewModel.addToVote() },
+                        enabled = gameUiState.mainBtnState == MainBtnState.END_SPEECH,
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            Icons.Filled.Add,
+                            contentDescription = "add to vote",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
                 GameButtonRow(
-                    canUndo = gameUiState.canUndo,
-                    onUndoClick = {
-                        viewModel.onPressUndoBtn()
-                    },
-                    onRedoClick = {},
                     onPlayClick = {
                         if (currentTime <= 0L) {
                             currentTime = totalTime
@@ -269,12 +302,11 @@ fun GameScreen(
                     isTimerActive = gameUiState.isTimerActive,
                     isTimerRunning = isTimerRunning,
                     currentTime = gameUiState.time,
-                    onPrevPhaseClick = {},
                     onNextPhaseClick = {
                         viewModel.nextPhase()
                     },
                     onPressFoulClick = {
-
+                        // todo
                     },
                     onPeepClick = {
                         isPlayerRolesShown = !isPlayerRolesShown

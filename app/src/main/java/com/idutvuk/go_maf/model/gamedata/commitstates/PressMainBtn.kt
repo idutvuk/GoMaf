@@ -127,10 +127,9 @@ class PressMainBtn:CmdCommitState {
                     if (speakQueue == null) {
                         cursor = nextAlivePlayer(cursor)
                     } else {
-                        assert(!speakQueue.isNullOrEmpty()) //its not empty
-                        voteKill(cursor)
+//                        voteKill(cursor) its doublekilling somehow
                         cursor = speakQueue!!.last()
-                        speakQueue!!.removeLast()
+                        speakQueue!!.removeAt(speakQueue!!.lastIndex)
                     }
                 }
 

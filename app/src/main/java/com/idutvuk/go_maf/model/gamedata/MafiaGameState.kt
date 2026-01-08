@@ -277,8 +277,7 @@ data class MafiaGameState(
                         if (speakQueue!!.isNotEmpty()) END_SPEECH
                         else CRASH
                     } else {
-                        delayedBtnState = END_SPEECH
-                        ADD_TO_VOTE
+                        END_SPEECH
                     }
                 }
 

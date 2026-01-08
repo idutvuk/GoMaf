@@ -105,7 +105,13 @@ class MainViewModel(application: Application) : ViewModel() {
         _uiState.value = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
     }
 
-
+    fun addToVote() {
+        if (_uiState.value.mainBtnState == MainBtnState.START_SPEECH) {
+            _uiState.value.mainBtnState = MainBtnState.ADD_TO_VOTE
+            manager.stateHistory[manager.currentHistoryIndex] = _uiState.value
+            _uiState.value = manager.commit(CmdCommitType.PRESS_MAIN_BTN)
+        }
+    }
 
     fun onPressUndoBtn() {
         _uiState.value = manager.undo()
