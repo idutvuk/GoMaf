@@ -108,11 +108,17 @@ fun ScreenSetup(viewModel: MainViewModel) {
                             ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT
                         )
+                        settings.javaScriptEnabled = true
+                        settings.domStorageEnabled = true
+                        settings.allowFileAccess = true
+                        settings.allowContentAccess = true
+                        settings.allowFileAccessFromFileURLs = true
+                        settings.allowUniversalAccessFromFileURLs = true
                         webViewClient = WebViewClient()
-                        loadUrl("file:///android_asset/index.html")
+                        loadUrl("file:///android_asset/rules.html")
                     }
                 }, update = {
-                    it.loadUrl("file:///android_asset/index.html")
+                    // Контент загружается из assets, дополнительное обновление не требуется
                 })
             }
         }
