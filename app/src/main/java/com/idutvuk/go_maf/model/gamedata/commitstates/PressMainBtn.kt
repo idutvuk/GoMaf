@@ -19,18 +19,22 @@ class PressMainBtn:CmdCommitState {
                     clearVoteList()
                     speakQueue = null
                     currentPhaseNumber++
-                    secondaryMessage = "phase: $currentPhaseNumber"
+                    val phaseNumber = (currentPhaseNumber + 1) / 2
+                    secondaryMessage = "phase: $phaseNumber"
+                    primaryMessage = "Night $phaseNumber"
                     time = GameTime.NIGHT
                 }
 
                 START_MAFIA_SPEECH -> {
                     isTimerActive = true
+                    primaryMessage = "Mafia speech"
                 }
 
 
                 MAFIA_KILL -> {
                     if (selectedPlayers.isNotEmpty()) {
                         mafiaKill()
+                        primaryMessage = "Mafia kill"
                     }
                 }
 
@@ -104,7 +108,10 @@ class PressMainBtn:CmdCommitState {
                 START_DAY -> {
                     isVoteCancelled = false
                     currentPhaseNumber++
-                    secondaryMessage = currentPhaseNumber.toString()
+                    // currentPhaseNumber теперь четное (2, 4, 6...), день имеет номер (1, 2, 3...)
+                    val phaseNumber = currentPhaseNumber / 2
+                    secondaryMessage = "phase: $phaseNumber"
+                    primaryMessage = "Day $phaseNumber"
                     time = GameTime.DAY
                     firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
                     cursor = firstSpokedPlayer
@@ -113,7 +120,14 @@ class PressMainBtn:CmdCommitState {
 
                 START_SPEECH -> {
                     selectionMode = PlayerSelectionMode.SINGLE //so you can select player before the vote
-                    isTimerActive = true
+                    // Skip speech if player cannot speak (e.g., has 3 fouls)
+                    if (!players[cursor].canSpeak) {
+                        // Skip this player's speech immediately
+                        primaryMessage = "Player ${cursor + 1} skipped (muted)"
+                    } else {
+                        isTimerActive = true
+                        primaryMessage = "Player ${cursor + 1} speaking"
+                    }
                 }
 
                 ADD_TO_VOTE -> {
@@ -126,14 +140,20 @@ class PressMainBtn:CmdCommitState {
                     isTimerActive = false
                     if (speakQueue == null) {
                         cursor = nextAlivePlayer(cursor)
+                        // Skip players who cannot speak
+                        while (!players[cursor].canSpeak && cursor != firstSpokedPlayer) {
+                            cursor = nextAlivePlayer(cursor)
+                        }
                     } else {
 //                        voteKill(cursor) its doublekilling somehow
                         cursor = speakQueue!!.last()
                         speakQueue!!.removeAt(speakQueue!!.lastIndex)
                     }
+                    primaryMessage = "Player ${cursor + 1} finished"
                 }
 
                 START_VOTE -> {
+                    primaryMessage = "Vote (${voteList.size} candidates)"
                     when(voteList.size) { //TODO: I deleted a lot of main button changes so I guess I broke everything
                         0 -> {
                             snackbarMessage = "Vote skipped (nobody was elected)"
@@ -152,11 +172,15 @@ class PressMainBtn:CmdCommitState {
                     }
                 }
 
-                KILL_IN_VOTE -> for (preyIndex in selectedPlayers) {
-//                    voteKill(preyIndex)
-                    if (speakQueue.isNullOrEmpty()) speakQueue = arrayListOf(preyIndex)
-                    else speakQueue!!.add(preyIndex)
-                    cursor = selectedPlayers.elementAt(0)
+                KILL_IN_VOTE -> {
+                    primaryMessage = "Vote kill"
+                    for (preyIndex in selectedPlayers) {
+                        // Kill player BEFORE adding to speech queue
+                        voteKill(preyIndex)
+                        if (speakQueue.isNullOrEmpty()) speakQueue = arrayListOf(preyIndex)
+                        else speakQueue!!.add(preyIndex)
+                        cursor = selectedPlayers.elementAt(0)
+                    }
                 }
 
                 END_GAME -> {prevMainBtnState = END_GAME}

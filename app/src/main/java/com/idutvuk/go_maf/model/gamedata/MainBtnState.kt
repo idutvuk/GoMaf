@@ -95,6 +95,7 @@ enum class MainBtnState(
      */
     START_VOTE(
         text = "Start vote",
+        icon = R.drawable.ic_arrow_right,
         requireNumber = PlayerSelectionMode.MULTIPLE,
         importance = EventImportance.IMPORTANT,
         overwriteText = "Vote"
@@ -129,6 +130,7 @@ enum class MainBtnState(
      */
     START_SPEECH(
         text = "Start speech",
+        icon = R.drawable.ic_play,
         requireNumber = PlayerSelectionMode.NONE,
         importance = EventImportance.REGULAR,
         overwriteText = "Player # spoked"
@@ -141,6 +143,7 @@ enum class MainBtnState(
     @Deprecated("Should not be used in game")
     END_SPEECH(
         text = "End speech",
+        icon = R.drawable.ic_arrow_right,
         requireNumber = PlayerSelectionMode.NONE,
         importance = EventImportance.SILENT
     ),
@@ -150,6 +153,7 @@ enum class MainBtnState(
      */
     ADD_TO_VOTE(
         text = "Add to vote",
+        icon = R.drawable.ic_arrow_right,
         requireNumber = PlayerSelectionMode.SINGLE,
         importance = EventImportance.SILENT
     ),
@@ -159,7 +163,8 @@ enum class MainBtnState(
      */
     KILL_IN_VOTE(
         text = "Kill by vote",
-        requireNumber = PlayerSelectionMode.MULTIPLE,
+        icon = R.drawable.ic_gun_target,
+        requireNumber = PlayerSelectionMode.SINGLE,
         importance = EventImportance.SILENT
     ),
 
@@ -192,6 +197,7 @@ enum class MainBtnState(
      */
     CHECK_DON(
         text = "Don check",
+        icon = R.drawable.ic_eye,
         requireNumber = PlayerSelectionMode.SINGLE,
         importance = EventImportance.REGULAR,
     ),
@@ -201,6 +207,7 @@ enum class MainBtnState(
      */
     CHECK_SHR(
         text = "Sheriff check",
+        icon = R.drawable.ic_eye,
         requireNumber = PlayerSelectionMode.SINGLE,
         importance = EventImportance.REGULAR
     ),
@@ -210,6 +217,7 @@ enum class MainBtnState(
      */
     BEST_MOVE(
         text = "Best move",
+        icon = R.drawable.ic_arrow_right,
         requireNumber = PlayerSelectionMode.MULTIPLE,
         importance = EventImportance.REGULAR
     ),
@@ -221,6 +229,7 @@ enum class MainBtnState(
      */
     WAITING_FOR_CLICK(
         text = "Cancel",
+        icon = R.drawable.ic_close,
         requireNumber = PlayerSelectionMode.NONE,
         importance = EventImportance.SILENT
     )

@@ -17,7 +17,9 @@ class SkipDay: CmdCommitState{
             speakQueue = null
 
             currentPhaseNumber++
-            secondaryMessage = currentPhaseNumber.toString()
+            val phaseNumber = (currentPhaseNumber + 1) / 2
+            secondaryMessage = "phase: $phaseNumber"
+            primaryMessage = "Night $phaseNumber"
 
             if (currentPhaseNumber == 1) {
                 mainBtnState = MainBtnState.START_MAFIA_SPEECH

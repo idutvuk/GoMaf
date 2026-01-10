@@ -41,6 +41,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
@@ -68,7 +69,7 @@ fun GameScreen(
 
     val scope = rememberCoroutineScope()
     val scaffoldState = rememberBottomSheetScaffoldState()
-    val bottomSheetHeight = 230.dp
+    val bottomSheetHeight = 120.dp
 
     val totalTime by remember { mutableStateOf(60L * 1000L) }
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -139,11 +140,12 @@ fun GameScreen(
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
         sheetPeekHeight = bottomSheetHeight,
-        topBar = { DefaultTopAppBar(
-            title = "Game",
-            navController
-        )
-                 },
+        topBar = {
+            DefaultTopAppBar(
+                title = gameUiState.mainBtnState.overwriteText ?: gameUiState.primaryMessage,
+                navController
+            )
+        },
         sheetContent = {
             Column(
                 Modifier
@@ -194,11 +196,21 @@ fun GameScreen(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.fillMaxSize()
                 ) {
+                    // Background icon (sun/moon) based on game time
+                    Icon(
+                        painter = painterResource(id = gameUiState.time.icon),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(200.dp)
+                            .alpha(0.2f),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    
                     CircularButtonLayout(
                         buttonCount = playerCount,
                         angles = angles,
                         onButtonClick = { index ->
-                            if(isWaitingForFoul) {
+                            if (isWaitingForFoul) {
                                 viewModel.foul(index)
                                 isWaitingForFoul = false
                             } else {
@@ -208,8 +220,10 @@ fun GameScreen(
                         selectedPlayers = gameUiState.selectedPlayers,
                         livingPlayers = gameUiState.livingPlayers,
                         isPlayerRolesShown = isPlayerRolesShown,
-                        roles = gameUiState.players.map {it.role},
-                        isWaitingForClick = gameUiState.mainBtnState == MainBtnState.WAITING_FOR_CLICK,
+                        roles = gameUiState.players.map { it.role },
+                        isWaitingForClick = gameUiState.mainBtnState == MainBtnState.WAITING_FOR_CLICK || gameUiState.mainBtnState == MainBtnState.KILL_IN_VOTE,
+                        fouls = gameUiState.players.map { it.fouls },
+                        firstSpokedPlayer = gameUiState.firstSpokedPlayer,
                     )
 
                     Icon(
@@ -236,7 +250,6 @@ fun GameScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(bottomSheetHeight)
                     .padding(horizontal = 30.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -256,9 +269,9 @@ fun GameScreen(
                             modifier = Modifier.size(24.dp)
                         )
                     }
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     Button(
                         modifier = Modifier
                             .weight(10f)
@@ -273,9 +286,9 @@ fun GameScreen(
                         Spacer(modifier = Modifier.width(5.dp))
                         Text(text = gameUiState.mainBtnState.text)
                     }
-                    
+
                     Spacer(modifier = Modifier.weight(1f))
-                    
+
                     IconButton(
                         onClick = { viewModel.addToVote() },
                         enabled = gameUiState.mainBtnState == MainBtnState.END_SPEECH,
@@ -311,6 +324,16 @@ fun GameScreen(
                     },
                     onPeepClick = {
                         isPlayerRolesShown = !isPlayerRolesShown
+                    }
+                )
+                VoteListRow(
+                    voteList = gameUiState.voteList,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    selectedPlayers = gameUiState.selectedPlayers,
+                    onPlayerClick = if (gameUiState.mainBtnState == MainBtnState.KILL_IN_VOTE) {
+                        { index -> viewModel.clickButton(index) }
+                    } else {
+                        null
                     }
                 )
             }

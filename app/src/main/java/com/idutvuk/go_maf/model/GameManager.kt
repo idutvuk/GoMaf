@@ -54,13 +54,21 @@ class GameManager (numPlayers: Int, roles: Array<Role>? = null) {
     private fun gameActionFormatter(string: String, state: MafiaGameState): String {
         var s = string
         when(state.mainBtnState) {
-            MainBtnState.START_DAY -> s += " ${(state.currentPhaseNumber)/2 + 1}"
-            MainBtnState.START_NIGHT -> s += " ${(state.currentPhaseNumber)/2}"
+            MainBtnState.START_DAY -> {
+                // currentPhaseNumber уже инкрементирован, день имеет четный индекс (1, 3, 5...)
+                val phaseNumber = (state.currentPhaseNumber + 1) / 2
+                s += " $phaseNumber"
+            }
+            MainBtnState.START_NIGHT -> {
+                // currentPhaseNumber уже инкрементирован, ночь имеет нечетный индекс (0, 2, 4...)
+                val phaseNumber = state.currentPhaseNumber / 2 + 1
+                s += " $phaseNumber"
+            }
 
-            MainBtnState.START_SPEECH -> s = s.replace("#", state.cursor.toString())
+            MainBtnState.START_SPEECH -> s = s.replace("#", (state.cursor + 1).toString())
 
             MainBtnState.MAFIA_KILL -> s =
-                if (state.mafiaMissStreak == 0) s + " ${(state.cursor)}"
+                if (state.mafiaMissStreak == 0) s + " ${(state.cursor + 1)}"
                 else "Misfire ( ${state.mafiaMissStreak}/3)"
 
             MainBtnState.CHECK_DON -> {}//TODO

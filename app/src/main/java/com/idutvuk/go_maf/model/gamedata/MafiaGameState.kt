@@ -109,12 +109,20 @@ data class MafiaGameState(
 ) {
 
     fun addToVoteList(index: Int): Boolean {
+        if (voteList.contains(index)) {
+            return false
+        }
         return voteList.add(index)
     }
 
     fun addToVoteList(): Boolean {
         assert(selectedPlayers.size == 1)
-        return addToVoteList(selectedPlayers[0])
+        val playerIndex = selectedPlayers[0]
+        if (voteList.contains(playerIndex)) {
+            snackbarMessage = "Кандидатура поддерживается"
+            return false
+        }
+        return addToVoteList(playerIndex)
     }
 
     fun clearVoteList() {
@@ -226,7 +234,10 @@ data class MafiaGameState(
         else {
             isTimerActive = false
             currentPhaseNumber++
-            secondaryMessage = currentPhaseNumber.toString()
+            // currentPhaseNumber теперь четное (2, 4, 6...), день имеет номер (1, 2, 3...)
+            val phaseNumber = currentPhaseNumber / 2
+            secondaryMessage = "phase: $phaseNumber"
+            primaryMessage = "Day $phaseNumber"
             time = GameTime.DAY
             firstSpokedPlayer = nextAlivePlayer(firstSpokedPlayer)
             cursor = firstSpokedPlayer
@@ -277,7 +288,12 @@ data class MafiaGameState(
                         if (speakQueue!!.isNotEmpty()) END_SPEECH
                         else CRASH
                     } else {
-                        END_SPEECH
+                        // If current player cannot speak, skip to next immediately
+                        if (!players[cursor].canSpeak) {
+                            END_SPEECH
+                        } else {
+                            END_SPEECH
+                        }
                     }
                 }
 
@@ -326,11 +342,11 @@ data class MafiaGameState(
     fun foul(i: Int) {
         players[i].fouls++
         when (players[i].fouls) {
-            0,1 -> return
-            2 -> {
+            1,2 -> return
+            3 -> {
                 players[i].mute()
             }
-            3 -> {
+            4 -> {
                 kill(i)
                 isVoteCancelled = true
             }
